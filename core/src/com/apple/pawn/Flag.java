@@ -6,12 +6,15 @@ import com.badlogic.gdx.utils.Array;
 import java.util.EnumSet;
 
 public enum Flag {
+    //---- フラグの定義
     PLAY(0, false, "実行中(ポーズされていない)"),
     UI_INPUT_ENABLE(1, true, "UIを操作可能か"),
     INPUT_ENABLE(2, true, "UI以外を操作可能か"),
     TURN_STANDBY(3, true, "ターン開始フェーズ"),
     DICE_ROLL(4, true, "さいころを振るフェーズ"),
-    PIECE_ADVANCE(5, true, "駒を進めるフェーズ"),
+    PIECE_ADVANCE(5, true, "駒を進めるフェーズ");
+
+/* テスト用
     b(6, true, ""),
     c(7, true, ""),
     d(8, true, ""),
@@ -89,11 +92,12 @@ public enum Flag {
     xxx(80, true, ""),
     yyy(81, true, ""),
     zzz(82, true, "");
+*/
 
 
-    public final int no;
-    public final boolean isSave;
-    public final String cry;
+    public final int no;            // フラグ番号
+    public final boolean isSave;    // セーブするか
+    public final String cry;        // 説明
 
     Flag(final int no, final boolean isSave, final String cry) {
         this.no = no;
@@ -101,52 +105,4 @@ public enum Flag {
         this.cry = cry;
     }
 
-    /**
-     * Encode フラグを文字列に変換
-     * @param set
-     * @return
-     */
-    public static String Encode(EnumSet<Flag> set) {
-        String ret = "";
-
-        Array<Long> flags = new Array<Long>();
-        Long l = 0L;
-        int dir = 0;
-        for (Flag val : set) {
-            if( dir < (int) (Math.floor(val.no / 64)) ) {
-                dir = (int) (Math.floor(val.no / 64));
-                flags.insert(0,l);
-                l = 0L;
-            }
-            if(val.isSave) {
-                l |= 1L << val.no%64;
-//                Gdx.app.debug("info", "save="+String.format("%016x", l));
-            }
-        }
-        flags.insert(0,l);
-
-        //-- 文字列化
-        Array.ArrayIterator<Long> fi = flags.iterator();
-        while( fi.hasNext() ) {
-            long lo = fi.next();
-            ret += String.format("%016x", lo);
-        }
-
-        return ret;
-    }
-
-    /**
-     * ※未完成 Decode 文字列から読み取る
-     * @param str
-     */
-    private static void Decode(String str) {
-        try {
-            int cnt = str.length() / 16;
-            for (int i = 0; i < cnt; i++) {
-                str.substring(i * 16, i * 16 + 15);
-            }
-        } catch(Exception e) {
-            Gdx.app.debug("error", "セーブデータの読み込みに失敗しました。");
-        }
-    }
 }

@@ -33,6 +33,11 @@ public class Player extends Actor {
         super.act(delta);
     }
 
+    /**
+     * 描画
+     * @param batch
+     * @param parentAlpha
+     */
     @Override
     public void draw (Batch batch, float parentAlpha) {
         Sprite sprite = new Sprite( new TextureRegion(img));

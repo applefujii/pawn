@@ -10,9 +10,10 @@ public enum Flag {
     PLAY(0, false, "実行中(ポーズされていない)"),
     UI_INPUT_ENABLE(1, true, "UIを操作可能か"),
     INPUT_ENABLE(2, true, "UI以外を操作可能か"),
-    TURN_STANDBY(3, true, "ターン開始フェーズ"),
-    DICE_ROLL(4, true, "さいころを振るフェーズ"),
-    PIECE_ADVANCE(5, true, "駒を進めるフェーズ");
+    TURN_STANDBY(10, true, "ターン開始フェーズ"),
+    ACTION_SELECT(11, true, "行動選択フェーズ"),
+    DICE_ROLL(12, true, "さいころを振るフェーズ"),
+    PIECE_ADVANCE(13, true, "駒を進めるフェーズ");
 
 /* テスト用
     b(6, true, ""),

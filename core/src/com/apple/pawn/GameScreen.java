@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -34,9 +35,10 @@ public class GameScreen implements Screen {
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
 
-	private Player player;					// プレイヤー
-
-	private FlagManagement fm;
+	//---- 他のクラス
+	private Player player;					// プレイヤー サンプル
+	private Array<Piece> piece;				// 駒
+	private FlagManagement fm;				// フラグ管理
 
 
 	/**
@@ -135,6 +137,7 @@ public class GameScreen implements Screen {
 		}
 		renderer.end();
 
+		// topGroupの中身全てを描画
 		stage.draw();
 
 		//------ ui描画

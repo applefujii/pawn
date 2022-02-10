@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -31,6 +32,7 @@ public class Pawn extends Game {
 	private long totalFrame = 0;
 	private int frame = 0;
 	private Timer fpsTimer;
+	private Screen nextScreen;
 
 	/**
 	 * create 初期化、読み込み
@@ -80,6 +82,16 @@ public class Pawn extends Game {
 		if(Gdx.input.isKeyPressed(Input.Keys.F4)) Gdx.app.exit();
 
 		super.render();
+
+		if(nextScreen != null) {
+			super.setScreen(nextScreen);
+			nextScreen = null;
+		}
+	}
+
+	@Override
+	public void setScreen(Screen screen) {
+		nextScreen = screen;
 	}
 
 	@Override

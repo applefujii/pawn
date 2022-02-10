@@ -66,7 +66,6 @@ public class TitleScreen implements Screen {
 		//-- 入力
 		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)  |  Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ENTER)) {
 			game.setScreen(new GameScreen(game));
-			dispose();
 		}
 
 	}
@@ -128,8 +127,7 @@ public class TitleScreen implements Screen {
 	}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() { dispose(); }
 
 	@Override
 	public void pause() {

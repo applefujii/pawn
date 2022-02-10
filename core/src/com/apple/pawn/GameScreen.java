@@ -81,10 +81,7 @@ public class GameScreen implements Screen {
 		viewport.unproject(screenOrigin);
 
 		//------ 入力
-		if(Gdx.input.isKeyPressed(Input.Keys.F1)) {
-			game.setScreen(new TitleScreen(game));
-			dispose();
-		}
+		if(Gdx.input.isKeyPressed(Input.Keys.F1)) { game.setScreen(new TitleScreen(game)); }
 		if(Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			//-- ワールド座標に変換
@@ -163,8 +160,7 @@ public class GameScreen implements Screen {
 	}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() { dispose(); }
 
 	@Override
 	public void pause() {

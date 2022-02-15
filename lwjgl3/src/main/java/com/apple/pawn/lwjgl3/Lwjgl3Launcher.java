@@ -1,11 +1,11 @@
-package com.apple.pawn.desktop;
+package com.apple.pawn.lwjgl3;
 
 import com.apple.pawn.Pawn;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
-public class DesktopLauncher {
+public class Lwjgl3Launcher {
 	public static void main (String[] arg) {
 		Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();

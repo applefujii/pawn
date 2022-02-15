@@ -8,18 +8,25 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.IntSupplier;
+
 
 public class GameScreen implements Screen {
+	public static final int TURN_STANDBY = 10;
+	public static final int ACTION_SELECT = 20;
+	public static final int DICE_ROLL = 30;
+	public static final int PIECE_ADVANCE = 40;
+
 	private final Pawn game;
+	// 動作させるシークエンス
+	private IntSupplier sequence;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private ShapeRenderer renderer;
@@ -30,14 +37,14 @@ public class GameScreen implements Screen {
 	private FitViewport uiViewport;
 	private Stage stage;					// カメラとビューポートの管理
 	private Stage uiStage;					// UIのカメラとビューポートの管理
-	private Group topGroup;
 
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
+	private int sequence_no;
 
 	//---- 他のクラス
 	private Player player;					// プレイヤー サンプル
-	private Array<Piece> piece;				// 駒
+	private BoardSurface board;
 	private FlagManagement fm;				// フラグ管理
 
 
@@ -56,8 +63,6 @@ public class GameScreen implements Screen {
 		uiViewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
 		stage = new Stage(viewport);
 		uiStage = new Stage(uiViewport);
-		topGroup = new Group();
-		stage.setRoot(topGroup);		// 最上位グループを指定
 		Gdx.input.setInputProcessor(stage);
 
 		uiCamera = new OrthographicCamera();
@@ -69,10 +74,12 @@ public class GameScreen implements Screen {
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
 
-		player = new Player();
-		topGroup.addActor(player);
-
+		board = new BoardSurface();
 		fm = new FlagManagement();
+
+		sequence_no = GameScreen.TURN_STANDBY;
+		// 動作させる関数を代入
+		sequence = this::TurnStandby;
 	}
 
 	/**
@@ -89,6 +96,7 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
+		/*
 		if(Gdx.input.justTouched()) {
 			//-- 衝突判定
 			Rectangle rect = new Rectangle();
@@ -97,13 +105,10 @@ public class GameScreen implements Screen {
 			boolean isCol = Intersector.intersectRectangles(player.getRect(), rect, touchRect);
 			if(isCol) Gdx.app.debug("info", "タッチ: x."+touchRect.x+" y."+touchRect.y+" w."+touchRect.width+" h."+touchRect.height);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+		 */
 
-		//---- 動作
-		player.move(touchPos);
+		//---- シークエンスの動作
+		sequence.getAsInt();
 	}
 
 	/**
@@ -111,6 +116,7 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void render (float delta) {
+		// 更新
 		update();
 
 		// カメラの更新
@@ -134,15 +140,17 @@ public class GameScreen implements Screen {
 		}
 		renderer.end();
 
-		// topGroupの中身全てを描画
-		stage.draw();
+		//------ メイン描画
+		board.draw(batch);
 
 		//------ ui描画
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
 		batch.begin();
+		font.getData().setScale(1, 1);
 		font.draw(batch,"ScreenOrigin: "+screenOrigin.x+":"+screenOrigin.y,0,0);
+		font.draw(batch,"Sequence_no: "+sequence_no,0,16);
 		batch.end();
 	}
 
@@ -179,6 +187,38 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose () {
 		player.dispose();
+
+		board.dispose();
+	}
+
+	private int TurnStandby() {
+		//------ 入力
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			sequence_no = GameScreen.ACTION_SELECT;
+			sequence = this::ActionSelect;
+			Gdx.app.debug("info", "select");
+		}
+
+		//---- 動作
+		board.update();
+		return 0;
+	}
+
+	private int ActionSelect() {
+		//------ 入力
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			sequence_no = GameScreen.TURN_STANDBY;
+			sequence = this::TurnStandby;
+			Gdx.app.debug("info", "standby");
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+
+		//---- 動作
+		board.update();
+		return 0;
 	}
 
 }

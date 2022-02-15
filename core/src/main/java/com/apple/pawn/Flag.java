@@ -1,15 +1,11 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.EnumSet;
-
 public enum Flag {
     //---- フラグの定義
     PLAY(0, false, "実行中(ポーズされていない)"),
     UI_INPUT_ENABLE(1, true, "UIを操作可能か"),
     INPUT_ENABLE(2, true, "UI以外を操作可能か"),
+
     TURN_STANDBY(10, true, "ターン開始フェーズ"),
     ACTION_SELECT(11, true, "行動選択フェーズ"),
     DICE_ROLL(12, true, "さいころを振るフェーズ"),

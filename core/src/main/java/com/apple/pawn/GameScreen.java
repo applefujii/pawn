@@ -139,7 +139,7 @@ public class GameScreen implements Screen {
 		renderer.end();
 
 		//------ メイン描画
-		board.draw(batch);
+		board.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -213,6 +213,22 @@ public class GameScreen implements Screen {
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+
+		//---- 動作
+		board.update();
+		return 0;
+	}
+
+	private int DiceRoll() {
+		//------ 入力
+
+		//---- 動作
+		board.update();
+		return 0;
+	}
+
+	private int PieceAdvance() {
+		//------ 入力
 
 		//---- 動作
 		board.update();

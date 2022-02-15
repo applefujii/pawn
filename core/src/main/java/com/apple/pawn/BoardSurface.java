@@ -1,32 +1,29 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
 public class BoardSurface {
     private Array<Piece> aPiece;
     private Array<Square> aSquare;
+
     private Texture img;        // テクスチャ
     private Group group;
 
     public BoardSurface() {
+        img = new Texture("badlogic.jpg");
         aPiece = new Array<Piece>();
         aSquare = new Array<Square>();
         group = new Group();
-
-        Pixmap mapPix = new Pixmap(2048, 2048, Pixmap.Format.RGB888);
-        img = new Texture(mapPix);
-        mapPix.dispose();
-
-        Initialize();
+        initialize();
     }
 
-    private void  Initialize() {
+    private void initialize() {
         Piece pi = new Piece("1P");
         pi.setSquareNo(0);
         aPiece.add( pi );
@@ -41,7 +38,7 @@ public class BoardSurface {
         }
     }
 
-    public void draw (Batch batch) {
+    public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
         Sprite sprite = new Sprite( new TextureRegion(img));
         sprite.setSize(2000, 2000);
@@ -52,7 +49,7 @@ public class BoardSurface {
         batch.end();
 
         for(Piece pi : aPiece) {
-            pi.draw(batch);
+            pi.draw(batch, renderer);
         }
     }
 

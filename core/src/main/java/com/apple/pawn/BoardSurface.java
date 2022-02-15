@@ -1,5 +1,6 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,15 +11,18 @@ import com.badlogic.gdx.utils.Array;
 public class BoardSurface {
     private Array<Piece> aPiece;
     private Array<Square> aSquare;
-
     private Texture img;        // テクスチャ
     private Group group;
 
     public BoardSurface() {
-        img = new Texture("badlogic.jpg");
         aPiece = new Array<Piece>();
         aSquare = new Array<Square>();
         group = new Group();
+
+        Pixmap mapPix = new Pixmap(2048, 2048, Pixmap.Format.RGB888);
+        img = new Texture(mapPix);
+        mapPix.dispose();
+
         Initialize();
     }
 

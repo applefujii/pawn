@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
@@ -19,10 +20,10 @@ public class BoardSurface {
         aPiece = new Array<Piece>();
         aSquare = new Array<Square>();
         group = new Group();
-        Initialize();
+        initialize();
     }
 
-    private void  Initialize() {
+    private void initialize() {
         Piece pi = new Piece("1P");
         pi.setSquareNo(0);
         aPiece.add( pi );
@@ -37,7 +38,7 @@ public class BoardSurface {
         }
     }
 
-    public void draw (Batch batch) {
+    public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
         Sprite sprite = new Sprite( new TextureRegion(img));
         sprite.setSize(2000, 2000);
@@ -48,7 +49,7 @@ public class BoardSurface {
         batch.end();
 
         for(Piece pi : aPiece) {
-            pi.draw(batch);
+            pi.draw(batch, renderer);
         }
     }
 

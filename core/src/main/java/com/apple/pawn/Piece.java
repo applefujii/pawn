@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Piece {
     private Texture img;        // テクスチャ
@@ -18,7 +19,7 @@ public class Piece {
     public void update() {
     }
 
-    public void draw (Batch batch) {
+    public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
         Sprite sprite = new Sprite( new TextureRegion(img));
         sprite.setSize(32, 32);

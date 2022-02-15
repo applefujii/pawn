@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.IntSupplier;
 
 

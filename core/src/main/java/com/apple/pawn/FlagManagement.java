@@ -10,26 +10,42 @@ import java.util.EnumSet;
  * @author 藤井淳一
  */
 public class FlagManagement {
-    EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
+    private static EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
 
     public FlagManagement() {
-        Gdx.app.debug("info", "flag->str="+this.Encode());
+//        Gdx.app.debug("info", "flag->str="+this.Encode());
     }
 
     /**
      * フラグを立てる
      * @param flag 立てるフラグ
      */
-    public void set(Flag flag) {
+    public static void set(Flag flag) {
         flags.add(flag);
+    }
+
+    /**
+     * フラグを立てる
+     * @param flag 立てるフラグ
+     */
+    public static void set(Flag... flag) {
+        for(Flag f : flag) flags.add(f);
     }
 
     /**
      * フラグを折る
      * @param flag 折るフラグ
      */
-    public void fold(Flag flag) {
+    public static void fold(Flag flag) {
         flags.remove(flag);
+    }
+
+    /**
+     * フラグを折る
+     * @param flag 折るフラグ
+     */
+    public static void fold(Flag... flag) {
+        for(Flag f : flag) flags.remove(f);
     }
 
     /**
@@ -37,7 +53,7 @@ public class FlagManagement {
      * @param flag 確認するフラグ
      * @return boolean フラグの状態
      */
-    public boolean is(Flag flag) {
+    public static boolean is(Flag flag) {
         return flags.contains(flag);
     }
 
@@ -46,7 +62,7 @@ public class FlagManagement {
      * @param flag 確認するフラグ
      * @return boolean 全て立っているか
      */
-    public boolean isAllSet(Flag... flag) {
+    public static boolean isAllSet(Flag... flag) {
         boolean allSet = true;
         for(Flag f : flag){
             if(!flags.contains(f)) allSet = false;
@@ -59,7 +75,7 @@ public class FlagManagement {
      * @param flag 確認するフラグ
      * @return boolean 全て折れているか
      */
-    public boolean isAllFold(Flag... flag) {
+    public static boolean isAllFold(Flag... flag) {
         boolean allFold = true;
         for(Flag f : flag){
             if(flags.contains(f)) allFold = false;
@@ -71,7 +87,7 @@ public class FlagManagement {
      * フラグを文字列に変換
      * @return String 16進数で変換した文字列
      */
-    public String Encode() {
+    public static String Encode() {
         String ret = "";
 
         Array<Long> bits = new Array<Long>();
@@ -104,7 +120,7 @@ public class FlagManagement {
      * ※未完成 文字列から読み取る
      * @param str 変換する文字列
      */
-    private void Decode(String str) {
+    private static void Decode(String str) {
         try {
             int cnt = str.length() / 16;
             for (int i = 0; i < cnt; i++) {

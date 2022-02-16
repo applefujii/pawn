@@ -22,6 +22,8 @@ public class Square {
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.setColor(0, 0, 0, 1);
+        renderer.box(x*SQUARE_LENGTH, y*SQUARE_LENGTH, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0);
         renderer.setColor(1, 1, 1, 1);
         renderer.box(x*SQUARE_LENGTH+1, y*SQUARE_LENGTH+1, 0, SQUARE_LENGTH-2, SQUARE_LENGTH-2, 0);
         renderer.end();

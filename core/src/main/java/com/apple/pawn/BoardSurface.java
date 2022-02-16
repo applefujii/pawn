@@ -9,22 +9,24 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
-public class BoardSurface {
-    public static int MAP_WIDTH = 2048;
-    private Array<Piece> aPiece;
-    private Array<Square> aSquare;
+import java.util.Iterator;
 
-    private Texture img;        // テクスチャ
-    private Group group;
+public class BoardSurface {
+    public static int MAP_LENGTH = 2048;
+    private final Array<Piece> aPiece;
+    private final Array<Square> aSquare;
+
+    private final Texture img;        // テクスチャ
+    private final Group group;
 
     public BoardSurface() {
-        Pixmap mapPix = new Pixmap(MAP_WIDTH, MAP_WIDTH, Pixmap.Format.RGB888);
+        Pixmap mapPix = new Pixmap(MAP_LENGTH, MAP_LENGTH, Pixmap.Format.RGB888);
         mapPix.setColor(0, 1, 0, 1);
         mapPix.fill();
         img = new Texture(mapPix);
         mapPix.dispose();
-        aPiece = new Array<Piece>();
-        aSquare = new Array<Square>();
+        aPiece = new Array<>();
+        aSquare = new Array<>();
         group = new Group();
         initialize();
     }
@@ -48,32 +50,38 @@ public class BoardSurface {
     }
 
     private void newSquare(int x, int y) {
-        Square sq = new Square(x, y);
-        aSquare.add(sq);
+        Square square = new Square(x, y);
+        aSquare.add(square);
     }
 
     public void update() {
-        for(Piece pi : aPiece) {
-            pi.update();
+        Iterator<Piece> pieceIterator = new Array.ArrayIterator<>(aPiece);
+        while(pieceIterator.hasNext()) {
+            Piece piece = pieceIterator.next();
+            piece.update();
         }
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
         Sprite sprite = new Sprite( new TextureRegion(img));
-        sprite.setSize(MAP_WIDTH, MAP_WIDTH);
+        sprite.setSize(MAP_LENGTH, MAP_LENGTH);
 //        sprite.setRegion(100,100,100,100);
         sprite.setPosition(0, 0);   // ※仮
         sprite.flip(false, true);       // 上下反転 setRegionより後に
         sprite.draw(batch);
         batch.end();
 
-        for(Square sq : aSquare) {
-            sq.draw(batch, renderer);
+        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+        while(squareIterator.hasNext()) {
+            Square square = squareIterator.next();
+            square.draw(batch, renderer);
         }
 
-        for(Piece pi : aPiece) {
-            pi.draw(batch, renderer);
+        Iterator<Piece> pieceIterator = new Array.ArrayIterator<>(aPiece);
+        while(pieceIterator.hasNext()) {
+            Piece piece = pieceIterator.next();
+            piece.draw(batch, renderer);
         }
     }
 

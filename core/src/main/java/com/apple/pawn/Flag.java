@@ -3,13 +3,10 @@ package com.apple.pawn;
 public enum Flag {
     //---- フラグの定義
     PLAY(0, false, "実行中(ポーズされていない)"),
-    UI_INPUT_ENABLE(1, true, "UIを操作可能か"),
-    INPUT_ENABLE(2, true, "UI以外を操作可能か"),
-
-    TURN_STANDBY(10, true, "ターン開始フェーズ"),
-    ACTION_SELECT(11, true, "行動選択フェーズ"),
-    DICE_ROLL(12, true, "さいころを振るフェーズ"),
-    PIECE_ADVANCE(13, true, "駒を進めるフェーズ");
+    UI_VISIBLE(1, false, "UIの表示"),
+    PRINT_DEBUG_INFO(10, false, "デバッグ表示を表示させるか"),
+    UI_INPUT_ENABLE(20, true, "UIを操作可能か"),
+    INPUT_ENABLE(21, true, "UI以外を操作可能か");
 
 /* テスト用
     b(6, true, ""),

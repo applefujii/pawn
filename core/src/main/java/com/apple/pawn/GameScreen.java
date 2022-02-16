@@ -43,7 +43,8 @@ public class GameScreen implements Screen {
 	//---- 他のクラス
 	private Player player;					// プレイヤー サンプル
 	private BoardSurface board;
-	private FlagManagement fm;				// フラグ管理
+	private Dice dice;
+	private UI ui;
 
 
 	/**
@@ -72,8 +73,19 @@ public class GameScreen implements Screen {
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
 
+		//-- new
 		board = new BoardSurface();
-		fm = new FlagManagement();
+		dice = new Dice(font);
+		ui = new UI(font);
+
+		//-- 初期化
+		ui.initialize(dice);
+		// フラグ初期化
+		FlagManagement.set(Flag.PLAY);
+		FlagManagement.set(Flag.UI_VISIBLE);
+		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+		FlagManagement.set(Flag.UI_INPUT_ENABLE);
+		FlagManagement.set(Flag.INPUT_ENABLE);
 
 		sequence_no = GameScreen.TURN_STANDBY;
 		// 動作させる関数を代入
@@ -88,25 +100,29 @@ public class GameScreen implements Screen {
 		viewport.unproject(screenOrigin);
 
 		//------ 入力
-		if(Gdx.input.isKeyPressed(Input.Keys.F1)) { game.setScreen(new TitleScreen(game)); }
-		if(Gdx.input.isTouched()) {
+		if (Gdx.input.isKeyPressed(Input.Keys.F1)) {
+			game.setScreen(new TitleScreen(game));
+		}
+		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
-		/*
-		if(Gdx.input.justTouched()) {
-			//-- 衝突判定
-			Rectangle rect = new Rectangle();
-			rect.set(touchPos.x,touchPos.y,1,1);
-			Rectangle touchRect = new Rectangle();
-			boolean isCol = Intersector.intersectRectangles(player.getRect(), rect, touchRect);
-			if(isCol) Gdx.app.debug("info", "タッチ: x."+touchRect.x+" y."+touchRect.y+" w."+touchRect.width+" h."+touchRect.height);
-		}
-		 */
 
-		//---- シークエンスの動作
-		sequence.getAsInt();
+		if(FlagManagement.is(Flag.PLAY)) {
+			dice.update();
+			ui.update();
+			// シークエンスの動作
+			sequence.getAsInt();
+		}
+
+		// Flag.PLAY == false
+		else {
+			//-- Spaceを押すと復帰
+			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+				FlagManagement.set(Flag.PLAY);
+			}
+		}
 	}
 
 	/**
@@ -145,11 +161,15 @@ public class GameScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
-		batch.begin();
-		font.getData().setScale(1, 1);
-		font.draw(batch,"ScreenOrigin: "+screenOrigin.x+":"+screenOrigin.y,0,0);
-		font.draw(batch,"Sequence_no: "+sequence_no,0,16);
-		batch.end();
+		if(FlagManagement.is(Flag.UI_VISIBLE)) ui.draw(batch, renderer);
+		//-- デバッグ表示
+		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
+			batch.begin();
+			font.getData().setScale(1, 1);
+			font.draw(batch, "ScreenOrigin: " + screenOrigin.x + ":" + screenOrigin.y, 0, 0);
+			font.draw(batch, "Sequence_no: " + sequence_no, 0, 16);
+			batch.end();
+		}
 	}
 
 	/**
@@ -196,6 +216,8 @@ public class GameScreen implements Screen {
 			sequence = this::ActionSelect;
 			Gdx.app.debug("info", "select");
 		}
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.zoom-=0.1;
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.zoom+=0.1;
 
 		//---- 動作
 		board.update();

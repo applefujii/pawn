@@ -1,0 +1,33 @@
+map_atlas.png
+size: 1024, 256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: false
+  xy: 0, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+goal
+  rotate: false
+  xy: 256, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+normal
+  rotate: false
+  xy: 512, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+start
+  rotate: false
+  xy: 768, 0
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1

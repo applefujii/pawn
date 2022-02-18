@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -21,6 +22,7 @@ public class GameScreen implements Screen {
 	public static final int ACTION_SELECT = 20;
 	public static final int DICE_ROLL = 30;
 	public static final int PIECE_ADVANCE = 40;
+	public static final int TASK_DO = 50;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -38,13 +40,14 @@ public class GameScreen implements Screen {
 
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
-	private int sequence_no;
+	private int sequenceNo;
 
 	//---- 他のクラス
-	private Player player;					// プレイヤー サンプル
-	private BoardSurface board;
-	private Dice dice;
-	private UI ui;
+	private Array<Player> player;			// プレイヤー
+	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
+	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
+	private BoardSurface board;				// 盤面
+	private UI ui;							// UI
 
 
 	/**
@@ -72,14 +75,20 @@ public class GameScreen implements Screen {
 
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
+		turnPlayerNo = -1;
 
 		//-- new
+		player = new Array<Player>();
+		player.add(new Player("1P"));
+		player.add(new Player("2P"));
 		board = new BoardSurface();
-		dice = new Dice(font);
-		ui = new UI(font);
+		ui = new UI();
 
 		//-- 初期化
-		ui.initialize(dice);
+		for(Player pl : player) {
+			pl.initialize(game);
+		}
+		ui.initialize(game);
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -87,9 +96,9 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 
-		sequence_no = GameScreen.TURN_STANDBY;
+		sequenceNo = GameScreen.TURN_STANDBY;
 		// 動作させる関数を代入
-		sequence = this::TurnStandby;
+		sequence = this::turnStandby;
 	}
 
 	/**
@@ -110,10 +119,9 @@ public class GameScreen implements Screen {
 		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
-			dice.update();
-			ui.update();
+			if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 			// シークエンスの動作
-			sequence.getAsInt();
+			if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
 		}
 
 		// Flag.PLAY == false
@@ -161,13 +169,13 @@ public class GameScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
-		if(FlagManagement.is(Flag.UI_VISIBLE)) ui.draw(batch, renderer);
+		if(FlagManagement.is(Flag.UI_VISIBLE)) ui.draw(batch, renderer, font);
 		//-- デバッグ表示
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
 			font.getData().setScale(1, 1);
 			font.draw(batch, "ScreenOrigin: " + screenOrigin.x + ":" + screenOrigin.y, 0, 0);
-			font.draw(batch, "Sequence_no: " + sequence_no, 0, 16);
+			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16);
 			batch.end();
 		}
 	}
@@ -204,55 +212,123 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void dispose () {
-		player.dispose();
-
+		for(Player pl : player) {
+			pl.dispose();
+		}
 		board.dispose();
 	}
 
-	private int TurnStandby() {
-		//------ 入力
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			sequence_no = GameScreen.ACTION_SELECT;
-			sequence = this::ActionSelect;
-			Gdx.app.debug("info", "select");
+	private int turnStandby() {
+		if(sequenceNo == TURN_STANDBY) {
+			turnPlayerNo++;
+			if(turnPlayerNo >= player.size) turnPlayerNo = 0;
+			turnPlayer = player.get(turnPlayerNo);
+			ui.setDice(turnPlayer.getDice());
+			ui.addUiParts(new SelectUIParts("confirm_ready", 100, 100, "ready"));
+			sequenceNo++;
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.zoom-=0.1;
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.zoom+=0.1;
+		else {
+			//------ 入力
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				sequenceNo = GameScreen.ACTION_SELECT;
+				sequence = this::actionSelect;
+			}
+			//		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.zoom-=0.1;
+			//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.zoom+=0.1;
+		}
 
 		//---- 動作
+		for(Player pl : player) {
+			pl.update();
+		}
 		board.update();
 		return 0;
 	}
 
-	private int ActionSelect() {
-		//------ 入力
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			sequence_no = GameScreen.TURN_STANDBY;
-			sequence = this::TurnStandby;
-			Gdx.app.debug("info", "standby");
+	private int actionSelect() {
+		if(sequenceNo == ACTION_SELECT) {
+			ui.addUiParts(new SelectUIParts("action_select", 100, 100, "dice", "map"));
+			sequenceNo++;
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+		else {
+			//------ 入力
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				sequenceNo = GameScreen.DICE_ROLL;
+				sequence = this::diceRoll;
+			}
+			//		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
+			//		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
+			//		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
+			//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+		}
 
 		//---- 動作
+		for(Player pl : player) {
+			pl.update();
+		}
 		board.update();
 		return 0;
 	}
 
-	private int DiceRoll() {
-		//------ 入力
+	private int diceRoll() {
+		Dice dice = turnPlayer.getDice();
+
+		if(sequenceNo == DICE_ROLL) {
+			dice.rollStart();
+			sequenceNo++;
+		}
+		else {
+			//------ 入力
+			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				turnPlayer.getPiece().move(dice.rollStop());
+				sequenceNo = GameScreen.PIECE_ADVANCE;
+				sequence = this::PieceAdvance;
+			}
+		}
 
 		//---- 動作
+		for(Player pl : player) {
+			pl.update();
+		}
 		board.update();
 		return 0;
 	}
 
 	private int PieceAdvance() {
-		//------ 入力
+		if(sequenceNo == PIECE_ADVANCE) {
+			ui.addUiParts(new SelectUIParts("move_piece", 100, 100, "move"));
+			sequenceNo++;
+		}
+		else {
+			//------ 入力
+//			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				sequenceNo = GameScreen.TASK_DO;
+				sequence = this::taskDo;
+//			}
+		}
 
 		//---- 動作
+		for(Player pl : player) {
+			pl.update();
+		}
+		board.update();
+		return 0;
+	}
+
+	private int taskDo() {
+		if(sequenceNo == TASK_DO) {
+			ui.addUiParts(new SelectUIParts("task_result_check", 100, 100, "success", "failure"));
+			sequenceNo++;
+		}
+		else {
+			sequenceNo = GameScreen.TURN_STANDBY;
+			sequence = this::turnStandby;
+		}
+
+		//---- 動作
+		for (Player pl : player) {
+			pl.update();
+		}
 		board.update();
 		return 0;
 	}

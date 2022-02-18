@@ -1,52 +1,66 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
 
 public class BoardSurface {
-    public static int MAP_LENGTH = 2048;
     public static int TILE_LENGTH = 256;
-    public static TextureAtlas mapAtlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
     private final Array<Square> aSquare;
+    private final Array<Array<Integer>> mapAddress;
+    private final Array<Integer> squareAddress;
+    private final TextureAtlas mapAtlas;
 
     //-- 参照
 //    private final Array<Piece> aPiece;
 
     private final Sprite backSprite;
-    private final Group group;
 
     public BoardSurface() {
+        mapAtlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
         backSprite = mapAtlas.createSprite("back");
         backSprite.flip(false, true);
         aSquare = new Array<>();
-        group = new Group();
+
+        mapAddress = new Array<>();
+        int i;
+        int j;
+        for(j = 0; j < 16; j++) {
+            for(i = 0; i < 16; i++) {
+                Array<Integer> address = new Array<>();
+                address.add(i, j);
+                mapAddress.add(address);
+            }
+        }
+
+        squareAddress = new Array<>();
+        for(j = 0; j < 192; j +=64) {
+            for(i = 35; i < 45; i++) squareAddress.add(i + j);
+            squareAddress.add(60 + j);
+            for(i = 76; i > 66; i--) squareAddress.add(i + j);
+            squareAddress.add(83 + j);
+        }
+
         initialize();
     }
 
     private void initialize() {
-        int i;
-        int j;
-        for(i = 0; i <= 4; i += 4) {
-            for(j = 0; j < 8; j++) newSquare(j, i);
-            newSquare(7, 1+i);
-            for(j = 7; j >= 0; j--) newSquare(j, 2+i);
-            newSquare(0, 3+i);
+        boolean start = true;
+        Array.ArrayIterator<Integer> ite = new Array.ArrayIterator<>(squareAddress);
+        while(ite.hasNext()) {
+            int index = ite.next();
+            if(start) {
+                aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), 0, mapAtlas));
+                start = false;
+            }
+            else if(!ite.hasNext()) aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), 1, mapAtlas));
+            else aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), 2, mapAtlas));
         }
-    }
-
-    private void newSquare(int x, int y) {
-        Square square = new Square(x, y);
-        aSquare.add(square);
     }
 
     public void update() {
@@ -54,16 +68,21 @@ public class BoardSurface {
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
-        backSprite.setSize(MAP_LENGTH, MAP_LENGTH);
-        backSprite.setPosition(0, 0);
-        backSprite.draw(batch);
-        batch.end();
+
+        backSprite.setSize(TILE_LENGTH, TILE_LENGTH);
+        for(int i = 0; i < 256; i++) {
+            if(squareAddress.contains(i, true)) continue;
+            backSprite.setPosition(TILE_LENGTH * mapAddress.get(i).get(0), TILE_LENGTH * mapAddress.get(i).get(1));
+            backSprite.draw(batch);
+        }
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
-            square.draw(batch, renderer);
+            square.draw(batch);
         }
+
+        batch.end();
     }
 
     public void dispose () {

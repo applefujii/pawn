@@ -1,13 +1,15 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Square {
-    public static int SQUARE_LENGTH = 256;
-
     protected int type;               // マスの種類
     protected String document;        // マスの文字
+
+    protected Sprite normal;
 
     protected int x;
     protected int y;
@@ -15,18 +17,19 @@ public class Square {
     public Square(int xPos, int yPos) {
         x = xPos;
         y = yPos;
+        normal = BoardSurface.mapAtlas.createSprite("normal");
+        normal.flip(false, true);
     }
 
     public void update() {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0, 0, 0, 1);
-        renderer.box(x*SQUARE_LENGTH, y*SQUARE_LENGTH, 0, SQUARE_LENGTH, SQUARE_LENGTH, 0);
-        renderer.setColor(1, 1, 1, 1);
-        renderer.box(x*SQUARE_LENGTH+1, y*SQUARE_LENGTH+1, 0, SQUARE_LENGTH-2, SQUARE_LENGTH-2, 0);
-        renderer.end();
+        batch.begin();
+        normal.setSize(BoardSurface.TILE_LENGTH, BoardSurface.TILE_LENGTH);
+        normal.setPosition(x*BoardSurface.TILE_LENGTH, y*BoardSurface.TILE_LENGTH);
+        normal.draw(batch);
+        batch.end();
     }
 
     public void dispose () {

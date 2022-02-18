@@ -1,9 +1,11 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -13,18 +15,17 @@ import java.util.Iterator;
 
 public class BoardSurface {
     public static int MAP_LENGTH = 2048;
+    public static int TILE_LENGTH = 256;
+    public static TextureAtlas mapAtlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
     private final Array<Piece> aPiece;
     private final Array<Square> aSquare;
 
-    private final Texture img;        // テクスチャ
+    private final Sprite backSprite;
     private final Group group;
 
     public BoardSurface() {
-        Pixmap mapPix = new Pixmap(MAP_LENGTH, MAP_LENGTH, Pixmap.Format.RGB888);
-        mapPix.setColor(0, 1, 0, 1);
-        mapPix.fill();
-        img = new Texture(mapPix);
-        mapPix.dispose();
+        backSprite = mapAtlas.createSprite("back");
+        backSprite.flip(false, true);
         aPiece = new Array<>();
         aSquare = new Array<>();
         group = new Group();
@@ -64,12 +65,9 @@ public class BoardSurface {
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
-        Sprite sprite = new Sprite( new TextureRegion(img));
-        sprite.setSize(MAP_LENGTH, MAP_LENGTH);
-//        sprite.setRegion(100,100,100,100);
-        sprite.setPosition(0, 0);   // ※仮
-        sprite.flip(false, true);       // 上下反転 setRegionより後に
-        sprite.draw(batch);
+        backSprite.setSize(MAP_LENGTH, MAP_LENGTH);
+        backSprite.setPosition(0, 0);
+        backSprite.draw(batch);
         batch.end();
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
@@ -86,7 +84,7 @@ public class BoardSurface {
     }
 
     public void dispose () {
-        img.dispose();
+        mapAtlas.dispose();
     }
 
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class UI {
+    public static int select = -1;
     private Array<UIParts> uiParts;
 
     //-- 参照
@@ -29,6 +30,7 @@ public class UI {
         for(UIParts ui : uiParts) {
             int ret = ui.update();
             if( ret != -1 ) {
+                select = ret;
                 uiParts.removeValue(ui, false);
                 return ret;
             }

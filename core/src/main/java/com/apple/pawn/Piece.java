@@ -8,12 +8,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Piece {
-    private String name;
     private Texture img;        // テクスチャ
     private int squareNo;       // 現在何マス目か
 
-    public Piece(String name) {
-        this.name = name;
+    public Piece() {
         img = new Texture("badlogic.jpg");
         squareNo = 0;
     }

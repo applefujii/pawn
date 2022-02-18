@@ -15,7 +15,7 @@ public class Player {
     private Dice dice;
 
     public Player(String name, int type) {
-        piece = new Piece(name);
+        piece = new Piece();
         this.name = name;
     }
 
@@ -29,6 +29,7 @@ public class Player {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
+        piece.draw(batch, renderer);
     }
 
     public void dispose () {

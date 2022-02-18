@@ -45,9 +45,10 @@ public class GameScreen implements Screen {
 	private int sequenceNo;
 
 	//---- 他のクラス
-	private Array<Player> player;			// プレイヤー
+	private PlayerManager playerManager;	// プレイヤー管理
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
 	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
+	private int diceNo;						// サイコロの直近の出た目
 	private BoardSurface board;				// 盤面
 	private UI ui;							// UI
 
@@ -80,16 +81,14 @@ public class GameScreen implements Screen {
 		turnPlayerNo = -1;
 
 		//-- new
-		player = new Array<Player>();
-		player.add(new Player("1P", 1));
-		player.add(new Player("2P", 2));
+		playerManager = new PlayerManager();
+		playerManager.initialize(game);
+		playerManager.add("1P", 1);
+		playerManager.add("2P", 2);
 		board = new BoardSurface();
 		ui = new UI();
 
 		//-- 初期化
-		for(Player pl : player) {
-			pl.initialize(game);
-		}
 		ui.initialize(game);
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
@@ -168,6 +167,7 @@ public class GameScreen implements Screen {
 
 		//------ メイン描画
 		board.draw(batch, renderer);
+		playerManager.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -217,17 +217,15 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void dispose () {
-		for(Player pl : player) {
-			pl.dispose();
-		}
+		playerManager.dispose();
 		board.dispose();
 	}
 
 	private int turnStandby() {
 		if(sequenceNo == TURN_STANDBY) {
 			turnPlayerNo++;
-			if(turnPlayerNo >= player.size) turnPlayerNo = 0;
-			turnPlayer = player.get(turnPlayerNo);
+			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
+			turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			ui.setDice(turnPlayer.getDice());
 			ui.addUiParts(new SelectUIParts("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
@@ -243,9 +241,7 @@ public class GameScreen implements Screen {
 		}
 
 		//---- 動作
-		for(Player pl : player) {
-			pl.update();
-		}
+		playerManager.update();
 		board.update();
 		return 0;
 	}
@@ -268,9 +264,7 @@ public class GameScreen implements Screen {
 		}
 
 		//---- 動作
-		for(Player pl : player) {
-			pl.update();
-		}
+		playerManager.update();
 		board.update();
 		return 0;
 	}
@@ -285,16 +279,14 @@ public class GameScreen implements Screen {
 		else {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				turnPlayer.getPiece().move(dice.rollStop());
+				diceNo = dice.rollStop();
 				sequenceNo = GameScreen.PIECE_ADVANCE;
 				sequence = this::PieceAdvance;
 			}
 		}
 
 		//---- 動作
-		for(Player pl : player) {
-			pl.update();
-		}
+		playerManager.update();
 		board.update();
 		return 0;
 	}
@@ -305,17 +297,13 @@ public class GameScreen implements Screen {
 			sequenceNo++;
 		}
 		else {
-			//------ 入力
-//			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				sequenceNo = GameScreen.TASK_DO;
-				sequence = this::taskDo;
-//			}
+			turnPlayer.getPiece().move(diceNo);
+			sequenceNo = GameScreen.TASK_DO;
+			sequence = this::taskDo;
 		}
 
 		//---- 動作
-		for(Player pl : player) {
-			pl.update();
-		}
+		playerManager.update();
 		board.update();
 		return 0;
 	}
@@ -325,15 +313,18 @@ public class GameScreen implements Screen {
 			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
 			sequenceNo++;
 		}
+		else if(sequenceNo == TASK_DO+1) {
+			if(UI.select == 0) turnPlayer.getPiece().move(1);
+			if(UI.select == 1) turnPlayer.getPiece().move(-1);
+			sequenceNo++;
+		}
 		else {
 			sequenceNo = GameScreen.TURN_STANDBY;
 			sequence = this::turnStandby;
 		}
 
 		//---- 動作
-		for (Player pl : player) {
-			pl.update();
-		}
+		playerManager.update();
 		board.update();
 		return 0;
 	}

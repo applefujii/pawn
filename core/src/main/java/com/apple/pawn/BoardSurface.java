@@ -17,8 +17,10 @@ public class BoardSurface {
     public static int MAP_LENGTH = 2048;
     public static int TILE_LENGTH = 256;
     public static TextureAtlas mapAtlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
-    private final Array<Piece> aPiece;
     private final Array<Square> aSquare;
+
+    //-- 参照
+//    private final Array<Piece> aPiece;
 
     private final Sprite backSprite;
     private final Group group;
@@ -26,20 +28,12 @@ public class BoardSurface {
     public BoardSurface() {
         backSprite = mapAtlas.createSprite("back");
         backSprite.flip(false, true);
-        aPiece = new Array<>();
         aSquare = new Array<>();
         group = new Group();
         initialize();
     }
 
     private void initialize() {
-        Piece pi = new Piece("1P");
-        pi.setSquareNo(0);
-        aPiece.add( pi );
-        pi = new Piece("2P");
-        pi.setSquareNo(1);
-        aPiece.add( pi );
-
         int i;
         int j;
         for(i = 0; i <= 4; i += 4) {
@@ -56,11 +50,6 @@ public class BoardSurface {
     }
 
     public void update() {
-        Iterator<Piece> pieceIterator = new Array.ArrayIterator<>(aPiece);
-        while(pieceIterator.hasNext()) {
-            Piece piece = pieceIterator.next();
-            piece.update();
-        }
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
@@ -74,12 +63,6 @@ public class BoardSurface {
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
             square.draw(batch, renderer);
-        }
-
-        Iterator<Piece> pieceIterator = new Array.ArrayIterator<>(aPiece);
-        while(pieceIterator.hasNext()) {
-            Piece piece = pieceIterator.next();
-            piece.draw(batch, renderer);
         }
     }
 

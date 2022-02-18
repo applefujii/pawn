@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -79,8 +81,8 @@ public class GameScreen implements Screen {
 
 		//-- new
 		player = new Array<Player>();
-		player.add(new Player("1P"));
-		player.add(new Player("2P"));
+		player.add(new Player("1P", 1));
+		player.add(new Player("2P", 2));
 		board = new BoardSurface();
 		ui = new UI();
 
@@ -147,6 +149,8 @@ public class GameScreen implements Screen {
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
 		ScreenUtils.clear(0, 0, 0, 1);
+//		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//-- 論理表示領域を黒で塗りつぶし
 //		renderer.begin(ShapeRenderer.ShapeType.Filled);
 //		renderer.setColor(0,0,0,1);
@@ -176,6 +180,7 @@ public class GameScreen implements Screen {
 			font.getData().setScale(1, 1);
 			font.draw(batch, "ScreenOrigin: " + screenOrigin.x + ":" + screenOrigin.y, 0, 0);
 			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16);
+			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 32);
 			batch.end();
 		}
 	}
@@ -224,7 +229,7 @@ public class GameScreen implements Screen {
 			if(turnPlayerNo >= player.size) turnPlayerNo = 0;
 			turnPlayer = player.get(turnPlayerNo);
 			ui.setDice(turnPlayer.getDice());
-			ui.addUiParts(new SelectUIParts("confirm_ready", 100, 100, "ready"));
+			ui.addUiParts(new SelectUIParts("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
 		}
 		else {
@@ -247,7 +252,7 @@ public class GameScreen implements Screen {
 
 	private int actionSelect() {
 		if(sequenceNo == ACTION_SELECT) {
-			ui.addUiParts(new SelectUIParts("action_select", 100, 100, "dice", "map"));
+			ui.addUiParts(new SelectUIParts("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
 		}
 		else {
@@ -296,7 +301,7 @@ public class GameScreen implements Screen {
 
 	private int PieceAdvance() {
 		if(sequenceNo == PIECE_ADVANCE) {
-			ui.addUiParts(new SelectUIParts("move_piece", 100, 100, "move"));
+			ui.addUiParts(new SelectUIParts("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, "移動"));
 			sequenceNo++;
 		}
 		else {
@@ -317,7 +322,7 @@ public class GameScreen implements Screen {
 
 	private int taskDo() {
 		if(sequenceNo == TASK_DO) {
-			ui.addUiParts(new SelectUIParts("task_result_check", 100, 100, "success", "failure"));
+			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
 			sequenceNo++;
 		}
 		else {

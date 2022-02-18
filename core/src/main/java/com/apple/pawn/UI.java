@@ -9,9 +9,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class UI {
     private Array<UIParts> uiParts;
+
+    //-- 参照
+    private Pawn game;
     private Dice dice;
 
-    private BitmapFont font;
     private Texture img;        // テクスチャ
 
     public UI() {
@@ -20,7 +22,7 @@ public class UI {
     }
 
     public void initialize(Pawn game) {
-        this.font = game.font;
+        this.game = game;
     }
 
     public int update() {

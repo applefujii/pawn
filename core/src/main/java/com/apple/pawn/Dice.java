@@ -11,6 +11,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author fujii
+ */
 public class Dice {
     private BitmapFont font;
     private RandomXS128 random;

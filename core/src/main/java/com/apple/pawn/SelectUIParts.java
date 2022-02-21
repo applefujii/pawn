@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * @author fujii
+ */
 public class SelectUIParts extends UIParts {
     private Array<String> choices;
     private int cursor = 0;

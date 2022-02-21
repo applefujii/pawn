@@ -19,6 +19,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.function.IntSupplier;
 
 
+/**
+ * @author fujii
+ */
 public class GameScreen implements Screen {
 	public static final int TURN_STANDBY = 10;
 	public static final int ACTION_SELECT = 20;

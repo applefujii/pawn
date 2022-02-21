@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * @author fujii
+ */
 public class Piece {
     private Texture img;        // テクスチャ
     private int squareNo;       // 現在何マス目か

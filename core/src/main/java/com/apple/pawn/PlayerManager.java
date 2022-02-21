@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * @author fujii
+ */
 public class PlayerManager {
     private Array<Player> aPlayer;
 

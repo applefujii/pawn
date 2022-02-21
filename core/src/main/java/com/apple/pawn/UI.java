@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * @author fujii
+ */
 public class UI {
     public static int select = -1;
     private Array<UIParts> uiParts;

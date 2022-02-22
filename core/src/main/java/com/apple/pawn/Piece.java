@@ -7,14 +7,20 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * @author fujii
+ */
 public class Piece {
     private Texture img;        // テクスチャ
     private int squareNo;       // 現在何マス目か
-    private String name;        // 名前
 
-    public Piece( String name ) {
-        this.name = name;
+    public Piece() {
         img = new Texture("badlogic.jpg");
+        squareNo = 0;
+    }
+
+    public void initialize(Pawn game) {
+
     }
 
     public void update() {
@@ -44,7 +50,7 @@ public class Piece {
     }
 
     public void move( int squareNo ) {
-        this.squareNo = squareNo;
+        this.squareNo += squareNo;
     }
 
     public void setSquareNo(int squareNo) {

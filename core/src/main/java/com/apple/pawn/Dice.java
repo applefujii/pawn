@@ -1,23 +1,42 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Array;
 
+import java.time.LocalDateTime;
+
+/**
+ * @author fujii
+ */
 public class Dice {
     private BitmapFont font;
+    private RandomXS128 random;
     private Texture img;        // テクスチャ
+    private boolean isRoll;
+    private int no;
     private Array<Integer> aNo;
 
-    public Dice(BitmapFont font) {
-        this.font = font;
+    public Dice(Pawn game) {
+        this.font = game.font;
+        random = game.random;
         img = new Texture("badlogic.jpg");
+        isRoll = false;
+        no = 1;
+        aNo = new Array<Integer>();
+        aNo.setSize(10);
     }
 
     public void update() {
+        if(isRoll) {
+            no = random.nextInt(6) +1;
+            Gdx.app.debug("info", "dice="+no);
+        }
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
@@ -39,12 +58,29 @@ public class Dice {
         renderer.end();
 
         batch.begin();
-        font.draw(batch, "1", Pawn.LOGICAL_WIDTH-64, Pawn.LOGICAL_HEIGHT-64);
+        font.draw(batch, Integer.toString(no), Pawn.LOGICAL_WIDTH-64, Pawn.LOGICAL_HEIGHT-64);
         batch.end();
     }
 
     public void dispose () {
         img.dispose();
+    }
+
+    public void rollStart() {
+        if(isRoll == false) isRoll = true;
+    }
+
+    public int rollStop() {
+        if(isRoll == true) {
+            isRoll = false;
+            aNo.add(no);
+            return no;
+        }
+        return -1;
+    }
+
+    public boolean isRoll() {
+        return isRoll;
     }
 
 }

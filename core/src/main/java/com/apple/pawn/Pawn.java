@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -25,6 +26,7 @@ public class Pawn extends Game {
 	public FreeTypeFontGenerator fontGenerator;
 	public BitmapFont font;
 	public ShapeRenderer renderer;
+	public RandomXS128 random;
 
 	public OrthographicCamera uiCamera;	// UIカメラ
 	public FitViewport uiViewport;
@@ -52,6 +54,7 @@ public class Pawn extends Game {
 		param.borderWidth = 2;				// 境界線の太さ
 		param.flip = true;					// 上下反転
 		font = fontGenerator.generateFont(param);
+		random = new RandomXS128(System.currentTimeMillis());
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, LOGICAL_WIDTH, LOGICAL_HEIGHT);

@@ -21,7 +21,7 @@ public class Square {
 
     static {
         TYPE_STR = new Array<>();
-        TYPE_STR.add("start", "goal", "normal");
+        TYPE_STR.add("start", "goal", "normal", "event");
     }
 
     public Square(int xPos, int yPos, int ty, TextureAtlas atlas) {

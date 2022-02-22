@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public class BoardSurface {
                 start = false;
             }
             else if(!ite.hasNext()) aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), 1, mapAtlas));
-            else aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), 2, mapAtlas));
+            else aSquare.add(new Square(mapAddress.get(index).get(0), mapAddress.get(index).get(1), MathUtils.random(2, 3), mapAtlas));
         }
     }
 

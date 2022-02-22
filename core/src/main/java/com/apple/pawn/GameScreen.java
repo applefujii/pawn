@@ -10,12 +10,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.Map;
 import java.util.function.IntSupplier;
 
 
@@ -51,7 +54,6 @@ public class GameScreen implements Screen {
 	private PlayerManager playerManager;	// プレイヤー管理
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
 	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
-	private int diceNo;						// サイコロの直近の出た目
 	private BoardSurface board;				// 盤面
 	private UI ui;							// UI
 
@@ -121,11 +123,17 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
+		if(Gdx.input.isKeyPressed(Input.Keys.W)) camera.zoom-=0.1;
+		if(Gdx.input.isKeyPressed(Input.Keys.S)) camera.zoom+=0.1;
 
 		if(FlagManagement.is(Flag.PLAY)) {
+			// UIの動作
 			if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 			// シークエンスの動作
 			if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
+			//-- その他の動作
+			playerManager.update();
+			board.update();
 		}
 
 		// Flag.PLAY == false
@@ -181,9 +189,10 @@ public class GameScreen implements Screen {
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
 			font.getData().setScale(1, 1);
-			font.draw(batch, "ScreenOrigin: " + screenOrigin.x + ":" + screenOrigin.y, 0, 0);
-			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16);
-			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 32);
+			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
+			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
+			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
+			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
 			batch.end();
 		}
 	}
@@ -229,11 +238,13 @@ public class GameScreen implements Screen {
 			turnPlayerNo++;
 			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 			turnPlayer = playerManager.getPlayer(turnPlayerNo);
+			setCameraPositionToTurnPlayer();
 			ui.setDice(turnPlayer.getDice());
 			ui.addUiParts(new SelectUIParts("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
+			return 0;
 		}
-		else {
+		if(sequenceNo == TURN_STANDBY +1) {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 				sequenceNo = GameScreen.ACTION_SELECT;
@@ -243,32 +254,34 @@ public class GameScreen implements Screen {
 			//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.zoom+=0.1;
 		}
 
-		//---- 動作
-		playerManager.update();
-		board.update();
 		return 0;
 	}
 
 	private int actionSelect() {
 		if(sequenceNo == ACTION_SELECT) {
+			setCameraPositionToTurnPlayer();
 			ui.addUiParts(new SelectUIParts("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
+			return 0;
 		}
-		else {
-			//------ 入力
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				sequenceNo = GameScreen.DICE_ROLL;
-				sequence = this::diceRoll;
-			}
-			//		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-			//		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-			//		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-			//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+		if(sequenceNo == ACTION_SELECT +1) {
+			if(UI.select == 0) sequenceNo+=2;
+			if(UI.select == 1) sequenceNo+=1;
+			return 0;
+		}
+		// マップ確認
+		if(sequenceNo == ACTION_SELECT +2) {
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) sequenceNo=ACTION_SELECT;
+			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
+			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
+			if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
+			if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+		}
+		if(sequenceNo == ACTION_SELECT +3) {
+			sequenceNo = GameScreen.DICE_ROLL;
+			sequence = this::diceRoll;
 		}
 
-		//---- 動作
-		playerManager.update();
-		board.update();
 		return 0;
 	}
 
@@ -279,18 +292,15 @@ public class GameScreen implements Screen {
 			dice.rollStart();
 			sequenceNo++;
 		}
-		else {
+		if(sequenceNo == DICE_ROLL +1) {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				diceNo = dice.rollStop();
+				dice.rollStop();
 				sequenceNo = GameScreen.PIECE_ADVANCE;
 				sequence = this::PieceAdvance;
 			}
 		}
 
-		//---- 動作
-		playerManager.update();
-		board.update();
 		return 0;
 	}
 
@@ -298,16 +308,15 @@ public class GameScreen implements Screen {
 		if(sequenceNo == PIECE_ADVANCE) {
 			ui.addUiParts(new SelectUIParts("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, "移動"));
 			sequenceNo++;
+			return 0;
 		}
-		else {
-			turnPlayer.getPiece().move(diceNo);
+		if(sequenceNo == PIECE_ADVANCE +1) {
+			turnPlayer.getPiece().move(turnPlayer.getDice().getNo());
+			setCameraPositionToTurnPlayer();
 			sequenceNo = GameScreen.TASK_DO;
 			sequence = this::taskDo;
 		}
 
-		//---- 動作
-		playerManager.update();
-		board.update();
 		return 0;
 	}
 
@@ -315,21 +324,27 @@ public class GameScreen implements Screen {
 		if(sequenceNo == TASK_DO) {
 			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
 			sequenceNo++;
+			return 0;
 		}
-		else if(sequenceNo == TASK_DO+1) {
+		if(sequenceNo == TASK_DO +1) {
 			if(UI.select == 0) turnPlayer.getPiece().move(1);
 			if(UI.select == 1) turnPlayer.getPiece().move(-1);
+			setCameraPositionToTurnPlayer();
 			sequenceNo++;
 		}
-		else {
+		if(sequenceNo == TASK_DO +2) {
 			sequenceNo = GameScreen.TURN_STANDBY;
 			sequence = this::turnStandby;
 		}
 
-		//---- 動作
-		playerManager.update();
-		board.update();
 		return 0;
+	}
+
+	private void setCameraPositionToTurnPlayer() {
+		Vector2 pv = turnPlayer.getPiece().getPosition();
+		camera.position.x = pv.x;
+		camera.position.y = pv.y;
+		camera.zoom = 1.0f;
 	}
 
 }

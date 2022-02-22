@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * @author fujii
@@ -15,11 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Player {
     private String name;
     private Piece piece;
+    private Array<Integer> aDiceNo;
+
+    //-- 参照
+    // ※参照にする
     private Dice dice;
 
-    public Player(String name, int type) {
-        piece = new Piece();
+    public Player(String name, int pieceColorNo) {
         this.name = name;
+        piece = new Piece(pieceColorNo);
+        aDiceNo = new Array<Integer>();
+        aDiceNo.setSize(10);
     }
 
     public void initialize(Pawn game) {
@@ -48,5 +55,9 @@ public class Player {
 
     public Dice getDice() {
         return dice;
+    }
+
+    public void addADiceNo(int diceNo) {
+        aDiceNo.add(diceNo);
     }
 }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Array;
  * @author fujii
  */
 public class PlayerManager {
+    public static final int RED = 1;
+
     private Array<Player> aPlayer;
 
     //-- 参照
@@ -39,8 +41,8 @@ public class PlayerManager {
         }
     }
 
-    public int add(String name, int type) {
-        Player p = new Player(name, type);
+    public int add(String name, int pieceColorNo) {
+        Player p = new Player(name, pieceColorNo);
         p.initialize(game);
         aPlayer.add(p);
         return aPlayer.size;

@@ -46,7 +46,7 @@ public class SelectUIParts extends UIParts {
         renderer.end();
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(1,1,1,0.5f);
+        renderer.setColor(1.0f,0.4f,0.4f,0.5f);
         renderer.box(x,y+height*cursor,0,width,height,0);
         renderer.end();
 

@@ -1,11 +1,14 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * @author fujii
@@ -13,8 +16,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Piece {
     private Texture img;        // テクスチャ
     private int squareNo;       // 現在何マス目か
+    private final TextureAtlas atlas;
 
-    public Piece() {
+    public Piece(int pieceColorNo) {
+        atlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
         img = new Texture("badlogic.jpg");
         squareNo = 0;
     }
@@ -37,6 +42,7 @@ public class Piece {
 //        batch.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.BLACK);
+        // ※マスのサイズは仮。BoardSurface.TILE_LENGTH に後で置き換える
         renderer.circle(50+squareNo*100, 100, 32);
         renderer.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -55,5 +61,10 @@ public class Piece {
 
     public void setSquareNo(int squareNo) {
         this.squareNo = squareNo;
+    }
+
+    //※ 仮
+    public Vector2 getPosition() {
+        return new Vector2(50+squareNo*100,100);
     }
 }

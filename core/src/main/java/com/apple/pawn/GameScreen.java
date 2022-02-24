@@ -245,7 +245,7 @@ public class GameScreen implements Screen {
 
 		//---- 動作
 		playerManager.update();
-		board.update();
+		board.update(turnPlayer);
 		return 0;
 	}
 
@@ -268,7 +268,7 @@ public class GameScreen implements Screen {
 
 		//---- 動作
 		playerManager.update();
-		board.update();
+		board.update(turnPlayer);
 		return 0;
 	}
 
@@ -283,6 +283,7 @@ public class GameScreen implements Screen {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 				diceNo = dice.rollStop();
+				turnPlayer.getPiece().setMove(diceNo);
 				sequenceNo = GameScreen.PIECE_ADVANCE;
 				sequence = this::PieceAdvance;
 			}
@@ -290,35 +291,36 @@ public class GameScreen implements Screen {
 
 		//---- 動作
 		playerManager.update();
-		board.update();
+		board.update(turnPlayer);
 		return 0;
 	}
 
 	private int PieceAdvance() {
+		FlagManagement.set(Flag.DICE_MOVE);
 		if(sequenceNo == PIECE_ADVANCE) {
 			ui.addUiParts(new SelectUIParts("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, "移動"));
 			sequenceNo++;
 		}
 		else {
-			turnPlayer.getPiece().move(diceNo);
+			turnPlayer.getPiece().move();
 			sequenceNo = GameScreen.TASK_DO;
 			sequence = this::taskDo;
+			FlagManagement.set(Flag.DICE_MOVE);
 		}
 
 		//---- 動作
 		playerManager.update();
-		board.update();
+		board.update(turnPlayer);
 		return 0;
 	}
 
 	private int taskDo() {
-		if(sequenceNo == TASK_DO) {
+		if(sequenceNo == TASK_DO && turnPlayer.getPiece().getMove() != 0) {
 			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
 			sequenceNo++;
 		}
 		else if(sequenceNo == TASK_DO+1) {
-			if(UI.select == 0) turnPlayer.getPiece().move(1);
-			if(UI.select == 1) turnPlayer.getPiece().move(-1);
+			if(UI.select == 0) turnPlayer.getPiece().move();
 			sequenceNo++;
 		}
 		else {
@@ -328,7 +330,7 @@ public class GameScreen implements Screen {
 
 		//---- 動作
 		playerManager.update();
-		board.update();
+		board.update(turnPlayer);
 		return 0;
 	}
 

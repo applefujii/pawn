@@ -17,9 +17,12 @@ public class Player {
     private Piece piece;
     private Dice dice;
 
+    private boolean isGoal;
+
     public Player(String name, int type) {
         piece = new Piece();
         this.name = name;
+        isGoal = false;
     }
 
     public void initialize(Pawn game) {
@@ -48,5 +51,10 @@ public class Player {
 
     public Dice getDice() {
         return dice;
+    }
+
+    public void goal() {
+        isGoal = true;
+        piece.setMove(0);
     }
 }

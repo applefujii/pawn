@@ -43,13 +43,16 @@ public class GameScreen implements Screen {
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
 	private int sequenceNo;
+	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
 
 	//---- 他のクラス
 	private PlayerManager playerManager;	// プレイヤー管理
-	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
-	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
 	private BoardSurface board;				// 盤面
+	private Dice dice;						// さいころ
 	private UI ui;							// UI
+
+	//---- 参照
+	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
 
 
 	/**
@@ -85,10 +88,13 @@ public class GameScreen implements Screen {
 		playerManager.add("1P", 1);
 		playerManager.add("2P", 2);
 		board = new BoardSurface();
+		dice = new Dice(game);
 		ui = new UI();
 
 		//-- 初期化
 		ui.initialize(game);
+		//-- 参照セット
+		ui.setDice(dice);
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -127,6 +133,7 @@ public class GameScreen implements Screen {
 			if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
 			//-- その他の動作
 			playerManager.update();
+			dice.update();
 			board.update();
 		}
 
@@ -224,6 +231,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose () {
 		playerManager.dispose();
+		dice.dispose();
 		board.dispose();
 	}
 
@@ -233,7 +241,6 @@ public class GameScreen implements Screen {
 			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 			turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			setCameraPositionToTurnPlayer();
-			ui.setDice(turnPlayer.getDice());
 			ui.addUiParts(new SelectUIParts("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
 			return 0;
@@ -280,8 +287,6 @@ public class GameScreen implements Screen {
 	}
 
 	private int diceRoll() {
-		Dice dice = turnPlayer.getDice();
-
 		if(sequenceNo == Sequence.DICE_ROLL.no) {
 			dice.rollStart();
 			sequenceNo++;
@@ -289,7 +294,7 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				dice.rollStop();
+				turnPlayer.addADiceNo( dice.rollStop() );
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
 			}
@@ -305,7 +310,7 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +1) {
-			turnPlayer.getPiece().move(turnPlayer.getDice().getNo());
+			turnPlayer.getPiece().move(dice.getNo());
 			setCameraPositionToTurnPlayer();
 			sequenceNo = Sequence.TASK_DO.no;
 			sequence = this::taskDo;

@@ -18,10 +18,6 @@ public class Player {
     private Piece piece;
     private Array<Integer> aDiceNo;
 
-    //-- 参照
-    // ※参照にする
-    private Dice dice;
-
     public Player(String name, int pieceColorNo) {
         this.name = name;
         piece = new Piece(pieceColorNo);
@@ -29,13 +25,8 @@ public class Player {
         aDiceNo.setSize(10);
     }
 
-    public void initialize(Pawn game) {
-        dice = new Dice(game);
-    }
-
     public void update() {
         piece.update();
-        dice.update();
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
@@ -51,10 +42,6 @@ public class Player {
 
     public String getName() {
         return name;
-    }
-
-    public Dice getDice() {
-        return dice;
     }
 
     public void addADiceNo(int diceNo) {

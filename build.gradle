@@ -46,6 +46,7 @@ configure(subprojects) {
 				because("CVE-2021-44228, CVE-2021-45046, CVE-2021-45105: Log4j vulnerable to remote code execution and other critical security vulnerabilities")
 			}
 		}
+		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
 	}
 
 }

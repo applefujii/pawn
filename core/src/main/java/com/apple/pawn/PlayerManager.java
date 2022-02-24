@@ -43,7 +43,6 @@ public class PlayerManager {
 
     public int add(String name, int pieceColorNo) {
         Player p = new Player(name, pieceColorNo);
-        p.initialize(game);
         aPlayer.add(p);
         return aPlayer.size;
     }

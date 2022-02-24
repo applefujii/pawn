@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * @author fujii
@@ -15,23 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Player {
     private String name;
     private Piece piece;
-    private Dice dice;
+    private Array<Integer> aDiceNo;
 
-    private boolean isGoal;
-
-    public Player(String name, int type) {
-        piece = new Piece();
+    public Player(String name, int pieceColorNo) {
         this.name = name;
-        isGoal = false;
-    }
-
-    public void initialize(Pawn game) {
-        dice = new Dice(game);
+        piece = new Piece(pieceColorNo);
+        aDiceNo = new Array<Integer>();
+        aDiceNo.setSize(10);
     }
 
     public void update() {
         piece.update();
-        dice.update();
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
@@ -49,12 +44,7 @@ public class Player {
         return name;
     }
 
-    public Dice getDice() {
-        return dice;
-    }
-
-    public void goal() {
-        isGoal = true;
-        piece.setMove(0);
+    public void addADiceNo(int diceNo) {
+        aDiceNo.add(diceNo);
     }
 }

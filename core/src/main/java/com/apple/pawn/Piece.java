@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * @author fujii
@@ -14,12 +16,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Piece {
     private Texture img;        // テクスチャ
     private int squareNo;       // 現在何マス目か
-    private int move;
+    private final TextureAtlas atlas;
 
-    public Piece() {
+    public Piece(int pieceColorNo) {
+        atlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
         img = new Texture("badlogic.jpg");
         squareNo = 0;
-        move = 0;
     }
 
     public void initialize(Pawn game) {
@@ -40,6 +42,7 @@ public class Piece {
 //        batch.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.BLACK);
+        // ※マスのサイズは仮。BoardSurface.TILE_LENGTH に後で置き換える
         renderer.circle(50+squareNo*100, 100, 32);
         renderer.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -52,22 +55,16 @@ public class Piece {
         img.dispose();
     }
 
-    public void setMove(int move) {
-        this.move = move;
-        Gdx.app.log("move=", String.valueOf(this.move));
-    }
-
-    public int getMove() { return move; }
-
-    public void move() {
-        squareNo += move;
-        if(squareNo > BoardSurface.SQUARE_COUNT) squareNo = BoardSurface.SQUARE_COUNT;
+    public void move( int squareNo ) {
+        this.squareNo += squareNo;
     }
 
     public void setSquareNo(int squareNo) {
         this.squareNo = squareNo;
-        if(this.squareNo > BoardSurface.SQUARE_COUNT) this.squareNo = BoardSurface.SQUARE_COUNT;
     }
 
-    public int getSquareNo() { return this.squareNo; }
+    //※ 仮
+    public Vector2 getPosition() {
+        return new Vector2(50+squareNo*100,100);
+    }
 }

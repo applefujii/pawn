@@ -21,16 +21,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import java.util.Map;
 import java.util.function.IntSupplier;
 
-
 /**
  * @author fujii
  */
 public class GameScreen implements Screen {
-	public static final int TURN_STANDBY = 10;
-	public static final int ACTION_SELECT = 20;
-	public static final int DICE_ROLL = 30;
-	public static final int PIECE_ADVANCE = 40;
-	public static final int TASK_DO = 50;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -102,7 +96,7 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 
-		sequenceNo = GameScreen.TURN_STANDBY;
+		sequenceNo = Sequence.TURN_STANDBY.no;
 		// 動作させる関数を代入
 		sequence = this::turnStandby;
 	}
@@ -234,7 +228,7 @@ public class GameScreen implements Screen {
 	}
 
 	private int turnStandby() {
-		if(sequenceNo == TURN_STANDBY) {
+		if(sequenceNo == Sequence.TURN_STANDBY.no) {
 			turnPlayerNo++;
 			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 			turnPlayer = playerManager.getPlayer(turnPlayerNo);
@@ -244,10 +238,10 @@ public class GameScreen implements Screen {
 			sequenceNo++;
 			return 0;
 		}
-		if(sequenceNo == TURN_STANDBY +1) {
+		if(sequenceNo == Sequence.TURN_STANDBY.no +1) {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				sequenceNo = GameScreen.ACTION_SELECT;
+				sequenceNo = Sequence.ACTION_SELECT.no;
 				sequence = this::actionSelect;
 			}
 			//		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.zoom-=0.1;
@@ -258,27 +252,27 @@ public class GameScreen implements Screen {
 	}
 
 	private int actionSelect() {
-		if(sequenceNo == ACTION_SELECT) {
+		if(sequenceNo == Sequence.ACTION_SELECT.no) {
 			setCameraPositionToTurnPlayer();
 			ui.addUiParts(new SelectUIParts("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
 			return 0;
 		}
-		if(sequenceNo == ACTION_SELECT +1) {
+		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
 			if(UI.select == 0) sequenceNo+=2;
 			if(UI.select == 1) sequenceNo+=1;
 			return 0;
 		}
 		// マップ確認
-		if(sequenceNo == ACTION_SELECT +2) {
-			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) sequenceNo=ACTION_SELECT;
+		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) sequenceNo=Sequence.ACTION_SELECT.no;
 			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
 			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
 			if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
 			if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
 		}
-		if(sequenceNo == ACTION_SELECT +3) {
-			sequenceNo = GameScreen.DICE_ROLL;
+		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
+			sequenceNo = Sequence.DICE_ROLL.no;
 			sequence = this::diceRoll;
 		}
 
@@ -288,15 +282,15 @@ public class GameScreen implements Screen {
 	private int diceRoll() {
 		Dice dice = turnPlayer.getDice();
 
-		if(sequenceNo == DICE_ROLL) {
+		if(sequenceNo == Sequence.DICE_ROLL.no) {
 			dice.rollStart();
 			sequenceNo++;
 		}
-		if(sequenceNo == DICE_ROLL +1) {
+		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			//------ 入力
 			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 				dice.rollStop();
-				sequenceNo = GameScreen.PIECE_ADVANCE;
+				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
 			}
 		}
@@ -305,15 +299,15 @@ public class GameScreen implements Screen {
 	}
 
 	private int PieceAdvance() {
-		if(sequenceNo == PIECE_ADVANCE) {
+		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
 			ui.addUiParts(new SelectUIParts("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, "移動"));
 			sequenceNo++;
 			return 0;
 		}
-		if(sequenceNo == PIECE_ADVANCE +1) {
+		if(sequenceNo == Sequence.PIECE_ADVANCE.no +1) {
 			turnPlayer.getPiece().move(turnPlayer.getDice().getNo());
 			setCameraPositionToTurnPlayer();
-			sequenceNo = GameScreen.TASK_DO;
+			sequenceNo = Sequence.TASK_DO.no;
 			sequence = this::taskDo;
 		}
 
@@ -321,19 +315,19 @@ public class GameScreen implements Screen {
 	}
 
 	private int taskDo() {
-		if(sequenceNo == TASK_DO) {
+		if(sequenceNo == Sequence.TASK_DO.no) {
 			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
 			sequenceNo++;
 			return 0;
 		}
-		if(sequenceNo == TASK_DO +1) {
+		if(sequenceNo == Sequence.TASK_DO.no +1) {
 			if(UI.select == 0) turnPlayer.getPiece().move(1);
 			if(UI.select == 1) turnPlayer.getPiece().move(-1);
 			setCameraPositionToTurnPlayer();
 			sequenceNo++;
 		}
-		if(sequenceNo == TASK_DO +2) {
-			sequenceNo = GameScreen.TURN_STANDBY;
+		if(sequenceNo == Sequence.TASK_DO.no +2) {
+			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}
 

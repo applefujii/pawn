@@ -36,13 +36,5 @@ public class EventSquare extends Square {
     }
 
     @Override
-    public void update(Player turnPlayer) {
-        if(FlagManagement.is(Flag.INPUT_ENABLE)) {
-            if (type == 1) turnPlayer.goal();
-            else if (FlagManagement.is(Flag.DICE_MOVE)) {
-                turnPlayer.getPiece().setMove(move);
-                FlagManagement.fold(Flag.DICE_MOVE);
-            }
-        }
-    }
+    public void update() { }
 }

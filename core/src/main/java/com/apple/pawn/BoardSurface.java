@@ -70,8 +70,7 @@ public class BoardSurface {
         }
     }
 
-    public void update(Player turnPlayer) {
-        aSquare.get(turnPlayer.getPiece().getSquareNo()).update(turnPlayer);
+    public void update() {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {

@@ -32,12 +32,7 @@ public class Square {
         sprite.flip(false, true);
     }
 
-    public void update(Player turnPlayer) {
-        if(FlagManagement.is(Flag.DICE_MOVE) && FlagManagement.is(Flag.INPUT_ENABLE)) {
-            turnPlayer.getPiece().setMove(0);
-            FlagManagement.fold(Flag.DICE_MOVE);
-        }
-    }
+    public void update() { }
 
     public void draw (Batch batch) {
         sprite.setSize(BoardSurface.TILE_LENGTH, BoardSurface.TILE_LENGTH);

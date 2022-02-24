@@ -84,19 +84,17 @@ public class FlagManagement {
     }
 
     /**
-     * フラグを文字列に変換
-     * @return String 16進数で変換した文字列
+     * フラグをLong[]で返す
+     * @return Long[] 数値化されたフラグ
      */
-    public static String Encode() {
-        String ret = "";
-
+    public static Long[] Encode() {
         Array<Long> bits = new Array<Long>();
         Long l = 0L;
         int dir = 0;
         for (Flag val : flags) {
             if( dir < (int) (Math.floor(val.no / 64)) ) {
                 dir = (int) (Math.floor(val.no / 64));
-                bits.insert(0,l);
+                bits.add(l);
                 l = 0L;
             }
             if(val.isSave) {
@@ -104,30 +102,32 @@ public class FlagManagement {
 //                Gdx.app.debug("info", "save="+String.format("%016x", l));
             }
         }
-        bits.insert(0,l);
+        bits.add(l);
 
         //-- 文字列化
+        String ret = "";
         Array.ArrayIterator<Long> fi = bits.iterator();
         while( fi.hasNext() ) {
             long lo = fi.next();
             ret += String.format("%016x", lo);
         }
+        Gdx.app.debug("info", "flag="+ret);
 
-        return ret;
+        Gdx.app.debug("info", "flag="+bits.toArray(Long.class)[0]);
+        return bits.toArray(Long.class);
     }
 
-    /**
-     * ※未完成 文字列から読み取る
-     * @param str 変換する文字列
-     */
-    private static void Decode(String str) {
-        try {
-            int cnt = str.length() / 16;
-            for (int i = 0; i < cnt; i++) {
-                str.substring(i * 16, i * 16 + 15);
+    private static void Decode(Long... data) {
+        flags.clear();
+        int i = 0;
+        for(Long d : data) {
+            for(int n=0 ; n>=64 ; n++) {
+                Long a = d & 1L<<(n+i*64);
+                if(a != 0) {
+                    FlagManagement.set(Flag.searchNo(a));
+                }
             }
-        } catch(Exception e) {
-            Gdx.app.debug("error", "セーブデータの読み込みに失敗しました。");
+            i++;
         }
     }
 

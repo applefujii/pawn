@@ -99,4 +99,13 @@ public enum Flag {
         this.cry = cry;
     }
 
+    public static Flag searchNo(Long no) {
+        for (Flag f : Flag.values()) {
+            if (f.no == no) {
+                return f;
+            }
+        }
+        return null;
+    }
+
 }

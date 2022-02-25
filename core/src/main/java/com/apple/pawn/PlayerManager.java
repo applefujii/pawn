@@ -51,6 +51,10 @@ public class PlayerManager {
         return aPlayer.size;
     }
 
+    public Array<Player> getPlayer() {
+        return aPlayer;
+    }
+
     public Player getPlayer(int i) {
         return aPlayer.get(i);
     }

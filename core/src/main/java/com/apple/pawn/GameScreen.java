@@ -50,6 +50,8 @@ public class GameScreen implements Screen {
 	private BoardSurface board;				// 盤面
 	private Dice dice;						// さいころ
 	private UI ui;							// UI
+	private FileIO fileIO;
+	private SaveData saveData;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -64,6 +66,7 @@ public class GameScreen implements Screen {
 		font = game.font;
 		renderer = game.renderer;
 
+		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, game.LOGICAL_WIDTH, game.LOGICAL_HEIGHT);
 		viewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
@@ -78,11 +81,10 @@ public class GameScreen implements Screen {
 		uiStage = new Stage(uiViewport);
 		Gdx.input.setInputProcessor(uiStage);
 
+		//---- その他の初期化
+		//-- new
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
-		turnPlayerNo = -1;
-
-		//-- new
 		playerManager = new PlayerManager();
 		playerManager.initialize(game);
 		playerManager.add("1P", 1);
@@ -90,11 +92,16 @@ public class GameScreen implements Screen {
 		board = new BoardSurface();
 		dice = new Dice(game);
 		ui = new UI();
-
+		fileIO = new FileIO();
+		saveData = new SaveData();
 		//-- 初期化
+		turnPlayerNo = -1;
 		ui.initialize(game);
 		//-- 参照セット
 		ui.setDice(dice);
+		fileIO.setSaveData(saveData);
+		saveData.setPlayer(playerManager.getPlayer());
+		fileIO.save();
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);

@@ -6,7 +6,8 @@ public enum Flag {
     UI_VISIBLE(1, false, "UIの表示"),
     PRINT_DEBUG_INFO(10, false, "デバッグ表示を表示させるか"),
     UI_INPUT_ENABLE(20, true, "UIを操作可能か"),
-    INPUT_ENABLE(21, true, "UI以外を操作可能か");
+    INPUT_ENABLE(21, true, "UI以外を操作可能か"),
+    DICE_MOVE(30, false, "ダイスによる移動かどうか");
 
 /* テスト用
     b(6, true, ""),

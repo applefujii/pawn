@@ -8,28 +8,27 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Square {
-    protected static Array<String> TYPE_STR;
+    public static Array<String> TYPE_STR;
 
-    protected int type;               // マスの種類
-    protected String document;        // マスの文字
+    protected final Sprite sprite;
 
-    protected TextureAtlas mapAtlas;
-    protected Sprite sprite;
-
-    protected int x;
-    protected int y;
+    protected final int x;
+    protected final int y;
+    protected final int type;
+    protected final int count;
 
     static {
         TYPE_STR = new Array<>();
         TYPE_STR.add("start", "goal", "normal", "event");
     }
 
-    public Square(int xPos, int yPos, int ty, TextureAtlas atlas) {
-        x = xPos;
-        y = yPos;
-        type = ty;
-        mapAtlas = atlas;
-        sprite = mapAtlas.createSprite(TYPE_STR.get(type));
+    public Square(int x, int y, int type, int count, TextureAtlas atlas) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.count = count;
+        // マスの種類
+        sprite = atlas.createSprite(TYPE_STR.get(this.type));
         sprite.flip(false, true);
     }
 
@@ -42,4 +41,10 @@ public class Square {
     }
 
     public void dispose () { }
+
+    public Array<Integer> getAddress() {
+        Array<Integer> pos = new Array<>();
+        pos.add(x, y);
+        return pos;
+    }
 }

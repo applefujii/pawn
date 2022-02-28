@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
 		//-- 作成
 		playerManager.add("1P", 1);
 		playerManager.add("2P", 2);
-		ui.add(new UIPartsExplanation("square_explanation", Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);

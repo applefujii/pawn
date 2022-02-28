@@ -60,5 +60,10 @@ public class UIPartsExplanation extends UIParts {
 
     public void setExplanation(String explanation) {
         this.explanation = explanation;
+        stringRow.clear();
+        Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(explanation);
+        while(row.find()) {
+            stringRow.add(row.group());
+        }
     }
 }

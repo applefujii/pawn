@@ -107,8 +107,9 @@ public class BoardSurface {
     }
 
     public Vector2 getPos(int squareNo) {
-        Square s = aSquare.get(squareNo);
-        if(s == null) return new Vector2(0,0);
+        Square s;
+        if(squareNo <= aSquare.size-1) s = aSquare.get(squareNo);
+        else s = aSquare.peek();
         return new Vector2(BoardSurface.TILE_LENGTH*s.x, BoardSurface.TILE_LENGTH*s.y);
     }
 }

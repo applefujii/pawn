@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
  * @author fujii
  */
 public class UI {
+    public static final String SQUARE_EXPLANATION = "square_explanation";
+
     public int select = -1;
     private Array<UIParts> uiParts;
 
@@ -63,6 +65,15 @@ public class UI {
             }
         }
         return false;
+    }
+
+    public UIParts getUIParts(String name) {
+        for(UIParts ui :uiParts) {
+            if(ui.getName() == name) {
+                return ui;
+            }
+        }
+        return null;
     }
 
     public void setDice(Dice dice) {

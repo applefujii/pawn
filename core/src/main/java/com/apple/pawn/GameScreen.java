@@ -35,6 +35,8 @@ public class GameScreen implements Screen {
 	private Stage stage;					// カメラとビューポートの管理
 	private Stage uiStage;					// UIのカメラとビューポートの管理
 
+	private float timer;
+	private float timerRap;
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
 	private int sequenceNo;
@@ -61,6 +63,7 @@ public class GameScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
+		timer = 0;
 		zoom = 1.0f;
 
 		//---- カメラ関係の初期化
@@ -99,13 +102,14 @@ public class GameScreen implements Screen {
 		//-- 作成
 		playerManager.add("1P", 1);
 		playerManager.add("2P", 2);
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
+		FlagManagement.set(Flag.LOOK_PIECE);
 
 		sequenceNo = Sequence.TURN_STANDBY.no;
 		// 動作させる関数を代入
@@ -116,6 +120,7 @@ public class GameScreen implements Screen {
 	 * update 更新。メインループの描画以外。
 	 */
 	private void update() {
+		timer += Gdx.graphics.getDeltaTime();
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
 
@@ -166,6 +171,7 @@ public class GameScreen implements Screen {
 		update();
 
 		// カメラの更新
+		if(FlagManagement.is(Flag.LOOK_PIECE)) setCameraPositionToTurnPlayer();
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
@@ -251,7 +257,6 @@ public class GameScreen implements Screen {
 			turnPlayerNo++;
 			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 			turnPlayer = playerManager.getPlayer(turnPlayerNo);
-			setCameraPositionToTurnPlayer();
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
 			return 0;
@@ -271,19 +276,26 @@ public class GameScreen implements Screen {
 
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
-			setCameraPositionToTurnPlayer();
 			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
 			if(ui.select == 0) sequenceNo+=2;
-			if(ui.select == 1) sequenceNo+=1;
+			if(ui.select == 1) {
+				FlagManagement.fold(Flag.LOOK_PIECE);
+				FlagManagement.set(Flag.LOOK_FREE);
+				sequenceNo+=1;
+			}
 			return 0;
 		}
 		// マップ確認
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
-			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) sequenceNo=Sequence.ACTION_SELECT.no;
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				FlagManagement.set(Flag.LOOK_PIECE);
+				FlagManagement.fold(Flag.LOOK_FREE);
+				sequenceNo=Sequence.ACTION_SELECT.no;
+			}
 			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
 			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
 			if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
@@ -322,7 +334,12 @@ public class GameScreen implements Screen {
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +1) {
 			turnPlayer.getPiece().move(dice.getNo());
-			setCameraPositionToTurnPlayer();
+			sequenceNo++;
+		}
+		if(sequenceNo == Sequence.PIECE_ADVANCE.no +2) {
+			if(FlagManagement.is(Flag.PIECE_MOVE) == false) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.PIECE_ADVANCE.no +3) {
 			sequenceNo = Sequence.TASK_DO.no;
 			sequence = this::taskDo;
 		}
@@ -339,10 +356,13 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
 			if(ui.select == 0) turnPlayer.getPiece().move(1);
 			if(ui.select == 1) turnPlayer.getPiece().move(-1);
-			setCameraPositionToTurnPlayer();
+			timerRap = timer;
 			sequenceNo++;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
+			if(timer-timerRap >= 0.5f) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.TASK_DO.no +3) {
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

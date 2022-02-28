@@ -7,7 +7,9 @@ public enum Flag {
     PRINT_DEBUG_INFO(10, false, "デバッグ表示を表示させるか"),
     UI_INPUT_ENABLE(20, true, "UIを操作可能か"),
     INPUT_ENABLE(21, true, "UI以外を操作可能か"),
-    DICE_MOVE(30, false, "ダイスによる移動かどうか");
+    PIECE_MOVE(100, false, "駒が移動中"),
+    LOOK_FREE(200, false, "視線が自由"),
+    LOOK_PIECE(200, false, "駒に視線");
 
 /* テスト用
     b(6, true, ""),

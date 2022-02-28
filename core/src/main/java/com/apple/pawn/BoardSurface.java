@@ -112,4 +112,8 @@ public class BoardSurface {
         else s = aSquare.peek();
         return new Vector2(BoardSurface.TILE_LENGTH*s.x, BoardSurface.TILE_LENGTH*s.y);
     }
+
+    public int getSquareCount() {
+        return aSquare.size;
+    }
 }

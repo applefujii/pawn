@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
@@ -103,5 +104,11 @@ public class BoardSurface {
 
     public Square getSquare(int squareCount) {
         return this.aSquare.get(squareCount);
+    }
+
+    public Vector2 getPos(int squareNo) {
+        Square s = aSquare.get(squareNo);
+        if(s == null) return new Vector2(0,0);
+        return new Vector2(BoardSurface.TILE_LENGTH*s.x, BoardSurface.TILE_LENGTH*s.y);
     }
 }

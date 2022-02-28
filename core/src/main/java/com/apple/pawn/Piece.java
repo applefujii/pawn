@@ -18,14 +18,17 @@ public class Piece {
     private int squareNo;       // 現在何マス目か
     private final TextureAtlas atlas;
 
+    //-- 参照
+    private BoardSurface boardSurface;
+
     public Piece(int pieceColorNo) {
         atlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
         img = new Texture("badlogic.jpg");
         squareNo = 0;
     }
 
-    public void initialize(Pawn game) {
-
+    public void initialize(BoardSurface bs) {
+        this.boardSurface = bs;
     }
 
     public void update() {
@@ -40,14 +43,14 @@ public class Piece {
 //        sprite.flip(false, true);       // 上下反転 setRegionより後に
 //        sprite.draw(batch);
 //        batch.end();
+        Vector2 pos = boardSurface.getPos(squareNo);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.BLACK);
-        // ※マスのサイズは仮。BoardSurface.TILE_LENGTH に後で置き換える
-        renderer.circle(50+squareNo*100, 100, 32);
+        renderer.circle(pos.x, pos.y, 32);
         renderer.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.RED);
-        renderer.circle(50+squareNo*100, 100, 29);
+        renderer.circle(pos.x, pos.y, 29);
         renderer.end();
     }
 
@@ -63,8 +66,7 @@ public class Piece {
         this.squareNo = squareNo;
     }
 
-    //※ 仮
     public Vector2 getPosition() {
-        return new Vector2(50+squareNo*100,100);
+        return boardSurface.getPos(squareNo);
     }
 }

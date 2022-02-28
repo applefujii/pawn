@@ -39,6 +39,7 @@ public class GameScreen implements Screen {
 	private Vector3 touchPos;				// タッチ座標
 	private int sequenceNo;
 	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
+	private float zoom;						// ズーム率
 
 	//---- 他のクラス
 	private PlayerManager playerManager;	// プレイヤー管理
@@ -60,6 +61,7 @@ public class GameScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
+		zoom = 1.0f;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -81,29 +83,29 @@ public class GameScreen implements Screen {
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
 		playerManager = new PlayerManager();
-		playerManager.initialize(game);
-		playerManager.add("1P", 1);
-		playerManager.add("2P", 2);
 		board = new BoardSurface();
 		dice = new Dice(game);
 		ui = new UI();
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		//-- 初期化
+		playerManager.initialize(game, board);
 		turnPlayerNo = -1;
 		ui.initialize(game);
 		//-- 参照セット
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
+		//-- 作成
+		playerManager.add("1P", 1);
+		playerManager.add("2P", 2);
+		ui.add(new UIPartsExplanation("square_explanation", Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
-
-		ui.add(new UIPartsExplanation("square_explanation", Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
 
 		sequenceNo = Sequence.TURN_STANDBY.no;
 		// 動作させる関数を代入
@@ -126,8 +128,14 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) camera.zoom-=0.1;
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) camera.zoom+=0.1;
+		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+			zoom-=0.1;
+			camera.zoom-=0.1;
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+			zoom+=0.1;
+			camera.zoom+=0.1;
+		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
 			// UIの動作
@@ -346,7 +354,7 @@ public class GameScreen implements Screen {
 		Vector2 pv = turnPlayer.getPiece().getPosition();
 		camera.position.x = pv.x;
 		camera.position.y = pv.y;
-		camera.zoom = 1.0f;
+		camera.zoom = zoom;
 	}
 
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
  * @author fujii
  */
 public class UI {
-    public static int select = -1;
+    public int select = -1;
     private Array<UIParts> uiParts;
 
     //-- 参照
@@ -52,11 +52,11 @@ public class UI {
         img.dispose();
     }
 
-    public void addUiParts(UIParts parts) {
+    public void add(UIParts parts) {
         uiParts.add(parts);
     }
 
-    public boolean removeUiParts(String name) {
+    public boolean remove(String name) {
         for(UIParts ui :uiParts) {
             if(ui.getName() == name) {
                 return uiParts.removeValue(ui,false);

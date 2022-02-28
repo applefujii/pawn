@@ -4,21 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-import java.util.Map;
 import java.util.function.IntSupplier;
 
 /**
@@ -101,13 +96,14 @@ public class GameScreen implements Screen {
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
-		fileIO.save();
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
+
+		ui.add(new UIPartsExplanation("square_explanation", Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。"));
 
 		sequenceNo = Sequence.TURN_STANDBY.no;
 		// 動作させる関数を代入
@@ -248,7 +244,7 @@ public class GameScreen implements Screen {
 			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 			turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			setCameraPositionToTurnPlayer();
-			ui.addUiParts(new SelectUIParts("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, turnPlayer.getName()+"の番です"));
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
 			return 0;
 		}
@@ -268,13 +264,13 @@ public class GameScreen implements Screen {
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
 			setCameraPositionToTurnPlayer();
-			ui.addUiParts(new SelectUIParts("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, "サイコロを振る", "マップ確認"));
+			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
-			if(UI.select == 0) sequenceNo+=2;
-			if(UI.select == 1) sequenceNo+=1;
+			if(ui.select == 0) sequenceNo+=2;
+			if(ui.select == 1) sequenceNo+=1;
 			return 0;
 		}
 		// マップ確認
@@ -312,7 +308,7 @@ public class GameScreen implements Screen {
 
 	private int PieceAdvance() {
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
-			ui.addUiParts(new SelectUIParts("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, "移動"));
+			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "移動"));
 			sequenceNo++;
 			return 0;
 		}
@@ -328,13 +324,13 @@ public class GameScreen implements Screen {
 
 	private int taskDo() {
 		if(sequenceNo == Sequence.TASK_DO.no) {
-			ui.addUiParts(new SelectUIParts("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, "成功", "失敗"));
+			ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "成功", "失敗"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
-			if(UI.select == 0) turnPlayer.getPiece().move(1);
-			if(UI.select == 1) turnPlayer.getPiece().move(-1);
+			if(ui.select == 0) turnPlayer.getPiece().move(1);
+			if(ui.select == 1) turnPlayer.getPiece().move(-1);
 			setCameraPositionToTurnPlayer();
 			sequenceNo++;
 		}

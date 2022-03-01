@@ -102,6 +102,7 @@ public class Piece {
 
     public void setSquareNo(int squareNo) {
         this.squareNo = squareNo;
+        this.moveToSquareNo = squareNo;
     }
 
     public Vector2 getPosition() {

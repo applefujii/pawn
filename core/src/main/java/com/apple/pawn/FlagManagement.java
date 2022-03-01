@@ -21,6 +21,11 @@ public class FlagManagement {
      * @param flag 立てるフラグ
      */
     public static void set(Flag flag) {
+        if(flag.group != -1) {
+            for(Flag f : flags) {
+                if(f.group == flag.group) fold(f);
+            }
+        }
         flags.add(flag);
     }
 
@@ -29,7 +34,7 @@ public class FlagManagement {
      * @param flag 立てるフラグ
      */
     public static void set(Flag... flag) {
-        for(Flag f : flag) flags.add(f);
+        for(Flag f : flag) set(f);
     }
 
     /**

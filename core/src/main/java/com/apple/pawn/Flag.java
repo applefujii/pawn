@@ -2,14 +2,14 @@ package com.apple.pawn;
 
 public enum Flag {
     //---- フラグの定義
-    PLAY(0, false, "実行中(ポーズされていない)"),
-    UI_VISIBLE(1, false, "UIの表示"),
-    PRINT_DEBUG_INFO(10, false, "デバッグ表示を表示させるか"),
-    UI_INPUT_ENABLE(20, true, "UIを操作可能か"),
-    INPUT_ENABLE(21, true, "UI以外を操作可能か"),
-    PIECE_MOVE(100, false, "駒が移動中"),
-    LOOK_FREE(200, false, "視線が自由"),
-    LOOK_PIECE(200, false, "駒に視線");
+    PLAY(0, -1, false, "実行中(ポーズされていない)"),
+    UI_VISIBLE(1, -1, false, "UIの表示"),
+    PRINT_DEBUG_INFO(10, -1, false, "デバッグ表示を表示させるか"),
+    UI_INPUT_ENABLE(20, -1, true, "UIを操作可能か"),
+    INPUT_ENABLE(21, -1, true, "UI以外を操作可能か"),
+    PIECE_MOVE(100, -1, false, "駒が移動中"),
+    LOOK_FREE(200, 200, false, "視線が自由"),
+    LOOK_PIECE(201, 200, false, "駒に視線");
 
 /* テスト用
     b(6, true, ""),
@@ -93,11 +93,13 @@ public enum Flag {
 
 
     public final int no;            // フラグ番号
+    public final int group;            // グループ番号。グループ内で立つのは1つのみ。
     public final boolean isSave;    // セーブするか
     public final String cry;        // 説明
 
-    Flag(final int no, final boolean isSave, final String cry) {
+    Flag(final int no, final int group, final boolean isSave, final String cry) {
         this.no = no;
+        this.group = group;
         this.isSave = isSave;
         this.cry = cry;
     }

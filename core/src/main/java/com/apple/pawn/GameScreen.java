@@ -283,7 +283,6 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
 			if(ui.select == 0) sequenceNo+=2;
 			if(ui.select == 1) {
-				FlagManagement.fold(Flag.LOOK_PIECE);
 				FlagManagement.set(Flag.LOOK_FREE);
 				sequenceNo+=1;
 			}
@@ -293,7 +292,6 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 				FlagManagement.set(Flag.LOOK_PIECE);
-				FlagManagement.fold(Flag.LOOK_FREE);
 				sequenceNo=Sequence.ACTION_SELECT.no;
 			}
 			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);

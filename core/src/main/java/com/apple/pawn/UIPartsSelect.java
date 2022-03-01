@@ -12,20 +12,19 @@ import com.badlogic.gdx.utils.Array;
 /**
  * @author fujii
  */
-public class SelectUIParts extends UIParts {
+public class UIPartsSelect extends UIParts {
     private Array<String> choices;
     private int cursor = 0;
-    private int width, height;
+    private boolean isObstruction;
 
-    public SelectUIParts(String name, int x, int y, String... choices) {
-        super(name, x, y);
+    public UIPartsSelect(String name, int x, int y, int width, int height, boolean isObstruction, String... choices) {
+        super(name, x, y, width, height);
+        this.isObstruction = isObstruction;
         this.choices = new Array<String>();
         for(String cho : choices) {
             this.choices.add(cho);
         }
-        width = 300;
-        height = 16;
-        FlagManagement.fold(Flag.INPUT_ENABLE);
+        if(isObstruction) FlagManagement.fold(Flag.INPUT_ENABLE);
     }
 
     public void initialize(Pawn game) {

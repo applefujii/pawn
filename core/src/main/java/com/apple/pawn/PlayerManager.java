@@ -14,13 +14,15 @@ public class PlayerManager {
 
     //-- 参照
     private Pawn game;
+    private BoardSurface boardSurface;
 
     public PlayerManager() {
         aPlayer = new Array<Player>();
     }
 
-    public void initialize(Pawn game) {
+    public void initialize(Pawn game, BoardSurface bs) {
         this.game = game;
+        this.boardSurface = bs;
     }
 
     public void update() {
@@ -43,12 +45,17 @@ public class PlayerManager {
 
     public int add(String name, int pieceColorNo) {
         Player p = new Player(name, pieceColorNo);
+        p.initialize(boardSurface);
         aPlayer.add(p);
         return aPlayer.size;
     }
 
     public int getSize() {
         return aPlayer.size;
+    }
+
+    public Array<Player> getPlayer() {
+        return aPlayer;
     }
 
     public Player getPlayer(int i) {

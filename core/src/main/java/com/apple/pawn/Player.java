@@ -18,11 +18,19 @@ public class Player {
     private Piece piece;
     private Array<Integer> aDiceNo;
 
+    //-- 参照
+    private BoardSurface boardSurface;
+
     public Player(String name, int pieceColorNo) {
         this.name = name;
         piece = new Piece(pieceColorNo);
         aDiceNo = new Array<Integer>();
         aDiceNo.setSize(10);
+    }
+
+    public void initialize(BoardSurface bs) {
+        this.boardSurface = bs;
+        piece.initialize(bs);
     }
 
     public void update() {

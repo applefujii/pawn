@@ -14,21 +14,59 @@ import com.badlogic.gdx.math.Vector2;
  * @author fujii
  */
 public class Piece {
-    private Texture img;        // テクスチャ
+    private float MOVE_INTERVAL = 0.3f;
+
     private int squareNo;       // 現在何マス目か
+    private int moveToSquareNo;
+    private Vector2 pos;
+    private Vector2 moveToPos;
+    private float timer;
+    private boolean isTimer;
+    private boolean isMove;
+
+    private Texture img;        // テクスチャ
     private final TextureAtlas atlas;
+
+    //-- 参照
+    private BoardSurface boardSurface;
 
     public Piece(int pieceColorNo) {
         atlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
         img = new Texture("badlogic.jpg");
         squareNo = 0;
+        moveToSquareNo = 0;
+        pos = new Vector2();
+        moveToPos = new Vector2();
+        timer = 0;
+        isTimer = false;
+        isMove = false;
     }
 
-    public void initialize(Pawn game) {
-
+    public void initialize(BoardSurface bs) {
+        this.boardSurface = bs;
+        pos = bs.getPos(squareNo);
     }
 
     public void update() {
+        if(isMove) {
+            if (isTimer == false) {
+                int plus = 1;
+                if(squareNo > moveToSquareNo) plus = -1;
+                if(squareNo != moveToSquareNo) squareNo+=plus;
+                pos = boardSurface.getPos(squareNo);
+                isTimer = true;
+            } else {
+                timer += Gdx.graphics.getDeltaTime();
+                if (timer >= MOVE_INTERVAL) {
+                    timer = 0;
+                    isTimer = false;
+                    if (squareNo == moveToSquareNo) {
+                        isMove = false;
+                        FlagManagement.fold(Flag.PIECE_MOVE);
+                    }
+                }
+            }
+        }
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
@@ -42,12 +80,11 @@ public class Piece {
 //        batch.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.BLACK);
-        // ※マスのサイズは仮。BoardSurface.TILE_LENGTH に後で置き換える
-        renderer.circle(50+squareNo*100, 100, 32);
+        renderer.circle(pos.x, pos.y, 32);
         renderer.end();
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(Color.RED);
-        renderer.circle(50+squareNo*100, 100, 29);
+        renderer.circle(pos.x, pos.y, 29);
         renderer.end();
     }
 
@@ -56,15 +93,18 @@ public class Piece {
     }
 
     public void move( int squareNo ) {
-        this.squareNo += squareNo;
+        this.moveToSquareNo += squareNo;
+        if(moveToSquareNo < 0) moveToSquareNo = 0;
+        if(moveToSquareNo > boardSurface.getSquareCount()-1) moveToSquareNo = boardSurface.getSquareCount()-1;
+        isMove = true;
+        FlagManagement.set(Flag.PIECE_MOVE);
     }
 
     public void setSquareNo(int squareNo) {
         this.squareNo = squareNo;
     }
 
-    //※ 仮
     public Vector2 getPosition() {
-        return new Vector2(50+squareNo*100,100);
+        return boardSurface.getPos(squareNo);
     }
 }

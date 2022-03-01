@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 abstract public class UIParts {
     protected String name;
     protected int x, y;
+    protected int width, height;
 
-    public UIParts(String name, int x, int y) {
+    public UIParts(String name, int x, int y, int width, int height) {
         this.name = name;
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     abstract public void initialize(Pawn game);

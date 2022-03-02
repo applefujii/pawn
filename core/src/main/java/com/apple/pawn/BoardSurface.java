@@ -103,7 +103,7 @@ public class BoardSurface {
     }
 
     public Square getSquare(int squareCount) {
-        return this.aSquare.get(squareCount);
+        return aSquare.get(squareCount);
     }
 
     public Vector2 getPos(int squareNo) {

@@ -39,8 +39,9 @@ public class GameScreen implements Screen {
 	private float timerRap;
 	private Vector3 screenOrigin;			// 画面左上座標
 	private Vector3 touchPos;				// タッチ座標
-	private int sequenceNo;
+	private int sequenceNo;					// シークエンス番号
 	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
+	private int goalNo;						// ゴールした人数
 	private float zoom;						// ズーム率
 
 	//---- 他のクラス
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
 		font = game.font;
 		renderer = game.renderer;
 		timer = 0;
+		goalNo = 0;
 		zoom = 1.0f;
 
 		//---- カメラ関係の初期化
@@ -92,7 +94,7 @@ public class GameScreen implements Screen {
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		//-- 初期化
-		playerManager.initialize(game, board);
+		playerManager.initialize(this, board);
 		turnPlayerNo = -1;
 		ui.initialize(game);
 		//-- 参照セット
@@ -100,8 +102,8 @@ public class GameScreen implements Screen {
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
 		//-- 作成
-		playerManager.add("1P", 1);
-		playerManager.add("2P", 2);
+		playerManager.add("1P", 0);
+		playerManager.add("2P", 4);
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
@@ -211,6 +213,8 @@ public class GameScreen implements Screen {
 			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
 			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
 			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
+			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 16*4);
+			font.draw(batch, "goal_no: " +goalNo , 0, 16*5);
 			batch.end();
 		}
 	}
@@ -254,9 +258,18 @@ public class GameScreen implements Screen {
 
 	private int turnStandby() {
 		if(sequenceNo == Sequence.TURN_STANDBY.no) {
-			turnPlayerNo++;
-			if(turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
-			turnPlayer = playerManager.getPlayer(turnPlayerNo);
+			// 全員ゴールしたらリザルトへ
+			if(playerManager.isAllGoal()) {
+				sequenceNo = Sequence.RESULT.no;
+				sequence = this::result;
+				return 0;
+			}
+			while(true) {
+				turnPlayerNo++;
+				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
+				turnPlayer = playerManager.getPlayer(turnPlayerNo);
+				if(turnPlayer.isGoal() == false) break;
+			}
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
 			sequenceNo++;
 			return 0;
@@ -347,6 +360,11 @@ public class GameScreen implements Screen {
 
 	private int taskDo() {
 		if(sequenceNo == Sequence.TASK_DO.no) {
+			if(turnPlayer.isGoal()) {
+				// ※ゴール演出へ
+				sequenceNo = Sequence.TASK_DO.no+1;
+				return 0;
+			}
 			ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "成功", "失敗"));
 			sequenceNo++;
 			return 0;
@@ -368,11 +386,35 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	private int result() {
+		if(sequenceNo == Sequence.RESULT.no) {
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全員ゴールしたよ。");
+			sequenceNo++;
+			return 0;
+		}
+		if(sequenceNo == Sequence.RESULT.no +1) {
+			if(ui.select == 0) turnPlayer.getPiece().move(1);
+			if(ui.select == 1) turnPlayer.getPiece().move(-1);
+			timerRap = timer;
+			sequenceNo++;
+		}
+
+		return 0;
+	}
+
 	private void setCameraPositionToTurnPlayer() {
 		Vector2 pv = turnPlayer.getPiece().getPosition();
 		camera.position.x = pv.x;
 		camera.position.y = pv.y;
 		camera.zoom = zoom;
+	}
+
+	public int getGoalNo() {
+		return goalNo;
+	}
+
+	public void addGoalNo() {
+		goalNo++;
 	}
 
 }

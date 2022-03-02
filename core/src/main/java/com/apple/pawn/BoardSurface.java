@@ -5,19 +5,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 public class BoardSurface {
     public static int TILE_LENGTH = 256;
-    public static int SQUARE_COUNT = 65;
-    public static Array<Array<Integer>> MAP_ADDRESS;
-    public static Array<Integer> SQUARE_NO;
-
-    private static int i;
+    public static int SQUARE_COUNT = 13;
+    public static Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
     private final TextureAtlas mapAtlas;
@@ -26,26 +25,18 @@ public class BoardSurface {
 
     static {
         MAP_ADDRESS = new Array<>();
+        int i;
         int j;
         for(j = 0; j < 16; j++) {
             for(i = 0; i < 16; i++) {
-                Array<Integer> address = new Array<>();
-                address.add(i, j);
-                MAP_ADDRESS.add(address);
+                Vector2 pos = new Vector2(i, j);
+                MAP_ADDRESS.add(pos);
             }
-        }
-
-        SQUARE_NO = new Array<>();
-        for(j = 0; j < 192; j +=64) {
-            for(i = 35; i < 45; i++) SQUARE_NO.add(i + j);
-            SQUARE_NO.add(60 + j);
-            for(i = 76; i > 66; i--) SQUARE_NO.add(i + j);
-            SQUARE_NO.add(83 + j);
         }
     }
 
     public BoardSurface() {
-        mapAtlas = new TextureAtlas(Gdx.files.internal("map_atlas.txt"));
+        mapAtlas = new TextureAtlas("map_atlas.txt");
         backSprite = mapAtlas.createSprite("back");
         backSprite.flip(false, true);
         aSquare = new Array<>();
@@ -54,20 +45,31 @@ public class BoardSurface {
     }
 
     private void initialize() {
-        boolean start = true;
-        int count = 0;
-        Array.ArrayIterator<Integer> ite = new Array.ArrayIterator<>(SQUARE_NO);
-        while(ite.hasNext()) {
-            int index = ite.next();
-            int type = MathUtils.random(2, 3);
-            if(start) {
-                aSquare.add(new Square(MAP_ADDRESS.get(index).get(0), MAP_ADDRESS.get(index).get(1), 0, count, mapAtlas));
-                start = false;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode aSquareJson = objectMapper.readTree(Gdx.files.local("assets/a_square_json.jsonc").file());
+            int count = 0;
+            for(JsonNode squareJson : aSquareJson) {
+                Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
+                if(squareJson.get("type").asInt() == 0 || squareJson.get("type").asInt() == 2) {
+                    aSquare.add(new Square(
+                            vec,
+                            squareJson.get("type").asInt(),
+                            count,
+                            squareJson.get("document").asText(),
+                            mapAtlas));
+                } else {
+                    aSquare.add(new EventSquare(
+                            vec,
+                            squareJson.get("type").asInt(),
+                            count,
+                            squareJson.get("document").asText(),
+                            mapAtlas));
+                }
+                count++;
             }
-            else if(!ite.hasNext()) aSquare.add(new Square(MAP_ADDRESS.get(index).get(0), MAP_ADDRESS.get(index).get(1), 1, count, mapAtlas));
-            else if(type == 3 && EventSquare.DOCUMENTS.notEmpty()) aSquare.add(new EventSquare(MAP_ADDRESS.get(index).get(0), MAP_ADDRESS.get(index).get(1), 3, count, mapAtlas));
-            else aSquare.add(new Square(MAP_ADDRESS.get(index).get(0), MAP_ADDRESS.get(index).get(1), 2, count, mapAtlas));
-            count++;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,9 +80,10 @@ public class BoardSurface {
         batch.begin();
 
         backSprite.setSize(TILE_LENGTH, TILE_LENGTH);
-        for(i = 0; i < 256; i++) {
-            if(SQUARE_NO.contains(i, true)) continue;
-            backSprite.setPosition(TILE_LENGTH * MAP_ADDRESS.get(i).get(0), TILE_LENGTH * MAP_ADDRESS.get(i).get(1));
+        Iterator<Vector2> mapAddressIterator = new Array.ArrayIterator<>(MAP_ADDRESS);
+        while(mapAddressIterator.hasNext()) {
+            Vector2 vec = mapAddressIterator.next();
+            backSprite.setPosition(TILE_LENGTH*vec.x, TILE_LENGTH*vec.y);
             backSprite.draw(batch);
         }
 
@@ -110,7 +113,7 @@ public class BoardSurface {
         Square s;
         if(squareNo <= aSquare.size-1) s = aSquare.get(squareNo);
         else s = aSquare.peek();
-        return new Vector2(BoardSurface.TILE_LENGTH*s.x, BoardSurface.TILE_LENGTH*s.y);
+        return s.getAddress();
     }
 
     public int getSquareCount() {

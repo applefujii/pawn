@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Objects;
 
@@ -34,7 +33,7 @@ public class Square {
         sprite.flip(false, true);
     }
 
-    public void update() { }
+    public void update() {}
 
     public void draw (Batch batch) {
         sprite.setSize(BoardSurface.TILE_LENGTH, BoardSurface.TILE_LENGTH);
@@ -42,13 +41,18 @@ public class Square {
         sprite.draw(batch);
     }
 
-    public void dispose () { }
+    public void dispose () {}
 
     public Vector2 getAddress() {
         return pos;
     }
 
-    public boolean hasDocument() {
-        return Objects.nonNull(document);
+    public Object getDocument() {
+        if(Objects.isNull(document)) return false;
+        else return document;
+    }
+
+    public boolean hasEvent() {
+        return (type == 1 || type == 3);
     }
 }

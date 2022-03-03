@@ -1,0 +1,47 @@
+piece_atlas.png
+size: 1024, 1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+red
+  rotate: false
+  xy: 0, 0
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1
+yellow
+  rotate: false
+  xy: 320, 0
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1
+green
+  rotate: false
+  xy: 640, 0
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1
+light_blue
+  rotate: false
+  xy: 0, 480
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1
+blue
+  rotate: false
+  xy: 320, 480
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1
+purple
+  rotate: false
+  xy: 640, 480
+  size: 320, 480
+  orig: 320, 480
+  offset: 0, 0
+  index: -1

@@ -45,7 +45,7 @@ public class Square {
     public void dispose () { }
 
     public Vector2 getAddress() {
-        return pos;
+        return new Vector2(BoardSurface.TILE_LENGTH*pos.x, BoardSurface.TILE_LENGTH*pos.y);
     }
 
     public boolean hasDocument() {

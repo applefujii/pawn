@@ -15,7 +15,7 @@ import java.util.Iterator;
 
 public class BoardSurface {
     public static int TILE_LENGTH = 256;
-    public static int SQUARE_COUNT = 13;
+    public static int SQUARE_COUNT = 65;
     public static Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
@@ -55,14 +55,24 @@ public class BoardSurface {
                             squareJson.get("type").asInt(),
                             count,
                             squareJson.get("document").asText(),
-                            mapAtlas));
+                            mapAtlas
+                    ));
+                } else if(squareJson.get("has_task").asBoolean()) {
+                    aSquare.add(new TaskSquare(
+                            vec,
+                            squareJson.get("type").asInt(),
+                            count,
+                            squareJson.get("document").asText(),
+                            mapAtlas
+                    ));
                 } else {
                     aSquare.add(new EventSquare(
                             vec,
                             squareJson.get("type").asInt(),
                             count,
                             squareJson.get("document").asText(),
-                            mapAtlas));
+                            mapAtlas
+                    ));
                 }
                 count++;
             }
@@ -71,8 +81,7 @@ public class BoardSurface {
         }
     }
 
-    public void update() {
-    }
+    public void update() {}
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
@@ -103,9 +112,7 @@ public class BoardSurface {
         mapAtlas.dispose();
     }
 
-    public Square getSquare(int squareCount) {
-        return aSquare.get(squareCount);
-    }
+    public Square getSquare(int squareNo) { return aSquare.get(squareNo); }
 
     public Vector2 getPos(int squareNo) {
         Square s;
@@ -114,7 +121,5 @@ public class BoardSurface {
         return s.getAddress();
     }
 
-    public int getSquareCount() {
-        return aSquare.size;
-    }
+    public int getSquareCount() { return aSquare.size; }
 }

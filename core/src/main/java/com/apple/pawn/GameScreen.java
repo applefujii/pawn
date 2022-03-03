@@ -94,16 +94,21 @@ public class GameScreen implements Screen {
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		//-- 初期化
-		playerManager.initialize(this, board);
+		board.initialize();
+		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
 		//-- 参照セット
+		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
 		//-- 作成
 		playerManager.add("1P", 0);
 		playerManager.add("2P", 4);
+		playerManager.add("3P", 1);
+		playerManager.add("4P", 5);
+		playerManager.add("5P", 3);
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
@@ -344,7 +349,7 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +1) {
-			turnPlayer.getPiece().move(dice.getNo());
+			turnPlayer.getPiece().move(dice.getNo(), true);
 			sequenceNo++;
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +2) {
@@ -370,8 +375,8 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
-			if(ui.select == 0) turnPlayer.getPiece().move(1);
-			if(ui.select == 1) turnPlayer.getPiece().move(-1);
+			if(ui.select == 0) turnPlayer.getPiece().move(1, true);
+			if(ui.select == 1) turnPlayer.getPiece().move(-1, true);
 			timerRap = timer;
 			sequenceNo++;
 		}
@@ -393,8 +398,6 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.RESULT.no +1) {
-			if(ui.select == 0) turnPlayer.getPiece().move(1);
-			if(ui.select == 1) turnPlayer.getPiece().move(-1);
 			timerRap = timer;
 			sequenceNo++;
 		}

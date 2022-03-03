@@ -20,9 +20,8 @@ public class PlayerManager {
         aPlayer = new Array<Player>();
     }
 
-    public void initialize(GameScreen gameScreen, BoardSurface bs) {
+    public void initialize(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-        this.boardSurface = bs;
     }
 
     public void update() {
@@ -68,6 +67,18 @@ public class PlayerManager {
 
     public Player getPlayer(int i) {
         return aPlayer.get(i);
+    }
+
+    public void setBoardSurface(BoardSurface boardSurface) {
+        this.boardSurface = boardSurface;
+    }
+
+    public Piece[] getPeaces() {
+        Array<Piece> p = new Array<Piece>();
+        for(Player player : aPlayer) {
+            p.add(player.getPiece());
+        }
+        return p.toArray();
     }
 
 }

@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Piece {
     private static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
+    private static final int WIDTH = 80, HEIGHT = 120;
+    private static final int LINE_MAX = 3;
     private float MOVE_INTERVAL = 0.3f;
 
     private int squareNo;       // 現在何マス目か
@@ -46,18 +48,30 @@ public class Piece {
 
     public void initialize(BoardSurface bs) {
         this.boardSurface = bs;
+        boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
+        pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
+        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
     }
 
     public boolean update() {
         if(isMove) {
+            //-- 進める
             if (isTimer == false) {
                 int plus = 1;
                 if(squareNo > moveToSquareNo) plus = -1;
-                if(squareNo != moveToSquareNo) squareNo+=plus;
+                if(squareNo != moveToSquareNo) {
+                    boardSurface.getSquare(squareNo).removePiece(this);
+                    squareNo+=plus;
+                    boardSurface.getSquare(squareNo).addPiece(this);
+                }
                 pos = boardSurface.getPos(squareNo);
+                pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
+                pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
                 isTimer = true;
-            } else {
+            }
+            //-- タイマー
+            else {
                 timer += Gdx.graphics.getDeltaTime();
                 if (timer >= MOVE_INTERVAL) {
                     timer = 0;
@@ -74,14 +88,16 @@ public class Piece {
                 }
             }
         }
+        pos = boardSurface.getPos(squareNo);
+        pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
+        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
         return false;
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
-        sprite.setSize(80, 120);
+        sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
-        Gdx.app.debug("info", sprite.toString());
         sprite.draw(batch);
         batch.end();
 
@@ -98,17 +114,27 @@ public class Piece {
     public void dispose () {
     }
 
-    public void move( int squareNo ) {
-        this.moveToSquareNo += squareNo;
-        if(moveToSquareNo < 0) moveToSquareNo = 0;
-        if(moveToSquareNo > boardSurface.getSquareCount()-1) moveToSquareNo = boardSurface.getSquareCount()-1;
-        isMove = true;
-        FlagManagement.set(Flag.PIECE_MOVE);
+    public void move( int squareNo, boolean isAnimation ) {
+        //-- アニメーションさせる
+        if(isAnimation) {
+            this.moveToSquareNo += squareNo;
+            if (moveToSquareNo < 0) moveToSquareNo = 0;
+            if (moveToSquareNo > boardSurface.getSquareCount() - 1)
+                moveToSquareNo = boardSurface.getSquareCount() - 1;
+            isMove = true;
+            FlagManagement.set(Flag.PIECE_MOVE);
+        }
+        //-- アニメーションさせない
+        else {
+            boardSurface.getSquare(squareNo).removePiece(this);
+            this.squareNo = squareNo;
+            this.moveToSquareNo = squareNo;
+            boardSurface.getSquare(squareNo).addPiece(this);
+        }
     }
 
-    public void setSquareNo(int squareNo) {
-        this.squareNo = squareNo;
-        this.moveToSquareNo = squareNo;
+    public int getSquareNo() {
+        return squareNo;
     }
 
     public Vector2 getPosition() {

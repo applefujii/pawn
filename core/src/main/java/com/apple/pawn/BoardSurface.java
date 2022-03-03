@@ -40,11 +40,9 @@ public class BoardSurface {
         backSprite = mapAtlas.createSprite("back");
         backSprite.flip(false, true);
         aSquare = new Array<>();
-
-        initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode aSquareJson = objectMapper.readTree(Gdx.files.local("assets/a_square_json.jsonc").file());

@@ -18,6 +18,9 @@ public class Square {
     protected final int count;
     protected String document;
 
+    //-- 参照
+    protected Array<Piece> aPiece;
+
     static {
         TYPE_STR = new Array<>();
         TYPE_STR.add("start", "goal", "normal", "event");
@@ -31,6 +34,7 @@ public class Square {
         // マスの種類
         sprite = atlas.createSprite(TYPE_STR.get(this.type));
         sprite.flip(false, true);
+        aPiece = new Array<Piece>();
     }
 
     public void update() {}
@@ -43,11 +47,22 @@ public class Square {
 
     public void dispose () {}
 
-    public Vector2 getAddress() { return pos; }
+    public void addPiece(Piece piece) {
+        aPiece.add(piece);
+    }
 
-    public boolean hasDocument() { return Objects.nonNull(document); }
+    public void removePiece(Piece piece) {
+        aPiece.removeValue(piece, false);
+    }
 
-    public String getDocument() { return document; }
+    public Vector2 getAddress() {
+        return new Vector2(BoardSurface.TILE_LENGTH*pos.x, BoardSurface.TILE_LENGTH*pos.y);
+    }
+
+    public Object getDocument() {
+        if(Objects.isNull(document)) return false;
+        else return document;
+    }
 
     public boolean hasEvent() {
         return (type == 1 || type == 3);

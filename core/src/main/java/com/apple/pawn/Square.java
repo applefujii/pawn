@@ -43,14 +43,11 @@ public class Square {
 
     public void dispose () {}
 
-    public Vector2 getAddress() {
-        return pos;
-    }
+    public Vector2 getAddress() { return pos; }
 
-    public Object getDocument() {
-        if(Objects.isNull(document)) return false;
-        else return document;
-    }
+    public boolean hasDocument() { return Objects.nonNull(document); }
+
+    public String getDocument() { return document; }
 
     public boolean hasEvent() {
         return (type == 1 || type == 3);

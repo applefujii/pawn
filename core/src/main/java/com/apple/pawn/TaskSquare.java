@@ -18,12 +18,10 @@ public class TaskSquare extends EventSquare {
         if(this.count < back) back = this.count;
     }
 
-    //識別用の仮描画
+    //確認用の仮描画
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
-        subSprite.setSize(128, 128);
-        subSprite.setPosition(pos.x*256+64, pos.y*256+64);
-        subSprite.draw(batch);
+        font.draw(batch, "back:" + back, pos.x*256+64, pos.y*256+192);
     }
 }

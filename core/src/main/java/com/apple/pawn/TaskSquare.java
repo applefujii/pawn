@@ -1,19 +1,20 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
     protected int back;
-    protected Sprite subSprite;
 
-    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
-        super(pos, type, count, document, atlas);
-        subSprite = atlas.createSprite("normal");
-        subSprite.flip(false, true);
+//    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
+//        super(pos, type, count, document, atlas);
+//        back = MathUtils.random(1, 6);
+//        if(this.count < back) back = this.count;
+//    }
+
+    public TaskSquare(Vector2 pos, int type, int count, String document) {
+        super(pos, type, count, document);
         back = MathUtils.random(1, 6);
         if(this.count < back) back = this.count;
     }

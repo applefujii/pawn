@@ -1,9 +1,8 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -19,9 +18,10 @@ public class BoardSurface {
     public static Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
-    private final TextureAtlas mapAtlas;
+//    private final TextureAtlas mapAtlas;
+//    private final Sprite backSprite;
 
-    private final Sprite backSprite;
+    private final Texture mapImg;
 
     static {
         MAP_ADDRESS = new Array<>();
@@ -36,9 +36,10 @@ public class BoardSurface {
     }
 
     public BoardSurface() {
-        mapAtlas = new TextureAtlas("map_atlas.txt");
-        backSprite = mapAtlas.createSprite("back");
-        backSprite.flip(false, true);
+//        mapAtlas = new TextureAtlas("map_atlas.txt");
+//        backSprite = mapAtlas.createSprite("back");
+//        backSprite.flip(false, true);
+        mapImg = new Texture(Gdx.files.local("map.png"));
         aSquare = new Array<>();
     }
 
@@ -50,29 +51,32 @@ public class BoardSurface {
             for(JsonNode squareJson : aSquareJson) {
                 Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
                 if(squareJson.get("type").asInt() == 0 || squareJson.get("type").asInt() == 2) {
-                    aSquare.add(new Square(
-                            vec,
-                            squareJson.get("type").asInt(),
-                            count,
-                            squareJson.get("document").asText(),
-                            mapAtlas
-                    ));
+//                    aSquare.add(new Square(
+//                            vec,
+//                            squareJson.get("type").asInt(),
+//                            count,
+//                            squareJson.get("document").asText(),
+//                            mapAtlas
+//                    ));
+                    aSquare.add(new Square(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
                 } else if(squareJson.get("has_task").asBoolean()) {
-                    aSquare.add(new TaskSquare(
-                            vec,
-                            squareJson.get("type").asInt(),
-                            count,
-                            squareJson.get("document").asText(),
-                            mapAtlas
-                    ));
+//                    aSquare.add(new TaskSquare(
+//                            vec,
+//                            squareJson.get("type").asInt(),
+//                            count,
+//                            squareJson.get("document").asText(),
+//                            mapAtlas
+//                    ));
+                    aSquare.add(new TaskSquare(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
                 } else {
-                    aSquare.add(new EventSquare(
-                            vec,
-                            squareJson.get("type").asInt(),
-                            count,
-                            squareJson.get("document").asText(),
-                            mapAtlas
-                    ));
+//                    aSquare.add(new EventSquare(
+//                            vec,
+//                            squareJson.get("type").asInt(),
+//                            count,
+//                            squareJson.get("document").asText(),
+//                            mapAtlas
+//                    ));
+                    aSquare.add(new EventSquare(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
                 }
                 count++;
             }
@@ -86,13 +90,15 @@ public class BoardSurface {
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
 
-        backSprite.setSize(TILE_LENGTH, TILE_LENGTH);
-        Iterator<Vector2> mapAddressIterator = new Array.ArrayIterator<>(MAP_ADDRESS);
-        while(mapAddressIterator.hasNext()) {
-            Vector2 vec = mapAddressIterator.next();
-            backSprite.setPosition(TILE_LENGTH*vec.x, TILE_LENGTH*vec.y);
-            backSprite.draw(batch);
-        }
+//        backSprite.setSize(TILE_LENGTH, TILE_LENGTH);
+//        Iterator<Vector2> mapAddressIterator = new Array.ArrayIterator<>(MAP_ADDRESS);
+//        while(mapAddressIterator.hasNext()) {
+//            Vector2 vec = mapAddressIterator.next();
+//            backSprite.setPosition(TILE_LENGTH*vec.x, TILE_LENGTH*vec.y);
+//            backSprite.draw(batch);
+//        }
+
+        batch.draw(mapImg, 0, 0, 4096, 4096, 0, 0, 4096, 4096, false, true);
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
@@ -109,7 +115,8 @@ public class BoardSurface {
             Square square = squareIterator.next();
             square.dispose();
         }
-        mapAtlas.dispose();
+//        mapAtlas.dispose();
+        mapImg.dispose();
     }
 
     public Square getSquare(int squareNo) { return aSquare.get(squareNo); }

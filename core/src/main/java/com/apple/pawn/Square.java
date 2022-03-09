@@ -25,22 +25,15 @@ public class Square {
     }
 
 //    public Square(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
-//        this.pos = pos;
-//        this.type = type;
-//        this.count = count;
-//        this.document = document;
-//        // マスの種類
-//        sprite = atlas.createSprite(TYPE_STR.get(this.type));
-//        sprite.flip(false, true);
-//        aPiece = new Array<Piece>();
-//    }
-
     public Square(Vector2 pos, int type, int count, String document) {
         this.pos = pos;
         this.type = type;
         this.count = count;
         this.document = document;
-        aPiece = new Array<>();
+        // マスの種類
+//        sprite = atlas.createSprite(TYPE_STR.get(this.type));
+//        sprite.flip(false, true);
+        aPiece = new Array<Piece>();
     }
 
     public void update() {}

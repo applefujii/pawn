@@ -8,12 +8,8 @@ public class TaskSquare extends EventSquare {
     protected int back;
 
 //    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
-//        super(pos, type, count, document, atlas);
-//        back = MathUtils.random(1, 6);
-//        if(this.count < back) back = this.count;
-//    }
-
     public TaskSquare(Vector2 pos, int type, int count, String document) {
+//        super(pos, type, count, document, atlas);
         super(pos, type, count, document);
         back = MathUtils.random(1, 6);
         if(this.count < back) back = this.count;

@@ -33,7 +33,7 @@ public class Square {
         // マスの種類
 //        sprite = atlas.createSprite(TYPE_STR.get(this.type));
 //        sprite.flip(false, true);
-        aPiece = new Array<Piece>();
+        aPiece = new Array<>();
     }
 
     public void update() {}

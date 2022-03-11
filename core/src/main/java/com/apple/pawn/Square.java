@@ -15,6 +15,8 @@ public class Square {
     protected final int type;
     protected final int count;
     protected String document;
+    protected int move;
+    protected int back;
 
     //-- 参照
     protected Array<Piece> aPiece;
@@ -22,6 +24,7 @@ public class Square {
     static {
         TYPE_STR = new Array<>();
         TYPE_STR.add("start", "goal", "normal", "event");
+        TYPE_STR.add("task");
     }
 
 //    public Square(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
@@ -54,16 +57,15 @@ public class Square {
         aPiece.removeValue(piece, false);
     }
 
-    public Vector2 getAddress() {
-        return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y);
-    }
+    public Vector2 getAddress() { return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y); }
 
-    public Object getDocument() {
-        if(Objects.isNull(document)) return false;
-        else return document;
-    }
+    public boolean hasDocument() { return !document.isEmpty(); }
 
-    public boolean hasEvent() {
-        return (type == 1 || type == 3);
-    }
+    public String getDocument() { return document; }
+
+    public int getType() { return type; }
+
+    public int getMove() { return move; }
+
+    public int getBack() { return back; }
 }

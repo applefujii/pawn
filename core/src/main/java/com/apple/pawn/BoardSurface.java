@@ -51,7 +51,26 @@ public class BoardSurface {
             int count = 0;
             for(JsonNode squareJson : aSquareJson) {
                 Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
-                if(squareJson.get("type").asInt() == 0 || squareJson.get("type").asInt() == 2) {
+                int type = squareJson.get("type").asInt();
+                if(squareJson.get("has_task").asBoolean()) {
+//                    aSquare.add(new TaskSquare(
+//                            vec,
+//                            squareJson.get("type").asInt(),
+//                            count,
+//                            squareJson.get("document").asText(),
+//                            mapAtlas
+//                    ));
+                    aSquare.add(new TaskSquare(vec, type, count, squareJson.get("document").asText()));
+                } else if(type == 3) {
+//                    aSquare.add(new EventSquare(
+//                            vec,
+//                            squareJson.get("type").asInt(),
+//                            count,
+//                            squareJson.get("document").asText(),
+//                            mapAtlas
+//                    ));
+                    aSquare.add(new EventSquare(vec, type, count, squareJson.get("document").asText()));
+                } else {
 //                    aSquare.add(new Square(
 //                            vec,
 //                            squareJson.get("type").asInt(),
@@ -60,24 +79,6 @@ public class BoardSurface {
 //                            mapAtlas
 //                    ));
                     aSquare.add(new Square(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
-                } else if(squareJson.get("has_task").asBoolean()) {
-//                    aSquare.add(new TaskSquare(
-//                            vec,
-//                            squareJson.get("type").asInt(),
-//                            count,
-//                            squareJson.get("document").asText(),
-//                            mapAtlas
-//                    ));
-                    aSquare.add(new TaskSquare(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
-                } else {
-//                    aSquare.add(new EventSquare(
-//                            vec,
-//                            squareJson.get("type").asInt(),
-//                            count,
-//                            squareJson.get("document").asText(),
-//                            mapAtlas
-//                    ));
-                    aSquare.add(new EventSquare(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
                 }
                 count++;
             }

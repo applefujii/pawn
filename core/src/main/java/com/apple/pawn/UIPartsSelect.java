@@ -46,12 +46,14 @@ public class UIPartsSelect extends UIParts {
         renderer.end();
 
         int i = 0;
-        for(String cho : choices) {
-            batch.begin();
+        Array.ArrayIterator<String> choicesIterator = new Array.ArrayIterator<>(choices);
+        batch.begin();
+        while(choicesIterator.hasNext()) {
+            String cho = choicesIterator.next();
             font.draw(batch,cho,x,y+height*i);
-            batch.end();
             i++;
         }
+        batch.end();
     }
 
     public int selectUp() {

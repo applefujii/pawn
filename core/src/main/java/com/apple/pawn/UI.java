@@ -1,11 +1,12 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+
+import java.util.Iterator;
 
 /**
  * @author fujii
@@ -14,17 +15,17 @@ public class UI {
     public static final String SQUARE_EXPLANATION = "square_explanation";
 
     private int select = -1;
-    private Array<UIParts> uiParts;
+    private final Array<UIParts> uiParts;
     private Array<UIPartsSelect> uiPartsSelect;
 
     //-- 参照
     private Pawn game;
     private Dice dice;
 
-    private Texture img;        // テクスチャ
+    private final Texture img;        // テクスチャ
 
     public UI() {
-        uiParts = new Array<UIParts>();
+        uiParts = new Array<>();
         img = new Texture("badlogic.jpg");
     }
 
@@ -33,11 +34,13 @@ public class UI {
     }
 
     public int update() {
-        for(UIParts ui : uiParts) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
             int ret = ui.update();
             if( ret != -1 ) {
                 select = ret;
-                uiParts.removeValue(ui, false);
+                uiPartsIterator.remove();
                 return ret;
             }
         }
@@ -45,8 +48,10 @@ public class UI {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
-        for(UIParts pa : uiParts) {
-            pa.draw(batch,renderer,font);
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()){
+            UIParts ui = uiPartsIterator.next();
+            ui.draw(batch,renderer,font);
         }
         if(dice != null) dice.draw(batch, renderer);
     }
@@ -61,10 +66,13 @@ public class UI {
     }
 
     public boolean remove(String name) {
-        for(UIParts ui :uiParts) {
-            if(ui.getName() == name) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
+            if(ui.getName().equals(name)) {
                 ui.dispose();
-                return uiParts.removeValue(ui,false);
+                uiPartsIterator.remove();
+                return true;
             }
         }
         return false;
@@ -77,8 +85,10 @@ public class UI {
     }
 
     public UIParts getUIParts(String name) {
-        for(UIParts ui :uiParts) {
-            if(ui.getName() == name) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
+            if(ui.getName().equals(name)) {
                 return ui;
             }
         }

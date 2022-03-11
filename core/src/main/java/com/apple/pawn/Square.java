@@ -55,7 +55,7 @@ public class Square {
     }
 
     public Vector2 getAddress() {
-        return new Vector2(BoardSurface.TILE_LENGTH*pos.x, BoardSurface.TILE_LENGTH*pos.y);
+        return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y);
     }
 
     public Object getDocument() {

@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class BoardSurface {
-    public static int TILE_LENGTH = 256;
+    public static int TILE_WIDTH = 256;
+    public static int TILE_HEIGHT = 256;
     public static int SQUARE_COUNT = 65;
     public static Array<Vector2> MAP_ADDRESS;
 

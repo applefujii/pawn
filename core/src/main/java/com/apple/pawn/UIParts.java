@@ -19,8 +19,6 @@ abstract public class UIParts {
         this.height = height;
     }
 
-    abstract public void initialize(Pawn game);
-
     abstract public int update();
 
     abstract public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font);

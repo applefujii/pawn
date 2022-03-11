@@ -13,8 +13,9 @@ import com.badlogic.gdx.utils.Array;
 public class UI {
     public static final String SQUARE_EXPLANATION = "square_explanation";
 
-    public int select = -1;
+    private int select = -1;
     private Array<UIParts> uiParts;
+    private Array<UIPartsSelect> uiPartsSelect;
 
     //-- 参照
     private Pawn game;
@@ -56,15 +57,23 @@ public class UI {
 
     public void add(UIParts parts) {
         uiParts.add(parts);
+//        if(((UIPartsSelect)parts).choices != null) uiPartsSelect. ※途中
     }
 
     public boolean remove(String name) {
         for(UIParts ui :uiParts) {
             if(ui.getName() == name) {
+                ui.dispose();
                 return uiParts.removeValue(ui,false);
             }
         }
         return false;
+    }
+
+    public int getSelect() {
+        int s = select;
+        select = -1;
+        return s;
     }
 
     public UIParts getUIParts(String name) {

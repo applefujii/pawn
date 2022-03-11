@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.Array;
  * @author fujii
  */
 public class UIPartsSelect extends UIParts {
-    private Array<String> choices;
-    private int cursor = 0;
+    protected Array<String> choices;
+    protected int cursor = 0;
     private boolean isObstruction;
 
     public UIPartsSelect(String name, int x, int y, int width, int height, boolean isObstruction, String... choices) {
@@ -25,10 +25,6 @@ public class UIPartsSelect extends UIParts {
             this.choices.add(cho);
         }
         if(isObstruction) FlagManagement.fold(Flag.INPUT_ENABLE);
-    }
-
-    public void initialize(Pawn game) {
-
     }
 
     public int update() {
@@ -78,4 +74,7 @@ public class UIPartsSelect extends UIParts {
     public void dispose () {
     }
 
+    public int getCursor() {
+        return cursor;
+    }
 }

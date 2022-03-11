@@ -13,9 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.function.IntSupplier;
+
 
 public class TitleScreen implements Screen {
+
 	private final Pawn game;
+	// 動作させるシークエンス
+	private IntSupplier sequence;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private ShapeRenderer renderer;
@@ -29,6 +34,14 @@ public class TitleScreen implements Screen {
 
 	private Vector3 screenOrigin;
 	private Vector3 touchPos;
+	private int sequenceNo;					// シークエンス番号
+
+	private UI ui;							// UI
+
+	private GameSetting gameSetting;
+
+	//-- 参照
+	private UIPartsSelect selectUI;
 
 
 	/**
@@ -54,6 +67,20 @@ public class TitleScreen implements Screen {
 
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
+
+		ui = new UI();
+		ui.initialize(game);
+
+		gameSetting = new GameSetting();
+
+		FlagManagement.set(Flag.PLAY);
+		FlagManagement.set(Flag.UI_VISIBLE);
+		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+		FlagManagement.set(Flag.UI_INPUT_ENABLE);
+		FlagManagement.set(Flag.INPUT_ENABLE);
+
+		sequenceNo = 1;
+		sequence = this::homeSequence;
 	}
 
 	/**
@@ -68,6 +95,9 @@ public class TitleScreen implements Screen {
 			game.setScreen(new GameScreen(game));
 		}
 
+		if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
+
+		ui.update();
 	}
 
 	/**
@@ -96,17 +126,15 @@ public class TitleScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
-
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.setColor(Color.SKY);
-		renderer.box(50, 100, 0, 300, 200, 0);
-		renderer.end();
-
+		font.getData().setScale(1, 1);
 		batch.begin();
-		font.draw(batch,"タイトル画面",70,120);
-		font.draw(batch,"エンターを押して開始！",70,150);
-		font.draw(batch,"ScreenOrigin: "+screenOrigin.x+":"+screenOrigin.y,0,0);
+		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
+		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
+		font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
+		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
 		batch.end();
+
+		ui.draw(batch, renderer, font);
 	}
 
 	/**
@@ -142,6 +170,47 @@ public class TitleScreen implements Screen {
 	 */
 	@Override
 	public void dispose () {
+	}
+
+	private int homeSequence() {
+		if(sequenceNo == 1) {
+			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, true, "開始", "続きから", "設定"));
+			sequenceNo++;
+		}
+		if(sequenceNo == 2) {
+			int select = ui.getSelect();
+			// 開始
+			if (select == 0) {
+				sequence = this::startSettingSequence;
+				sequenceNo = 1;
+			}
+			// 続きから
+			if (select == 1) {
+				sequenceNo = 1;
+			}
+			// 設定
+			if (select == 2) {
+				sequenceNo = 1;
+			}
+		}
+		return 0;
+	}
+
+	private int startSettingSequence() {
+		if(sequenceNo == 1) {
+			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
+			selectUI = (UIPartsSelect)ui.getUIParts("setting_menu");
+			sequenceNo++;
+		}
+		// 人数
+		if(sequenceNo == 2) {
+			int select = ui.getSelect();
+			gameSetting.init(select+2);
+			sequenceNo = 3;
+		}
+		if(sequenceNo == 3) {
+		}
+		return 0;
 	}
 
 }

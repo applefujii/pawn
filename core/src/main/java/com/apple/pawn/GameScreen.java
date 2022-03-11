@@ -299,8 +299,9 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
-			if(ui.select == 0) sequenceNo+=2;
-			if(ui.select == 1) {
+		    int select = ui.getSelect();
+			if(select == 0) sequenceNo+=2;
+			if(select == 1) {
 				FlagManagement.set(Flag.LOOK_FREE);
 				sequenceNo+=1;
 			}
@@ -375,8 +376,9 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
-			if(ui.select == 0) turnPlayer.getPiece().move(1, true);
-			if(ui.select == 1) turnPlayer.getPiece().move(-1, true);
+            int select = ui.getSelect();
+			if(select == 0) turnPlayer.getPiece().move(1, true);
+			if(select == 1) turnPlayer.getPiece().move(-1, true);
 			timerRap = timer;
 			sequenceNo++;
 		}

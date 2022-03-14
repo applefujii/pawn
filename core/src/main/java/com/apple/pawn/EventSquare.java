@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class EventSquare extends Square {
-    protected int move;
     protected BitmapFont font;
 
 //    public EventSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {

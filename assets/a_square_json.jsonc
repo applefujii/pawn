@@ -3,462 +3,396 @@
         "x":3,
         "y":2,
         "type":0,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":4,
         "y":2,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":2,
         "type":3,
-        "document":"あああああ",
-        "has_task":false
+        "document":"あああああ"
     },
     {
         "x":6,
         "y":2,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":2,
-        "type":3,
-        "document":"いいいいい",
-        "has_task":true
+        "type":4,
+        "document":"いいいいい"
     },
     {
         "x":8,
         "y":2,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":2,
         "type":3,
-        "document":"ううううう",
-        "has_task":false
+        "document":"ううううう"
     },
     {
         "x":10,
         "y":2,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":2,
-        "type":3,
-        "document":"えええええ",
-        "has_task":true
+        "type":4,
+        "document":"えええええ"
     },
     {
         "x":12,
         "y":2,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":12,
         "y":3,
         "type":3,
-        "document":"おおおおお",
-        "has_task":false
+        "document":"おおおおお"
     },
     {
         "x":12,
         "y":4,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":4,
-        "type":3,
-        "document":"かかかかか",
-        "has_task":true
+        "type":4,
+        "document":"かかかかか"
     },
     {
         "x":10,
         "y":4,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":4,
         "type":3,
-        "document":"ききききき",
-        "has_task":false
+        "document":"ききききき"
     },
     {
         "x":8,
         "y":4,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":4,
-        "type":3,
-        "document":"くくくくく",
-        "has_task":true
+        "type":4,
+        "document":"くくくくく"
     },
     {
         "x":6,
         "y":4,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":4,
         "type":3,
-        "document":"けけけけけ",
-        "has_task":false
+        "document":"けけけけけ"
     },
     {
         "x":4,
         "y":4,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":3,
         "y":4,
-        "type":3,
-        "document":"こここここ",
-        "has_task":true
+        "type":4,
+        "document":"こここここ"
     },
     {
         "x":3,
         "y":5,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":3,
         "y":6,
         "type":3,
-        "document":"さささささ",
-        "has_task":false
+        "document":"さささささ"
     },
     {
         "x":4,
         "y":6,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":6,
-        "type":3,
-        "document":"ししししし",
-        "has_task":true
+        "type":4,
+        "document":"ししししし"
     },
     {
         "x":6,
         "y":6,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":6,
         "type":3,
-        "document":"すすすすす",
-        "has_task":false
+        "document":"すすすすす"
     },
     {
         "x":8,
         "y":6,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":6,
-        "type":3,
-        "document":"せせせせせ",
-        "has_task":true
+        "type":4,
+        "document":"せせせせせ"
     },
     {
         "x":10,
         "y":6,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":6,
         "type":3,
-        "document":"そそそそそ",
-        "has_task":false
+        "document":"そそそそそ"
     },
     {
         "x":12,
         "y":6,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":12,
         "y":7,
-        "type":3,
-        "document":"たたたたた",
-        "has_task":true
+        "type":4,
+        "document":"たたたたた"
     },
     {
         "x":12,
         "y":8,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":8,
         "type":3,
-        "document":"ちちちちち",
-        "has_task":false
+        "document":"ちちちちち"
     },
     {
         "x":10,
         "y":8,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":8,
-        "type":3,
-        "document":"つつつつつ",
-        "has_task":true
+        "type":4,
+        "document":"つつつつつ"
     },
     {
         "x":8,
         "y":8,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":8,
         "type":3,
-        "document":"ててててて",
-        "has_task":false
+        "document":"ててててて"
     },
     {
         "x":6,
         "y":8,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":8,
-        "type":3,
-        "document":"ととととと",
-        "has_task":true
+        "type":4,
+        "document":"ととととと"
     },
     {
         "x":4,
         "y":8,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":3,
         "y":8,
         "type":3,
-        "document":"ななななな",
-        "has_task":false
+        "document":"ななななな"
     },
     {
         "x":3,
         "y":9,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":3,
         "y":10,
-        "type":3,
-        "document":"ににににに",
-        "has_task":true
+        "type":4,
+        "document":"ににににに"
     },
     {
         "x":4,
         "y":10,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":10,
         "type":3,
-        "document":"ぬぬぬぬぬ",
-        "has_task":false
+        "document":"ぬぬぬぬぬ"
     },
     {
         "x":6,
         "y":10,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":10,
-        "type":3,
-        "document":"ねねねねね",
-        "has_task":true
+        "type":4,
+        "document":"ねねねねね"
     },
     {
         "x":8,
         "y":10,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":10,
         "type":3,
-        "document":"ののののの",
-        "has_task":false
+        "document":"ののののの"
     },
     {
         "x":10,
         "y":10,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":10,
-        "type":3,
-        "document":"ははははは",
-        "has_task":true
+        "type":4,
+        "document":"ははははは"
     },
     {
         "x":12,
         "y":10,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":12,
         "y":11,
         "type":3,
-        "document":"ひひひひひ",
-        "has_task":false
+        "document":"ひひひひひ"
     },
     {
         "x":12,
         "y":12,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":11,
         "y":12,
-        "type":3,
-        "document":"ふふふふふ",
-        "has_task":true
+        "type":4,
+        "document":"ふふふふふ"
     },
     {
         "x":10,
         "y":12,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":9,
         "y":12,
         "type":3,
-        "document":"へへへへへ",
-        "has_task":false
+        "document":"へへへへへ"
     },
     {
         "x":8,
         "y":12,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":7,
         "y":12,
-        "type":3,
-        "document":"ほほほほほ",
-        "has_task":true
+        "type":4,
+        "document":"ほほほほほ"
     },
     {
         "x":6,
         "y":12,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":5,
         "y":12,
         "type":3,
-        "document":"ままままま",
-        "has_task":false
+        "document":"ままままま"
     },
     {
         "x":4,
         "y":12,
         "type":2,
-        "document":null,
-        "has_task":false
+        "document":""
     },
     {
         "x":3,
         "y":12,
-        "type":3,
-        "document":"みみみみみ",
-        "has_task":true
+        "type":4,
+        "document":"みみみみみ"
     },
     {
         "x":3,
         "y":13,
         "type":1,
-        "document":null,
-        "has_task":false
+        "document":""
     }
 ]

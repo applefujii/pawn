@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Iterator;
+
 /**
  * @author fujii
  */
@@ -15,14 +17,14 @@ public class UI {
     public static final String SQUARE_EXPLANATION = "square_explanation";
 
     private int select = -1;
-    private Array<UIParts> uiParts;
-    private Array<UIPartsSelect> uiPartsSelect;
+    private final Array<UIParts> uiParts;
+    private final Array<UIPartsSelect> uiPartsSelect;
 
     //-- 参照
     private Pawn game;
     private Dice dice;
 
-    private Texture img;        // テクスチャ
+    private final Texture img;        // テクスチャ
 
     public UI() {
         uiParts = new Array<UIParts>();
@@ -35,7 +37,9 @@ public class UI {
     }
 
     public int update() {
-        for(UIParts ui : uiParts) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
             ui.update();
         }
         if(uiPartsSelect.size > 0) {
@@ -51,11 +55,15 @@ public class UI {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
-        for(UIParts pa : uiParts) {
-            pa.draw(batch,renderer,font);
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()){
+            UIParts ui = uiPartsIterator.next();
+            ui.draw(batch,renderer,font);
         }
-        for(UIPartsSelect pa : uiPartsSelect) {
-            pa.draw(batch,renderer,font);
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsSelectIterator.hasNext()){
+            UIPartsSelect ui = uiPartsSelectIterator.next();
+            ui.draw(batch,renderer,font);
         }
         if(dice != null) dice.draw(batch, renderer);
     }
@@ -70,16 +78,22 @@ public class UI {
     }
 
     public boolean remove(String name) {
-        for(UIParts ui :uiParts) {
-            if(ui.getName() == name) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
+            if(ui.getName().equals(name)) {
                 ui.dispose();
-                return uiParts.removeValue(ui,false);
+                uiPartsIterator.remove();
+                return true;
             }
         }
-        for(UIPartsSelect ui :uiPartsSelect) {
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()) {
+            UIPartsSelect ui = uiPartsSelectIterator.next();
             if(ui.getName() == name) {
                 ui.dispose();
-                return uiPartsSelect.removeValue(ui,false);
+                uiPartsSelectIterator.remove();
+                return true;
             }
         }
         return false;
@@ -98,8 +112,17 @@ public class UI {
     }
 
     public UIParts getUIParts(String name) {
-        for(UIParts ui :uiParts) {
-            if(ui.getName() == name) {
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()) {
+            UIParts ui = uiPartsIterator.next();
+            if(ui.getName().equals(name)) {
+                return ui;
+            }
+        }
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()) {
+            UIPartsSelect ui = uiPartsSelectIterator.next();
+            if(ui.getName().equals(name)) {
                 return ui;
             }
         }

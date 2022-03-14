@@ -24,33 +24,36 @@ public class GameScreen implements Screen {
 	private final Pawn game;
 	// 動作させるシークエンス
 	private IntSupplier sequence;
-	private SpriteBatch batch;
-	private BitmapFont font;
-	private ShapeRenderer renderer;
+	private final SpriteBatch batch;
+	private final BitmapFont font;
+	private final ShapeRenderer renderer;
 
-	private OrthographicCamera camera;		// カメラ
-	private OrthographicCamera uiCamera;	// UIカメラ
-	private FitViewport viewport;
-	private FitViewport uiViewport;
-	private Stage stage;					// カメラとビューポートの管理
+	private final OrthographicCamera camera;		// カメラ
+	private final OrthographicCamera uiCamera;	// UIカメラ
+	private final FitViewport viewport;
+	private final FitViewport uiViewport;
+	private final Stage stage;					// カメラとビューポートの管理
 	private Stage uiStage;					// UIのカメラとビューポートの管理
 
 	private float timer;
 	private float timerRap;
-	private Vector3 screenOrigin;			// 画面左上座標
-	private Vector3 touchPos;				// タッチ座標
+	private final Vector3 screenOrigin;			// 画面左上座標
+	private final Vector3 touchPos;				// タッチ座標
 	private int sequenceNo;					// シークエンス番号
 	private int turnPlayerNo;				// 何人目のプレイヤーのターンか
 	private int goalNo;						// ゴールした人数
 	private float zoom;						// ズーム率
+	private int move;
+	private int back;
 
 	//---- 他のクラス
-	private PlayerManager playerManager;	// プレイヤー管理
-	private BoardSurface board;				// 盤面
-	private Dice dice;						// さいころ
-	private UI ui;							// UI
-	private FileIO fileIO;
-	private SaveData saveData;
+	private final PlayerManager playerManager;	// プレイヤー管理
+	private final BoardSurface board;				// 盤面
+	private Square visitSquare;                     // ターンプレイヤーが居るマス
+	private final Dice dice;						// さいころ
+	private final UI ui;							// UI
+	private final FileIO fileIO;
+	private final SaveData saveData;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -70,16 +73,16 @@ public class GameScreen implements Screen {
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, game.LOGICAL_WIDTH, game.LOGICAL_HEIGHT);
-		viewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
-		uiViewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
+		camera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		viewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,camera);
+		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,camera);
 		stage = new Stage(viewport);
 		uiStage = new Stage(uiViewport);
 		Gdx.input.setInputProcessor(stage);
 
 		uiCamera = new OrthographicCamera();
-		uiCamera.setToOrtho(true, game.LOGICAL_WIDTH, game.LOGICAL_HEIGHT);
-		FitViewport uiViewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,uiCamera);
+		uiCamera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		FitViewport uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,uiCamera);
 		uiStage = new Stage(uiViewport);
 		Gdx.input.setInputProcessor(uiStage);
 
@@ -269,13 +272,13 @@ public class GameScreen implements Screen {
 				sequence = this::result;
 				return 0;
 			}
-			while(true) {
+			do {
 				turnPlayerNo++;
 				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
-				if(turnPlayer.isGoal() == false) break;
-			}
-			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
+			} while (turnPlayer.isGoal());
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
 			sequenceNo++;
 			return 0;
 		}
@@ -359,7 +362,7 @@ public class GameScreen implements Screen {
 			}
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +2) {
-			if(FlagManagement.is(Flag.PIECE_MOVE) == false) sequenceNo++;
+			if(!FlagManagement.is(Flag.PIECE_MOVE)) sequenceNo++;
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +3) {
 			sequenceNo = Sequence.TASK_DO.no;
@@ -370,6 +373,7 @@ public class GameScreen implements Screen {
 	}
 
 	private int taskDo() {
+		visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
 		if(sequenceNo == Sequence.TASK_DO.no) {
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ
@@ -377,14 +381,24 @@ public class GameScreen implements Screen {
 				return 0;
 			}
 			ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "成功", "失敗"));
+			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());
+			if(visitSquare.getType() == 4) {
+				move = visitSquare.getMove();
+				back = visitSquare.getBack();
+				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "成功", "失敗"));
+			} else if(visitSquare.getType() == 3) {
+				move = visitSquare.getMove();
+				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "移動"));
+			} else sequenceNo += 2;
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
+			FlagManagement.set(Flag.PIECE_MOVE);
             int select = ui.getSelect();
 			if(select != -1 ) {
-				if (select == 0) turnPlayer.getPiece().move(1, true);
-				if (select == 1) turnPlayer.getPiece().move(-1, true);
+				if (select == 0) turnPlayer.getPiece().move(move, true);
+				if (select == 1) turnPlayer.getPiece().move(-back, true);
 				timerRap = timer;
 				sequenceNo++;
 			}

@@ -5,8 +5,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
-    protected int back;
-
 //    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
     public TaskSquare(Vector2 pos, int type, int count, String document) {
 //        super(pos, type, count, document, atlas);

@@ -71,7 +71,7 @@ public class Pawn extends Game {
 		fpsTimer = new Timer();
 		fpsTimer.scheduleAtFixedRate(fpsTask, 0, 1000);
 
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new TitleScreen(this));
 	}
 
 	/**

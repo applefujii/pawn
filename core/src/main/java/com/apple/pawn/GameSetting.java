@@ -25,6 +25,10 @@ public class GameSetting {
         aColorNo[no] = colorNo;
     }
 
+    public void setPlayerNo(int playerNo) {
+        this.playerNo = playerNo;
+    }
+
     public int getPlayerNo() {
         return playerNo;
     }

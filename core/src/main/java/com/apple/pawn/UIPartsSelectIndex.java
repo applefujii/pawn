@@ -8,8 +8,8 @@ public class UIPartsSelectIndex extends UIPartsSelect{
 
     private String index;
 
-    public UIPartsSelectIndex(String name, int x, int y, int width, int height, boolean isObstruction, String index, String... choices) {
-        super(name, x, y, width, height, isObstruction, choices);
+    public UIPartsSelectIndex(String name, int x, int y, int width, int height, int cursor, boolean isObstruction, String index, String... choices) {
+        super(name, x, y, width, height, cursor, isObstruction, choices);
         this.index = index;
     }
 

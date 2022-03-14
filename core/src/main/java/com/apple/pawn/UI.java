@@ -1,5 +1,6 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -25,6 +26,7 @@ public class UI {
 
     public UI() {
         uiParts = new Array<UIParts>();
+        uiPartsSelect = new Array<UIPartsSelect>();
         img = new Texture("badlogic.jpg");
     }
 
@@ -34,10 +36,14 @@ public class UI {
 
     public int update() {
         for(UIParts ui : uiParts) {
+            ui.update();
+        }
+        if(uiPartsSelect.size > 0) {
+            UIPartsSelect ui = uiPartsSelect.peek();
             int ret = ui.update();
-            if( ret != -1 ) {
+            if (ret != -1) {
                 select = ret;
-                uiParts.removeValue(ui, false);
+                remove(ui.getName());
                 return ret;
             }
         }
@@ -48,6 +54,9 @@ public class UI {
         for(UIParts pa : uiParts) {
             pa.draw(batch,renderer,font);
         }
+        for(UIPartsSelect pa : uiPartsSelect) {
+            pa.draw(batch,renderer,font);
+        }
         if(dice != null) dice.draw(batch, renderer);
     }
 
@@ -56,8 +65,8 @@ public class UI {
     }
 
     public void add(UIParts parts) {
-        uiParts.add(parts);
-//        if(((UIPartsSelect)parts).choices != null) uiPartsSelect. ※途中
+        if(parts.getClass().getName().matches(".*Select.*") == false) uiParts.add(parts);
+        else uiPartsSelect.add((UIPartsSelect)parts);
     }
 
     public boolean remove(String name) {
@@ -67,6 +76,12 @@ public class UI {
                 return uiParts.removeValue(ui,false);
             }
         }
+        for(UIPartsSelect ui :uiPartsSelect) {
+            if(ui.getName() == name) {
+                ui.dispose();
+                return uiPartsSelect.removeValue(ui,false);
+            }
+        }
         return false;
     }
 
@@ -74,6 +89,12 @@ public class UI {
         int s = select;
         select = -1;
         return s;
+    }
+
+    public int getCursor() {
+        int ret = -1;
+        if(uiPartsSelect.size > 0) ret = uiPartsSelect.peek().getCursor();
+        return ret;
     }
 
     public UIParts getUIParts(String name) {

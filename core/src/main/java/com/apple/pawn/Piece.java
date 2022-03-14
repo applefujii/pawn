@@ -14,8 +14,8 @@ import com.badlogic.gdx.math.Vector2;
  * @author fujii
  */
 public class Piece {
-    private static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
-    private static final int WIDTH = 80, HEIGHT = 120;
+    public static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
+    public static final int WIDTH = 80, HEIGHT = 120;
     private static final int LINE_MAX = 3;
     private float MOVE_INTERVAL = 0.3f;
 

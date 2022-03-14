@@ -277,7 +277,7 @@ public class GameScreen implements Screen {
 				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
-			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
 			sequenceNo++;
 			return 0;
@@ -380,16 +380,18 @@ public class GameScreen implements Screen {
 				sequenceNo = Sequence.TASK_DO.no+1;
 				return 0;
 			}
-			ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "成功", "失敗"));
 			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());
 			if(visitSquare.getType() == 4) {
 				move = visitSquare.getMove();
 				back = visitSquare.getBack();
-				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "成功", "失敗"));
+				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "成功", "失敗"));
 			} else if(visitSquare.getType() == 3) {
 				move = visitSquare.getMove();
-				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "移動"));
-			} else sequenceNo += 2;
+				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "移動"));
+			} else {
+				sequenceNo += 2;
+				return 0;
+			}
 			sequenceNo++;
 			return 0;
 		}
@@ -399,14 +401,19 @@ public class GameScreen implements Screen {
 			if(select != -1 ) {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
 				if (select == 1) turnPlayer.getPiece().move(-back, true);
-				timerRap = timer;
 				sequenceNo++;
 			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
-			if(timer-timerRap >= 0.5f) sequenceNo++;
+			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
+				timerRap = timer;
+				sequenceNo++;
+			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +3) {
+			if(timer-timerRap >= 0.5f) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.TASK_DO.no +4) {
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

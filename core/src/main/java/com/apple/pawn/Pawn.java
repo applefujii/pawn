@@ -64,14 +64,14 @@ public class Pawn extends Game {
 		//-- FPSをデバッグ出力
 		TimerTask fpsTask = new TimerTask() {
 			public void run() {
-				Gdx.app.debug("fps", "fps="+frame);
+//				Gdx.app.debug("fps", "fps="+frame);
 				frame = 0;
 			}
 		};
 		fpsTimer = new Timer();
 		fpsTimer.scheduleAtFixedRate(fpsTask, 0, 1000);
 
-		this.setScreen(new TitleScreen(this));
+		this.setScreen(new GameScreen(this));
 	}
 
 	/**

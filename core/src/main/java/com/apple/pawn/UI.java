@@ -60,7 +60,7 @@ public class UI {
             UIParts ui = uiPartsIterator.next();
             ui.draw(batch,renderer,font);
         }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiParts);
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
         while(uiPartsSelectIterator.hasNext()){
             UIPartsSelect ui = uiPartsSelectIterator.next();
             ui.draw(batch,renderer,font);

@@ -52,7 +52,7 @@ public class BoardSurface {
             for(JsonNode squareJson : aSquareJson) {
                 Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
                 int type = squareJson.get("type").asInt();
-                if(squareJson.get("has_task").asBoolean()) {
+                if(type == 4) {
 //                    aSquare.add(new TaskSquare(
 //                            vec,
 //                            squareJson.get("type").asInt(),

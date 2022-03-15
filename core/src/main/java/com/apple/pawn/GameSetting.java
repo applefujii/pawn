@@ -1,5 +1,9 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
+
+import java.util.stream.IntStream;
+
 public class GameSetting {
 
     private int playerNo;
@@ -15,6 +19,10 @@ public class GameSetting {
         aName = new String[playerNo];
         aColorNo = new int[playerNo];
         aSquareNo = new int[playerNo];
+        for(int i : IntStream.range(0,playerNo).toArray()) {
+            aName[i] = (i+1)+"P";
+            aColorNo[i] = i;
+        }
     }
 
     public void setAName(int no, String name) {
@@ -23,10 +31,6 @@ public class GameSetting {
 
     public void setAColorNo(int no, int colorNo) {
         aColorNo[no] = colorNo;
-    }
-
-    public void setPlayerNo(int playerNo) {
-        this.playerNo = playerNo;
     }
 
     public int getPlayerNo() {

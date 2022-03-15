@@ -64,7 +64,7 @@ public class Pawn extends Game {
 		//-- FPSをデバッグ出力
 		TimerTask fpsTask = new TimerTask() {
 			public void run() {
-				Gdx.app.debug("fps", "fps="+frame);
+//				Gdx.app.debug("fps", "fps="+frame);
 				frame = 0;
 			}
 		};

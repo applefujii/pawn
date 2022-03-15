@@ -155,7 +155,7 @@ public class GameScreen implements Screen {
 			// UIの動作
 			if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 			// シークエンスの動作
-			if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
+			sequence.getAsInt();
 			//-- その他の動作
 			playerManager.update();
 			dice.update();
@@ -276,19 +276,17 @@ public class GameScreen implements Screen {
 				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
-			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, turnPlayer.getName()+"の番です"));
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.TURN_STANDBY.no +1) {
-			//------ 入力
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			int select = ui.getSelect();
+			if(select != -1 ) {
 				sequenceNo = Sequence.ACTION_SELECT.no;
 				sequence = this::actionSelect;
 			}
-			//		if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.zoom-=0.1;
-			//		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.zoom+=0.1;
 		}
 
 		return 0;
@@ -296,33 +294,36 @@ public class GameScreen implements Screen {
 
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
-			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "サイコロを振る", "マップ確認"));
+			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "サイコロを振る", "マップ確認"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.ACTION_SELECT.no +1) {
 		    int select = ui.getSelect();
-			if(select == 0) sequenceNo+=2;
-			if(select == 1) {
-				FlagManagement.set(Flag.LOOK_FREE);
-				sequenceNo+=1;
+			if(select != -1 ) {
+				if (select == 0) {
+					sequenceNo = Sequence.DICE_ROLL.no;
+					sequence = this::diceRoll;
+				}
+				if (select == 1) {
+					FlagManagement.set(Flag.LOOK_FREE);
+					sequenceNo += 1;
+				}
 			}
 			return 0;
 		}
 		// マップ確認
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
-			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				FlagManagement.set(Flag.LOOK_PIECE);
-				sequenceNo=Sequence.ACTION_SELECT.no;
+			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
+				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+					FlagManagement.set(Flag.LOOK_PIECE);
+					sequenceNo = Sequence.ACTION_SELECT.no;
+				}
+				if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
+				if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
+				if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
+				if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
 			}
-			if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-			if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-			if(Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-			if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
-		}
-		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
-			sequenceNo = Sequence.DICE_ROLL.no;
-			sequence = this::diceRoll;
 		}
 
 		return 0;
@@ -334,11 +335,12 @@ public class GameScreen implements Screen {
 			sequenceNo++;
 		}
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
-			//------ 入力
-			if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-				turnPlayer.addADiceNo( dice.rollStop() );
-				sequenceNo = Sequence.PIECE_ADVANCE.no;
-				sequence = this::PieceAdvance;
+			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
+				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+					turnPlayer.addADiceNo(dice.rollStop());
+					sequenceNo = Sequence.PIECE_ADVANCE.no;
+					sequence = this::PieceAdvance;
+				}
 			}
 		}
 
@@ -347,13 +349,16 @@ public class GameScreen implements Screen {
 
 	private int PieceAdvance() {
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
-			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "移動"));
+			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "移動"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +1) {
-			turnPlayer.getPiece().move(dice.getNo(), true);
-			sequenceNo++;
+			int select = ui.getSelect();
+			if(select != -1 ) {
+				turnPlayer.getPiece().move(dice.getNo(), true);
+				sequenceNo++;
+			}
 		}
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no +2) {
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) sequenceNo++;
@@ -379,25 +384,36 @@ public class GameScreen implements Screen {
 			if(visitSquare.getType() == 4) {
 				move = visitSquare.getMove();
 				back = visitSquare.getBack();
-				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "成功", "失敗"));
+				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "成功", "失敗"));
 			} else if(visitSquare.getType() == 3) {
 				move = visitSquare.getMove();
-				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, true, "移動"));
-			} else sequenceNo += 2;
+				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "移動"));
+			} else {
+				sequenceNo += 2;
+				return 0;
+			}
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +1) {
 			FlagManagement.set(Flag.PIECE_MOVE);
             int select = ui.getSelect();
-			if(select == 0) turnPlayer.getPiece().move(move, true);
-			if(select == 1) turnPlayer.getPiece().move(-back, true);
-			sequenceNo++;
+			if(select != -1 ) {
+				if (select == 0) turnPlayer.getPiece().move(move, true);
+				if (select == 1) turnPlayer.getPiece().move(-back, true);
+				sequenceNo++;
+			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
-			if(!FlagManagement.is(Flag.PIECE_MOVE)) sequenceNo++;
+			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
+				timerRap = timer;
+				sequenceNo++;
+			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +3) {
+			if(timer-timerRap >= 0.5f) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.TASK_DO.no +4) {
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

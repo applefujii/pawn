@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +18,7 @@ public class UI {
 
     private int select = -1;
     private final Array<UIParts> uiParts;
-    private Array<UIPartsSelect> uiPartsSelect;
+    private final Array<UIPartsSelect> uiPartsSelect;
 
     //-- 参照
     private Pawn game;
@@ -25,7 +27,8 @@ public class UI {
     private final Texture img;        // テクスチャ
 
     public UI() {
-        uiParts = new Array<>();
+        uiParts = new Array<UIParts>();
+        uiPartsSelect = new Array<UIPartsSelect>();
         img = new Texture("badlogic.jpg");
     }
 
@@ -37,10 +40,14 @@ public class UI {
         Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
         while(uiPartsIterator.hasNext()) {
             UIParts ui = uiPartsIterator.next();
+            ui.update();
+        }
+        if(uiPartsSelect.size > 0) {
+            UIPartsSelect ui = uiPartsSelect.peek();
             int ret = ui.update();
-            if( ret != -1 ) {
+            if (ret != -1) {
                 select = ret;
-                uiPartsIterator.remove();
+                remove(ui.getName());
                 return ret;
             }
         }
@@ -53,6 +60,11 @@ public class UI {
             UIParts ui = uiPartsIterator.next();
             ui.draw(batch,renderer,font);
         }
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()){
+            UIPartsSelect ui = uiPartsSelectIterator.next();
+            ui.draw(batch,renderer,font);
+        }
         if(dice != null) dice.draw(batch, renderer);
     }
 
@@ -61,8 +73,8 @@ public class UI {
     }
 
     public void add(UIParts parts) {
-        uiParts.add(parts);
-//        if(((UIPartsSelect)parts).choices != null) uiPartsSelect. ※途中
+        if(parts.getClass().getName().matches(".*Select.*") == false) uiParts.add(parts);
+        else uiPartsSelect.add((UIPartsSelect)parts);
     }
 
     public boolean remove(String name) {
@@ -75,6 +87,15 @@ public class UI {
                 return true;
             }
         }
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()) {
+            UIPartsSelect ui = uiPartsSelectIterator.next();
+            if(ui.getName() == name) {
+                ui.dispose();
+                uiPartsSelectIterator.remove();
+                return true;
+            }
+        }
         return false;
     }
 
@@ -84,10 +105,23 @@ public class UI {
         return s;
     }
 
+    public int getCursor() {
+        int ret = -1;
+        if(uiPartsSelect.size > 0) ret = uiPartsSelect.peek().getCursor();
+        return ret;
+    }
+
     public UIParts getUIParts(String name) {
         Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
         while(uiPartsIterator.hasNext()) {
             UIParts ui = uiPartsIterator.next();
+            if(ui.getName().equals(name)) {
+                return ui;
+            }
+        }
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()) {
+            UIPartsSelect ui = uiPartsSelectIterator.next();
             if(ui.getName().equals(name)) {
                 return ui;
             }

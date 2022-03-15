@@ -6,7 +6,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +20,7 @@ import java.util.function.IntSupplier;
 
 
 public class TitleScreen implements Screen {
+	private final static int DISTANCE = 240;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -35,13 +39,18 @@ public class TitleScreen implements Screen {
 	private Vector3 screenOrigin;
 	private Vector3 touchPos;
 	private int sequenceNo;					// シークエンス番号
+	private int sequenceSubNo;				// サブシークエンス番号
 
 	private UI ui;							// UI
 
 	private GameSetting gameSetting;
 
-	//-- 参照
-	private UIPartsSelect selectUI;
+	private int playerNo;
+	private double rad;
+
+	//-- リソース
+	private BitmapFont fontTitle;
+	private final Sprite spPiece[];
 
 
 	/**
@@ -72,6 +81,39 @@ public class TitleScreen implements Screen {
 		ui.initialize(game);
 
 		gameSetting = new GameSetting();
+		gameSetting.init(6);
+		playerNo = 6;
+		rad = 0;
+
+		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		param.size = 94;
+		param.incremental = true;			// 自動的に文字を追加
+		param.color = Color.WHITE;			// 文字色
+		param.borderColor = Color.BLACK;	// 境界線色
+		param.borderWidth = 2;				// 境界線の太さ
+		param.flip = true;					// 上下反転
+		fontTitle = game.fontGenerator.generateFont(param);
+
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+		spPiece = new Sprite[6];
+		spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
+		spPiece[0].flip(false, true);
+		spPiece[0].setSize(80,120);
+		spPiece[1] = atlas.createSprite(Piece.COLOR[1]);
+		spPiece[1].flip(false, true);
+		spPiece[1].setSize(80,120);
+		spPiece[2] = atlas.createSprite(Piece.COLOR[2]);
+		spPiece[2].flip(false, true);
+		spPiece[2].setSize(80,120);
+		spPiece[3] = atlas.createSprite(Piece.COLOR[3]);
+		spPiece[3].flip(false, true);
+		spPiece[3].setSize(80,120);
+		spPiece[4] = atlas.createSprite(Piece.COLOR[4]);
+		spPiece[4].flip(false, true);
+		spPiece[4].setSize(80,120);
+		spPiece[5] = atlas.createSprite(Piece.COLOR[5]);
+		spPiece[5].flip(false, true);
+		spPiece[5].setSize(80,120);
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -80,6 +122,7 @@ public class TitleScreen implements Screen {
 		FlagManagement.set(Flag.INPUT_ENABLE);
 
 		sequenceNo = 1;
+		sequenceSubNo = 1;
 		sequence = this::homeSequence;
 	}
 
@@ -95,9 +138,8 @@ public class TitleScreen implements Screen {
 			game.setScreen(new GameScreen(game));
 		}
 
-		if(FlagManagement.is(Flag.INPUT_ENABLE)) sequence.getAsInt();
-
-		ui.update();
+		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
+		sequence.getAsInt();
 	}
 
 	/**
@@ -120,7 +162,24 @@ public class TitleScreen implements Screen {
 		renderer.end();
 
 		//------ 描画
+		if(sequenceNo == 1  ||  sequenceNo == 2) {
+			batch.begin();
+			int px=game.LOGICAL_WIDTH/2-40, py=game.LOGICAL_HEIGHT/2-60;
+			double tRad = rad, sa = Math.toRadians(360/playerNo);
+			for(int i=0 ; i<playerNo ; i++) {
+				spPiece[i].setPosition((int) (Math.cos(tRad) * DISTANCE + px), (int) (Math.sin(tRad) * DISTANCE + py));
+				spPiece[i].draw(batch);
+				tRad += sa;
+			}
+			batch.end();
 
+			fontTitle.getData().setScale(1, 1);
+			batch.begin();
+			fontTitle.draw(batch, "すごろくゲーム", game.LOGICAL_WIDTH / 2 - 329, game.LOGICAL_HEIGHT / 2 - 100);
+			batch.end();
+		} else if(sequenceNo == 3) {
+
+		}
 
 		//------ ui描画
 		uiCamera.update();
@@ -130,8 +189,9 @@ public class TitleScreen implements Screen {
 		batch.begin();
 		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
 		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
-		font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
+		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 16*2);
 		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
+		font.draw(batch, "人数: " +playerNo , 300, 16*5);
 		batch.end();
 
 		ui.draw(batch, renderer, font);
@@ -173,42 +233,54 @@ public class TitleScreen implements Screen {
 	}
 
 	private int homeSequence() {
-		if(sequenceNo == 1) {
-			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, true, "開始", "続きから", "設定"));
-			sequenceNo++;
+		if(sequenceSubNo == 1) {
+			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", "続きから", "設定"));
+			sequenceSubNo++;
 		}
-		if(sequenceNo == 2) {
+		if(sequenceSubNo == 2) {
+			rad += 0.02f;
+			if(rad >360) rad %= 360;
 			int select = ui.getSelect();
 			// 開始
 			if (select == 0) {
 				sequence = this::startSettingSequence;
-				sequenceNo = 1;
+				sequenceNo = 2;
+				sequenceSubNo = 1;
 			}
 			// 続きから
 			if (select == 1) {
-				sequenceNo = 1;
+				sequenceSubNo = 1;
 			}
 			// 設定
 			if (select == 2) {
-				sequenceNo = 1;
+				sequenceSubNo = 1;
 			}
 		}
 		return 0;
 	}
 
 	private int startSettingSequence() {
-		if(sequenceNo == 1) {
-			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
-			selectUI = (UIPartsSelect)ui.getUIParts("setting_menu");
-			sequenceNo++;
+		if(sequenceSubNo == 1) {
+			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 2, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
+			sequenceSubNo++;
 		}
 		// 人数
-		if(sequenceNo == 2) {
+		if(sequenceSubNo == 2) {
+			rad += 0.02f;
+			if(rad >360) rad %= 360;
+			playerNo = ui.getCursor()+2;
+			gameSetting.setPlayerNo(playerNo);
 			int select = ui.getSelect();
-			gameSetting.init(select+2);
-			sequenceNo = 3;
+			if(select != -1 ) {
+				sequenceNo = 3;
+				sequenceSubNo = 1;
+			}
 		}
-		if(sequenceNo == 3) {
+		return 0;
+	}
+
+	private int startSetting2Sequence() {
+		if (sequenceSubNo == 1) {
 		}
 		return 0;
 	}

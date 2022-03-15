@@ -44,7 +44,6 @@ public class Dice {
     public void update() {
         if(isRoll) {
             no = random.nextInt(6) +1;
-            Gdx.app.debug("info", "dice="+no);
         }
     }
 

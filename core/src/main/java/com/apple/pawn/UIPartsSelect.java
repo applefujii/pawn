@@ -17,8 +17,9 @@ public class UIPartsSelect extends UIParts {
     protected int cursor = 0;
     private boolean isObstruction;
 
-    public UIPartsSelect(String name, int x, int y, int width, int height, boolean isObstruction, String... choices) {
+    public UIPartsSelect(String name, int x, int y, int width, int height, int cursor, boolean isObstruction, String... choices) {
         super(name, x, y, width, height);
+        this.cursor = cursor;
         this.isObstruction = isObstruction;
         this.choices = new Array<String>();
         for(String cho : choices) {
@@ -69,7 +70,7 @@ public class UIPartsSelect extends UIParts {
     }
 
     public int confirm() {
-        FlagManagement.set(Flag.INPUT_ENABLE);
+        if(isObstruction) FlagManagement.set(Flag.INPUT_ENABLE);
         return cursor;
     }
 

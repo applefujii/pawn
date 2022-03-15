@@ -50,7 +50,6 @@ public class GameScreen implements Screen {
 	private final GameSetting gameSetting;			// ゲームの設定
 	private final PlayerManager playerManager;		// プレイヤー管理
 	private final BoardSurface board;				// 盤面
-	private Square visitSquare;                     // ターンプレイヤーが居るマス
 	private final Dice dice;						// さいころ
 	private final UI ui;							// UI
 	private final FileIO fileIO;
@@ -380,7 +379,8 @@ public class GameScreen implements Screen {
 	}
 
 	private int taskDo() {
-		visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
+		// ターンプレイヤーが居るマス
+		Square visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
 		if(sequenceNo == Sequence.TASK_DO.no) {
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ

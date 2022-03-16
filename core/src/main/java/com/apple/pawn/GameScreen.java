@@ -48,6 +48,7 @@ public class GameScreen implements Screen {
 	private final float mapCameraZoom;
 	private final float mapCameraHeight;
 	private final float mapCameraWidth;
+	private int turnCount;
 
 	//---- 他のクラス
 	private final GameSetting gameSetting;			// ゲームの設定
@@ -77,6 +78,7 @@ public class GameScreen implements Screen {
 		mapCameraZoom = (float) BoardSurface.MAP_HEIGHT / Pawn.LOGICAL_HEIGHT;
 		mapCameraHeight = (float) BoardSurface.MAP_HEIGHT / 2;
 		mapCameraWidth = (float) BoardSurface.MAP_WIDTH / 2;
+		turnCount = 1;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -124,7 +126,7 @@ public class GameScreen implements Screen {
 //		playerManager.add("3P", 1);
 //		playerManager.add("4P", 5);
 //		playerManager.add("5P", 3);
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -155,8 +157,8 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
-		if(!FlagManagement.is(Flag.LOOK_FREE)) {
-			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+		if(FlagManagement.is(Flag.LOOK_FREE)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W) && zoom > 1) {
 				zoom -= 0.1;
 				camera.zoom -= 0.1;
 			}
@@ -288,11 +290,14 @@ public class GameScreen implements Screen {
 			}
 			do {
 				turnPlayerNo++;
-				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
+				if (turnPlayerNo >= playerManager.getSize()) {
+					turnPlayerNo = 0;
+					turnCount++;
+				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
-			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
 			sequenceNo++;
 			return 0;
 		}
@@ -331,13 +336,13 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
 					zoom = 1.0f;
 					FlagManagement.set(Flag.LOOK_PIECE);
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小");
 					if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
 					if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
 					if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
@@ -369,12 +374,10 @@ public class GameScreen implements Screen {
 			sequenceNo++;
 		}
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
-			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
-				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-					turnPlayer.addADiceNo(dice.rollStop());
-					sequenceNo = Sequence.PIECE_ADVANCE.no;
-					sequence = this::PieceAdvance;
-				}
+			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				turnPlayer.addADiceNo(dice.rollStop());
+				sequenceNo = Sequence.PIECE_ADVANCE.no;
+				sequence = this::PieceAdvance;
 			}
 		}
 
@@ -409,6 +412,7 @@ public class GameScreen implements Screen {
 		// ターンプレイヤーが居るマス
 		Square visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
 		if(sequenceNo == Sequence.TASK_DO.no) {
+			turnPlayer.addResultDetail(visitSquare, turnCount);
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ
 				sequenceNo = Sequence.TASK_DO.no+1;
@@ -434,7 +438,10 @@ public class GameScreen implements Screen {
             int select = ui.getSelect();
 			if(select != -1 ) {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
-				if (select == 1) turnPlayer.getPiece().move(-back, true);
+				if (select == 1){
+					turnPlayer.getPiece().move(-back, true);
+					turnPlayer.getResultDetail(turnCount).setTaskResult(false);
+				}
 				sequenceNo++;
 			}
 		}
@@ -484,4 +491,7 @@ public class GameScreen implements Screen {
 		goalNo++;
 	}
 
+	public int getTurnCount() {
+		return turnCount;
+	}
 }

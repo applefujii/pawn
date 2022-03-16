@@ -1,7 +1,5 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -16,19 +14,22 @@ import java.util.regex.Pattern;
 public class UIPartsExplanation extends UIParts {
 
     private String explanation;
-    private Array<String> stringRow;
-    private final int strWidth = 16;
-    private final int strHeight = 16;
-    private int charsNoRow;
+    private final Array<String> stringRow;
+    private final int strWidth = 18;
+    private final int strHeight = 18;
+    private final int charsNoRow;
 
     public UIPartsExplanation(String name, int x, int y, int width, int height, String expl) {
         super(name, x, y, width, height);
         explanation = expl;
-        stringRow = new Array<String>();
-        charsNoRow = (int)Math.floor(width/strWidth)-2;
-        Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(expl);
-        while(row.find()) {
-            stringRow.add(row.group());
+        stringRow = new Array<>();
+        charsNoRow = width/strWidth;
+        String[] splits = Pattern.compile("\\n").split(explanation);
+        for(String split : splits) {
+            Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(split);
+            while(row.find()) {
+                stringRow.add(row.group());
+            }
         }
     }
 
@@ -46,24 +47,25 @@ public class UIPartsExplanation extends UIParts {
         renderer.box(x,y,0,width,height,0);
         renderer.end();
 
-        int i = 0;
-        for(String s : stringRow) {
-            batch.begin();
-            font.draw(batch,s,x,y+strHeight*i);
-            batch.end();
-            i++;
+        batch.begin();
+        for(int i = 0; i < stringRow.size; i++) {
+            font.draw(batch,stringRow.get(i),x,y+2+strHeight*i);
         }
+        batch.end();
     }
 
     public void dispose () {
     }
 
-    public void setExplanation(String explanation) {
-        this.explanation = explanation;
+    public void setExplanation(String expl) {
+        explanation = expl;
         stringRow.clear();
-        Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(explanation);
-        while(row.find()) {
-            stringRow.add(row.group());
+        String[] splits = Pattern.compile("\\n").split(explanation);
+        for(String split : splits) {
+            Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(split);
+            while(row.find()) {
+                stringRow.add(row.group());
+            }
         }
     }
 }

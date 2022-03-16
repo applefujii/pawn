@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class BoardSurface {
+    public static int MAP_WIDTH = 4096;
+    public static int MAP_HEIGHT = 4096;
     public static int TILE_WIDTH = 256;
     public static int TILE_HEIGHT = 256;
     public static int SQUARE_COUNT = 65;
@@ -100,7 +102,7 @@ public class BoardSurface {
 //            backSprite.draw(batch);
 //        }
 
-        batch.draw(mapImg, 0, 0, 4096, 4096, 0, 0, 4096, 4096, false, true);
+        batch.draw(mapImg, 0, 0, MAP_WIDTH, MAP_HEIGHT, 0, 0, MAP_WIDTH, MAP_HEIGHT, false, true);
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {

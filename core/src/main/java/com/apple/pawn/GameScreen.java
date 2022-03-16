@@ -45,6 +45,9 @@ public class GameScreen implements Screen {
 	private float zoom;						// ズーム率
 	private int move;
 	private int back;
+	private final float mapCameraZoom;
+	private final float mapCameraHeight;
+	private final float mapCameraWidth;
 
 	//---- 他のクラス
 	private final PlayerManager playerManager;	// プレイヤー管理
@@ -69,6 +72,9 @@ public class GameScreen implements Screen {
 		timer = 0;
 		goalNo = 0;
 		zoom = 1.0f;
+		mapCameraZoom = (float) BoardSurface.MAP_HEIGHT / Pawn.LOGICAL_HEIGHT;
+		mapCameraHeight = (float) BoardSurface.MAP_HEIGHT / 2;
+		mapCameraWidth = (float) BoardSurface.MAP_WIDTH / 2;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -142,13 +148,15 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-			zoom-=0.1;
-			camera.zoom-=0.1;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-			zoom+=0.1;
-			camera.zoom+=0.1;
+		if(!FlagManagement.is(Flag.LOOK_FREE)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+				zoom -= 0.1;
+				camera.zoom -= 0.1;
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				zoom += 0.1;
+				camera.zoom += 0.1;
+			}
 		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
@@ -316,13 +324,32 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
+					zoom = 1.0f;
 					FlagManagement.set(Flag.LOOK_PIECE);
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
-				if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-				if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-				if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-				if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+				if(FlagManagement.is(Flag.LOOK_FREE)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小");
+					if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
+					if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
+					if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
+					if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+						zoom = mapCameraZoom;
+						camera.zoom = mapCameraZoom;
+						camera.position.x = mapCameraWidth;
+						camera.position.y = mapCameraHeight;
+						FlagManagement.set(Flag.LOOK_MAP);
+					}
+				} else if (FlagManagement.is(Flag.LOOK_MAP)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで詳細マップ");
+					if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+						zoom = 1.0f;
+						setCameraPositionToTurnPlayer();
+						FlagManagement.set(Flag.LOOK_FREE);
+					}
+				}
 			}
 		}
 

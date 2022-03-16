@@ -50,7 +50,9 @@ public class Player {
         piece.draw(batch, renderer);
     }
 
-    public void dispose () { }
+    public void dispose () {
+        piece.dispose();
+    }
 
     public void addResultDetail(Square square, int turn) {
         resultDetails.add(new ResultDetail(square, turn));

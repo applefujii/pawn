@@ -16,6 +16,7 @@ public class Piece {
     private static final int LINE_MAX = 3;
     private float MOVE_INTERVAL = 0.3f;
 
+    private final TextureAtlas atlas;
     private int squareNo;       // 現在何マス目か
     private int moveToSquareNo;
     private Vector2 pos;
@@ -31,7 +32,7 @@ public class Piece {
     private BoardSurface boardSurface;
 
     public Piece(int pieceColorNo) {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         sprite = atlas.createSprite(COLOR[pieceColorNo]);
         sprite.flip(false, true);
         squareNo = 0;
@@ -54,7 +55,7 @@ public class Piece {
     public boolean update() {
         if(isMove) {
             //-- 進める
-            if (isTimer == false) {
+            if (!isTimer) {
                 int plus = 1;
                 if(squareNo > moveToSquareNo) plus = -1;
                 if(squareNo != moveToSquareNo) {
@@ -109,6 +110,7 @@ public class Piece {
     }
 
     public void dispose () {
+        atlas.dispose();
     }
 
     public void move( int squareNo, boolean isAnimation ) {

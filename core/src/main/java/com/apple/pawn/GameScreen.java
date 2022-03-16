@@ -50,7 +50,8 @@ public class GameScreen implements Screen {
 	private final float mapCameraWidth;
 
 	//---- 他のクラス
-	private final PlayerManager playerManager;	// プレイヤー管理
+	private final GameSetting gameSetting;			// ゲームの設定
+	private final PlayerManager playerManager;		// プレイヤー管理
 	private final BoardSurface board;				// 盤面
 	private final Dice dice;						// さいころ
 	private final UI ui;							// UI
@@ -64,8 +65,9 @@ public class GameScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public GameScreen (final Pawn game) {
+	public GameScreen (final Pawn game, final GameSetting setting) {
 		this.game = game;
+		this.gameSetting = setting;
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
@@ -112,11 +114,16 @@ public class GameScreen implements Screen {
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
 		//-- 作成
-		playerManager.add("1P", 0);
-		playerManager.add("2P", 4);
-		playerManager.add("3P", 1);
-		playerManager.add("4P", 5);
-		playerManager.add("5P", 3);
+		String name[] = gameSetting.getAName();
+		int color[] = gameSetting.getAColorNo();
+		for(int i=0 ; i<name.length ; i++) {
+			playerManager.add(name[i], color[i]);
+		}
+//		playerManager.add("1P", 0);
+//		playerManager.add("2P", 4);
+//		playerManager.add("3P", 1);
+//		playerManager.add("4P", 5);
+//		playerManager.add("5P", 3);
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);

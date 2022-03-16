@@ -81,14 +81,13 @@ public class TitleScreen implements Screen {
 		ui.initialize(game);
 
 		gameSetting = new GameSetting();
-		gameSetting.init(6);
 		playerNo = 6;
 		rad = 0;
 
 		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		param.size = 94;
 		param.incremental = true;			// 自動的に文字を追加
-		param.color = Color.WHITE;			// 文字色
+		param.color = Color.CORAL;			// 文字色
 		param.borderColor = Color.BLACK;	// 境界線色
 		param.borderWidth = 2;				// 境界線の太さ
 		param.flip = true;					// 上下反転
@@ -135,7 +134,8 @@ public class TitleScreen implements Screen {
 
 		//-- 入力
 		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)  |  Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ENTER)) {
-			game.setScreen(new GameScreen(game));
+			gameSetting.init(4);
+			game.setScreen(new GameScreen(game, gameSetting));
 		}
 
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
@@ -157,7 +157,7 @@ public class TitleScreen implements Screen {
 		ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 		//-- 論理表示領域を黒で塗りつぶし
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.setColor(0,0,0,1);
+		renderer.setColor(0.5f,0.1f,0.5f,1);
 		renderer.rect(screenOrigin.x, screenOrigin.y,game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT);
 		renderer.end();
 
@@ -191,7 +191,6 @@ public class TitleScreen implements Screen {
 		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
 		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 16*2);
 		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
-		font.draw(batch, "人数: " +playerNo , 300, 16*5);
 		batch.end();
 
 		ui.draw(batch, renderer, font);
@@ -269,9 +268,11 @@ public class TitleScreen implements Screen {
 			rad += 0.02f;
 			if(rad >360) rad %= 360;
 			playerNo = ui.getCursor()+2;
-			gameSetting.setPlayerNo(playerNo);
 			int select = ui.getSelect();
 			if(select != -1 ) {
+				playerNo = select+2;
+				gameSetting.init(playerNo);
+				sequence = this::startSetting2Sequence;
 				sequenceNo = 3;
 				sequenceSubNo = 1;
 			}
@@ -281,6 +282,7 @@ public class TitleScreen implements Screen {
 
 	private int startSetting2Sequence() {
 		if (sequenceSubNo == 1) {
+			game.setScreen(new GameScreen(game, gameSetting));
 		}
 		return 0;
 	}

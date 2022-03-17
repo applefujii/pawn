@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
 		}
 	}
 
-	public void initialize(final SaveData sd) {
+	public void load(final SaveData sd) {
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;
 		goalNo = sd.goalNo;

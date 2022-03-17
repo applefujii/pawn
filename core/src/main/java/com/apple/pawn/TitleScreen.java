@@ -299,7 +299,7 @@ public class TitleScreen implements Screen {
 		if (sequenceSubNo == 1) {
 			fileIO.load();
 			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.initialize(fileIO.getSaveData());
+			gameScreen.load(fileIO.getSaveData());
 			game.setScreen(gameScreen);
 		}
 		return 0;

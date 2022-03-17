@@ -137,4 +137,8 @@ public class Piece {
     public Vector2 getPosition() {
         return boardSurface.getPos(squareNo);
     }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
 }

@@ -24,6 +24,13 @@ public class PlayerManager {
         this.gameScreen = gameScreen;
     }
 
+    public void load(Array<Player> aPlayer) {
+        this.aPlayer = aPlayer;
+        for(Player p : aPlayer) {
+            p.load(gameScreen, boardSurface);
+        }
+    }
+
     public void update() {
         for(Player player : aPlayer) {
             player.update();
@@ -61,7 +68,7 @@ public class PlayerManager {
         return aPlayer.size;
     }
 
-    public Array<Player> getPlayer() {
+    public Array<Player> getAPlayer() {
         return aPlayer;
     }
 

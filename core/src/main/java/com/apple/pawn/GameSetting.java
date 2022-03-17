@@ -22,6 +22,7 @@ public class GameSetting {
         for(int i : IntStream.range(0,playerNo).toArray()) {
             aName[i] = (i+1)+"P";
             aColorNo[i] = i;
+            aSquareNo[i] = 0;
         }
     }
 

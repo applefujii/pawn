@@ -10,26 +10,37 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author fujii
  */
 public class Player {
-    private String name;
-    private Piece piece;
-    private Array<Integer> aDiceNo;
-    private boolean isGoal;
-    private int goalNo;
+    @JsonProperty
+    private String name;                // 名前
+    @JsonProperty
+    private Piece piece;                // 駒
+    @JsonProperty
+    private Array<Integer> aDiceNo;     // 過去に出したサイコロの目
+    @JsonProperty
+    private boolean isGoal;             // ゴールしているか
+    @JsonProperty
+    private int goalNo;                 // 何番目にゴールしたか
 
     //-- 参照
+    @JsonIgnore
     private GameScreen gameScreen;
+    @JsonIgnore
     private BoardSurface boardSurface;
+
+    public Player() {
+    }
 
     public Player(String name, int pieceColorNo) {
         this.name = name;
         piece = new Piece(pieceColorNo);
         aDiceNo = new Array<Integer>();
-        aDiceNo.setSize(10);
         isGoal = false;
         goalNo = 0;
     }
@@ -38,6 +49,12 @@ public class Player {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
         piece.initialize(bs);
+    }
+
+    public void load(GameScreen gameScreen, BoardSurface bs) {
+        this.gameScreen = gameScreen;
+        this.boardSurface = bs;
+        piece.load(bs);
     }
 
     public void update() {
@@ -56,6 +73,7 @@ public class Player {
     }
 
     public void addADiceNo(int diceNo) {
+        if(aDiceNo.size >=2) aDiceNo.removeIndex(0);
         aDiceNo.add(diceNo);
     }
 
@@ -65,6 +83,10 @@ public class Player {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {

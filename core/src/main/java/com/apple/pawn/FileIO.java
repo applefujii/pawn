@@ -1,28 +1,64 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class FileIO {
 
     private SaveData saveData;
 
+    public FileIO() {
+        saveData = new SaveData();
+    }
+
     public boolean save() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            String json = mapper.writeValueAsString(saveData);
-            Gdx.app.debug("savaData", json);
+            mapper.writeValue(new File("./save/savedata1.sav"), saveData);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
 
     public boolean load() {
         ObjectMapper mapper = new ObjectMapper();
-//        SaveData t = mapper.readValue(json, SaveData.class);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        try {
+            saveData = mapper.readValue(new File("./save/savedata1.sav"), SaveData.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return false;
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
+    }
+
+    public SaveData getSaveData() {
+        return saveData;
     }
 
     public void setSaveData(SaveData saveData) {

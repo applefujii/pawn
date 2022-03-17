@@ -42,6 +42,7 @@ public class TitleScreen implements Screen {
 	private int sequenceSubNo;				// サブシークエンス番号
 
 	private UI ui;							// UI
+	private final FileIO fileIO;			// セーブファイルの読み書き
 
 	private GameSetting gameSetting;
 
@@ -79,6 +80,7 @@ public class TitleScreen implements Screen {
 
 		ui = new UI();
 		ui.initialize(game);
+		fileIO = new FileIO();
 
 		gameSetting = new GameSetting();
 		playerNo = 6;
@@ -135,7 +137,9 @@ public class TitleScreen implements Screen {
 		//-- 入力
 		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)  |  Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ENTER)) {
 			gameSetting.init(4);
-			game.setScreen(new GameScreen(game, gameSetting));
+			GameScreen gameScreen = new GameScreen(game);
+			gameScreen.initialize(gameSetting);
+			game.setScreen(gameScreen);
 		}
 
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
@@ -248,6 +252,8 @@ public class TitleScreen implements Screen {
 			}
 			// 続きから
 			if (select == 1) {
+				sequence = this::loadSequence;
+				sequenceNo = 3;
 				sequenceSubNo = 1;
 			}
 			// 設定
@@ -282,7 +288,19 @@ public class TitleScreen implements Screen {
 
 	private int startSetting2Sequence() {
 		if (sequenceSubNo == 1) {
-			game.setScreen(new GameScreen(game, gameSetting));
+			GameScreen gameScreen = new GameScreen(game);
+			gameScreen.initialize(gameSetting);
+			game.setScreen(gameScreen);
+		}
+		return 0;
+	}
+
+	private int loadSequence() {
+		if (sequenceSubNo == 1) {
+			fileIO.load();
+			GameScreen gameScreen = new GameScreen(game);
+			gameScreen.initialize(fileIO.getSaveData());
+			game.setScreen(gameScreen);
 		}
 		return 0;
 	}

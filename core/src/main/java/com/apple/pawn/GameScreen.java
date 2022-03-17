@@ -47,13 +47,13 @@ public class GameScreen implements Screen {
 	private int back;
 
 	//---- 他のクラス
-	private final GameSetting gameSetting;			// ゲームの設定
+	private GameSetting gameSetting;				// ゲームの設定
 	private final PlayerManager playerManager;		// プレイヤー管理
 	private final BoardSurface board;				// 盤面
 	private final Dice dice;						// さいころ
 	private final UI ui;							// UI
-	private final FileIO fileIO;
-	private final SaveData saveData;
+	private final FileIO fileIO;					// セーブファイルの読み書き
+	private final SaveData saveData;				// セーブファイル
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -62,14 +62,15 @@ public class GameScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public GameScreen (final Pawn game, final GameSetting setting) {
+	public GameScreen (final Pawn game) {
 		this.game = game;
-		this.gameSetting = setting;
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
 		timer = 0;
 		goalNo = 0;
+		sequenceNo = 1;
+		turnPlayerNo = 1;
 		zoom = 1.0f;
 
 		//---- カメラ関係の初期化
@@ -106,13 +107,8 @@ public class GameScreen implements Screen {
 		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
-		saveData.setPlayer(playerManager.getPlayer());
+		saveData.aPlayer = playerManager.getAPlayer();
 		//-- 作成
-		String name[] = gameSetting.getAName();
-		int color[] = gameSetting.getAColorNo();
-		for(int i=0 ; i<name.length ; i++) {
-			playerManager.add(name[i], color[i]);
-		}
 //		playerManager.add("1P", 0);
 //		playerManager.add("2P", 4);
 //		playerManager.add("3P", 1);
@@ -132,6 +128,24 @@ public class GameScreen implements Screen {
 		sequence = this::turnStandby;
 	}
 
+	public void initialize(final GameSetting setting) {
+		this.gameSetting = setting;
+		String name[] = gameSetting.getAName();
+		int color[] = gameSetting.getAColorNo();
+		for(int i=0 ; i<name.length ; i++) {
+			playerManager.add(name[i], color[i]);
+		}
+	}
+
+	public void initialize(final SaveData sd) {
+		playerManager.load(sd.aPlayer);
+		timer = sd.timer;
+		goalNo = sd.goalNo;
+//		sequenceNo = sd.sequenceNo;
+		turnPlayerNo = sd.turnPlayerNo-1;
+		saveData.aPlayer = playerManager.getAPlayer();
+	}
+
 	/**
 	 * update 更新。メインループの描画以外。
 	 */
@@ -143,6 +157,11 @@ public class GameScreen implements Screen {
 		//------ 入力
 		if (Gdx.input.isKeyPressed(Input.Keys.F1)) {
 			game.setScreen(new TitleScreen(game));
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
+			fileIO.save();
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
 		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -301,7 +320,7 @@ public class GameScreen implements Screen {
 
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
-			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "サイコロを振る", "マップ確認"));
+			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
 			sequenceNo++;
 			return 0;
 		}
@@ -315,6 +334,9 @@ public class GameScreen implements Screen {
 				if (select == 1) {
 					FlagManagement.set(Flag.LOOK_FREE);
 					sequenceNo += 1;
+				}
+				if (select == 2) {
+					sequenceNo += 2;
 				}
 			}
 			return 0;
@@ -331,6 +353,12 @@ public class GameScreen implements Screen {
 				if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
 				if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
 			}
+		}
+
+		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
+			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
+			fileIO.save();
+			sequenceNo = Sequence.ACTION_SELECT.no;
 		}
 
 		return 0;

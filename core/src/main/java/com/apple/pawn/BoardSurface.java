@@ -69,7 +69,7 @@ public class BoardSurface {
 //                            squareJson.get("document").asText(),
 //                            mapAtlas
 //                    ));
-                    aSquare.add(new EventSquare(vec, type, count, squareJson.get("document").asText()));
+                    aSquare.add(new EventSquare(vec, type, count));
                 } else {
 //                    aSquare.add(new Square(
 //                            vec,
@@ -78,7 +78,7 @@ public class BoardSurface {
 //                            squareJson.get("document").asText(),
 //                            mapAtlas
 //                    ));
-                    aSquare.add(new Square(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
+                    aSquare.add(new Square(vec, type, count));
                 }
                 count++;
             }

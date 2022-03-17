@@ -206,7 +206,7 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
-		ScreenUtils.clear(0, 0, 0, 1);
+		ScreenUtils.clear(0, 255, 0, 1);
 //		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 //		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//-- 論理表示領域を黒で塗りつぶし
@@ -416,7 +416,7 @@ public class GameScreen implements Screen {
 			turnPlayer.addResultDetail(visitSquare, turnCount);
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ
-				sequenceNo = Sequence.TASK_DO.no+1;
+				sequenceNo = Sequence.TASK_DO.no+2;
 				return 0;
 			}
 			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());

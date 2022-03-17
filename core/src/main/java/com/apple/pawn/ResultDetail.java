@@ -11,16 +11,16 @@ public class ResultDetail {
         taskResult = true;
     }
 
+    public void setTaskResult(boolean taskResult) {
+        this.taskResult = taskResult;
+    }
+
     public Square getSquare() {
         return square;
     }
 
     public int getTurn() {
         return turn;
-    }
-
-    public void setTaskResult(boolean taskResult) {
-        this.taskResult = taskResult;
     }
 
     public String getTaskResult() {

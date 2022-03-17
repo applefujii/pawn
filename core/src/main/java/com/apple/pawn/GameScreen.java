@@ -116,8 +116,8 @@ public class GameScreen implements Screen {
 		fileIO.setSaveData(saveData);
 		saveData.setPlayer(playerManager.getPlayer());
 		//-- 作成
-		String name[] = gameSetting.getAName();
-		int color[] = gameSetting.getAColorNo();
+		String[] name = gameSetting.getAName();
+		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
 			playerManager.add(name[i], color[i]);
 		}
@@ -165,6 +165,10 @@ public class GameScreen implements Screen {
 			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 				zoom += 0.1;
 				camera.zoom += 0.1;
+			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+				zoom = 1.0f;
+				setCameraPositionToTurnPlayer();
 			}
 		}
 
@@ -233,12 +237,12 @@ public class GameScreen implements Screen {
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
 			font.getData().setScale(1, 1);
-			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
-			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
-			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
-			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
-			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 16*4);
-			font.draw(batch, "goal_no: " +goalNo , 0, 16*5);
+			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 18*0);
+			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 18*1);
+			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 18*2);
+			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
+			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 18*4);
+			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
 			batch.end();
 		}
 	}
@@ -342,11 +346,8 @@ public class GameScreen implements Screen {
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小");
-					if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-					if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-					if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-					if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット");
+					freeCamera();
 					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 						zoom = mapCameraZoom;
 						camera.zoom = mapCameraZoom;
@@ -481,6 +482,18 @@ public class GameScreen implements Screen {
 		camera.position.x = pv.x;
 		camera.position.y = pv.y;
 		camera.zoom = zoom;
+	}
+
+	private void freeCamera() {
+		int x = 0;
+		int y = 0;
+		int fast = 1;
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -1;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 1;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -1;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 1;
+		if(x != 0 || y != 0) camera.translate(6*x*fast, 6*y*fast);
 	}
 
 	public int getGoalNo() {

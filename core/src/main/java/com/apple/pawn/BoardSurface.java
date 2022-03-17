@@ -13,12 +13,10 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class BoardSurface {
-    public static int MAP_WIDTH = 4096;
-    public static int MAP_HEIGHT = 4096;
-    public static int TILE_WIDTH = 256;
-    public static int TILE_HEIGHT = 256;
-    public static int SQUARE_COUNT = 65;
-    public static Array<Vector2> MAP_ADDRESS;
+    public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
+    public static final int TILE_WIDTH = 256, TILE_HEIGHT = 256;
+    public static final int SQUARE_COUNT = 65;
+    public static final Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
 //    private final TextureAtlas mapAtlas;

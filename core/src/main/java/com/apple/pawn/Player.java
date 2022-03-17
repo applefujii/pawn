@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
     private final String name;
     private final Piece piece;
-    private Array<Integer> aDiceNo;
+    private final Array<Integer> aDiceNo;
     private boolean isGoal;
     private int goalNo;
     private int goalTurn;

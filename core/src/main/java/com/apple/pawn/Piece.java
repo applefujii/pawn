@@ -14,7 +14,7 @@ public class Piece {
     public static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
     public static final int WIDTH = 80, HEIGHT = 120;
     private static final int LINE_MAX = 3;
-    private float MOVE_INTERVAL = 0.3f;
+    private static final float MOVE_INTERVAL = 0.3f;
 
     private final TextureAtlas atlas;
     private int squareNo;       // 現在何マス目か
@@ -49,7 +49,7 @@ public class Piece {
         boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+        pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
     }
 
     public boolean update() {
@@ -65,7 +65,7 @@ public class Piece {
                 }
                 pos = boardSurface.getPos(squareNo);
                 pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-                pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+                pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
                 isTimer = true;
             }
             //-- タイマー
@@ -88,7 +88,7 @@ public class Piece {
         }
         pos = boardSurface.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+        pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
         return false;
     }
 

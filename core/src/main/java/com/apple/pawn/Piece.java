@@ -93,11 +93,9 @@ public class Piece {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
-        batch.begin();
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
         sprite.draw(batch);
-        batch.end();
 
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(Color.BLACK);

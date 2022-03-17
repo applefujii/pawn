@@ -4,20 +4,24 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Iterator;
+
 /**
  * @author fujii
  */
 public class PlayerManager {
     public static final int RED = 1;
 
-    private Array<Player> aPlayer;
+    private final Array<Player> aPlayer;
+    private final Array<Player> goalPlayer;
 
     //-- 参照
     private GameScreen gameScreen;
     private BoardSurface boardSurface;
 
     public PlayerManager() {
-        aPlayer = new Array<Player>();
+        aPlayer = new Array<>();
+        goalPlayer = new Array<>();
     }
 
     public void initialize(GameScreen gameScreen) {
@@ -25,34 +29,48 @@ public class PlayerManager {
     }
 
     public void update() {
-        for(Player player : aPlayer) {
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
             player.update();
         }
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
-        for(Player player : aPlayer) {
+        batch.begin();
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
             player.draw(batch, renderer);
         }
+        batch.end();
     }
 
     public void dispose () {
-        for(Player player : aPlayer) {
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
             player.dispose();
         }
     }
 
     public int add(String name, int pieceColorNo) {
         Player p = new Player(name, pieceColorNo);
-        p.initialize(gameScreen, boardSurface);
+        p.initialize(gameScreen, boardSurface, this);
         aPlayer.add(p);
         return aPlayer.size;
     }
 
+    public void addGoal(Player player) {
+        goalPlayer.add(player);
+    }
+
     public boolean isAllGoal() {
         boolean ret = true;
-        for(Player player : aPlayer) {
-            if(player.isGoal() == false) ret = false;
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
+            if(!player.isGoal()) ret = false;
         }
         return ret;
     }
@@ -73,12 +91,17 @@ public class PlayerManager {
         this.boardSurface = boardSurface;
     }
 
-    public Piece[] getPeaces() {
-        Array<Piece> p = new Array<Piece>();
-        for(Player player : aPlayer) {
+    public Piece[] getPieces() {
+        Array<Piece> p = new Array<>();
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
             p.add(player.getPiece());
         }
         return p.toArray();
     }
 
+    public Array<Player> getGoalPlayer() {
+        return goalPlayer;
+    }
 }

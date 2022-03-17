@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.Iterator;
 import java.util.function.IntSupplier;
 
 /**
@@ -260,19 +262,18 @@ public class GameScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
+	public void show() { }
+
+	@Override
+	public void hide() {
+		dispose();
 	}
 
 	@Override
-	public void hide() { dispose(); }
+	public void pause() { }
 
 	@Override
-	public void pause() {
-	}
-
-	@Override
-	public void resume() {
-	}
+	public void resume() { }
 
 	/**
 	 * dispose 解放
@@ -416,6 +417,7 @@ public class GameScreen implements Screen {
 			turnPlayer.addResultDetail(visitSquare, turnCount);
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ
+				((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 				sequenceNo = Sequence.TASK_DO.no+2;
 				return 0;
 			}
@@ -465,7 +467,13 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
-			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全員ゴールしたよ。");
+			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
+			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
+			while(playerIterator.hasNext()) {
+				Player player = playerIterator.next();
+				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
+			}
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());
 			sequenceNo++;
 			return 0;
 		}

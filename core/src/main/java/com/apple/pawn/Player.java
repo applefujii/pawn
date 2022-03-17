@@ -19,6 +19,7 @@ public class Player {
     //-- 参照
     private GameScreen gameScreen;
     private BoardSurface boardSurface;
+    private PlayerManager playerManager;
 
     public Player(String name, int pieceColorNo) {
         this.name = name;
@@ -31,9 +32,10 @@ public class Player {
         resultDetails = new Array<>();
     }
 
-    public void initialize(GameScreen gameScreen, BoardSurface bs) {
+    public void initialize(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
+        this.playerManager = playerManager;
         piece.initialize(bs);
     }
 
@@ -43,6 +45,7 @@ public class Player {
             goalNo = gameScreen.getGoalNo();
             goalTurn = resultDetails.size;
             isGoal = true;
+            playerManager.addGoal(this);
         }
     }
 
@@ -82,6 +85,10 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public int getGoalNo() {
+        return goalNo;
     }
 
     public int getGoalTurn() {

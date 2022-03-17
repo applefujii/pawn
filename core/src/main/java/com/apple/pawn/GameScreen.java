@@ -60,6 +60,7 @@ public class GameScreen implements Screen {
 	private final UI ui;							// UI
 	private final FileIO fileIO;
 	private final SaveData saveData;
+	private final Result result;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -107,11 +108,13 @@ public class GameScreen implements Screen {
 		ui = new UI();
 		fileIO = new FileIO();
 		saveData = new SaveData();
+		result = new Result();
 		//-- 初期化
 		board.initialize();
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
+		result.initialize(playerManager);
 		//-- 参照セット
 		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
@@ -229,6 +232,7 @@ public class GameScreen implements Screen {
 		//------ メイン描画
 		board.draw(batch, renderer);
 		playerManager.draw(batch, renderer);
+		result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -251,8 +255,8 @@ public class GameScreen implements Screen {
 
 	/**
 	 * resize リサイズイベント
-	 * @param width
-	 * @param height
+	 * @param width 変更後のウィンドウの横幅
+	 * @param height　変更後のウィンドウの縦幅
 	 */
 	@Override
 	public void resize(int width, int height) {
@@ -283,6 +287,7 @@ public class GameScreen implements Screen {
 		playerManager.dispose();
 		dice.dispose();
 		board.dispose();
+		result.dispose();
 	}
 
 	private int turnStandby() {
@@ -474,10 +479,12 @@ public class GameScreen implements Screen {
 				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
 			}
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());
+			ui.add(new UIPartsSelect("move_result", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "リザルト画面へ"));
 			sequenceNo++;
 			return 0;
 		}
 		if(sequenceNo == Sequence.RESULT.no +1) {
+			result.begin();
 			timerRap = timer;
 			sequenceNo++;
 		}

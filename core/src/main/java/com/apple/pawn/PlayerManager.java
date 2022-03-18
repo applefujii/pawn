@@ -29,8 +29,10 @@ public class PlayerManager {
 
     public void load(Array<Player> aPlayer) {
         this.aPlayer = aPlayer;
-        for(Player p : aPlayer) {
-            p.load(gameScreen, boardSurface, this);
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(this.aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
+            player.load(gameScreen, boardSurface, this);
         }
     }
 

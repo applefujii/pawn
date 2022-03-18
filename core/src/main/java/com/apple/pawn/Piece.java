@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author fujii
@@ -14,24 +16,41 @@ public class Piece {
     public static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
     public static final int WIDTH = 80, HEIGHT = 120;
     private static final int LINE_MAX = 3;
-    private static final float MOVE_INTERVAL = 0.3f;
+    @JsonIgnore
+    private float MOVE_INTERVAL = 0.3f;
 
-    private final TextureAtlas atlas;
+    @JsonProperty
+    private int colorNo;       // 色番号
+    @JsonProperty
     private int squareNo;       // 現在何マス目か
+    @JsonProperty
     private int moveToSquareNo;
+    @JsonProperty
     private Vector2 pos;
+    @JsonProperty
     private Vector2 moveToPos;
+    @JsonProperty
     private float timer;
+    @JsonProperty
     private boolean isTimer;
+    @JsonProperty
     private boolean isMove;
 
     //-- リソース
-    private final Sprite sprite;
+    @JsonIgnore
+    private TextureAtlas atlas;
+    @JsonIgnore
+    private Sprite sprite;
 
     //-- 参照
+    @JsonIgnore
     private BoardSurface boardSurface;
 
+    public Piece() {
+    }
+
     public Piece(int pieceColorNo) {
+        this.colorNo = pieceColorNo;
         atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         sprite = atlas.createSprite(COLOR[pieceColorNo]);
         sprite.flip(false, true);
@@ -50,6 +69,14 @@ public class Piece {
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
         pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
+    }
+
+    public void load(BoardSurface bs) {
+        this.boardSurface = bs;
+        boardSurface.getSquare(squareNo).addPiece(this);
+        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        sprite.flip(false, true);
     }
 
     public boolean update() {

@@ -1,9 +1,18 @@
 package com.apple.pawn;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ResultDetail {
-    private final Square square;
-    private final int turn;
+    @JsonIgnore
+    private Square square;
+    @JsonProperty
+    private int turn;
+    @JsonProperty
     private boolean taskResult;
+
+    public ResultDetail() {
+    }
 
     public ResultDetail(Square square, int turn) {
         this.square = square;

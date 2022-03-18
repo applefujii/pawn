@@ -12,8 +12,8 @@ import java.util.Iterator;
 public class PlayerManager {
     public static final int RED = 1;
 
-    private final Array<Player> aPlayer;
-    private final Array<Player> goalPlayer;
+    private Array<Player> aPlayer;
+    private Array<Player> goalPlayer;
 
     //-- 参照
     private GameScreen gameScreen;
@@ -26,6 +26,13 @@ public class PlayerManager {
 
     public void initialize(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
+    }
+
+    public void load(Array<Player> aPlayer) {
+        this.aPlayer = aPlayer;
+        for(Player p : aPlayer) {
+            p.load(gameScreen, boardSurface, this);
+        }
     }
 
     public void update() {
@@ -79,7 +86,7 @@ public class PlayerManager {
         return aPlayer.size;
     }
 
-    public Array<Player> getPlayer() {
+    public Array<Player> getAPlayer() {
         return aPlayer;
     }
 

@@ -4,11 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Result {
-    private boolean drawable; //リザルト描画開始を司るフラグ(Flagで管理したほうがいいかも)
     private PlayerManager playerManager;
 
     public Result() {
-        drawable = false;
+
     }
 
     /**
@@ -32,9 +31,7 @@ public class Result {
      * @param renderer 直線など簡単な図形の描画を受け持つ。renderer.begin()で描画受付開始、renderer.end()で描画受付終了
      */
     public void draw(Batch batch, ShapeRenderer renderer) {
-        if(drawable) {
 
-        }
     }
 
     /**
@@ -42,12 +39,5 @@ public class Result {
      */
     public void dispose() {
 
-    }
-
-    /**
-     * begin フラグを立てる
-     */
-    public void begin() {
-        drawable = true;
     }
 }

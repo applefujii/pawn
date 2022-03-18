@@ -186,6 +186,7 @@ public class GameScreen implements Screen {
 			playerManager.update();
 			dice.update();
 			board.update();
+			if(FlagManagement.is(Flag.RESULT_SHOW)) result.update();
 		}
 
 		// Flag.PLAY == false
@@ -232,7 +233,7 @@ public class GameScreen implements Screen {
 		//------ メイン描画
 		board.draw(batch, renderer);
 		playerManager.draw(batch, renderer);
-		result.draw(batch, renderer);
+		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -484,7 +485,7 @@ public class GameScreen implements Screen {
 			return 0;
 		}
 		if(sequenceNo == Sequence.RESULT.no +1) {
-			result.begin();
+			FlagManagement.set(Flag.RESULT_SHOW);
 			timerRap = timer;
 			sequenceNo++;
 		}

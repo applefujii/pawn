@@ -1,12 +1,9 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,6 +38,8 @@ public class Piece {
 
     //-- リソース
     @JsonIgnore
+    private TextureAtlas atlas;
+    @JsonIgnore
     private Sprite sprite;
 
     //-- 参照
@@ -52,7 +51,7 @@ public class Piece {
 
     public Piece(int pieceColorNo) {
         this.colorNo = pieceColorNo;
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         sprite = atlas.createSprite(COLOR[pieceColorNo]);
         sprite.flip(false, true);
         squareNo = 0;
@@ -69,13 +68,13 @@ public class Piece {
         boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+        pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
     }
 
     public void load(BoardSurface bs) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         sprite = atlas.createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
@@ -83,7 +82,7 @@ public class Piece {
     public boolean update() {
         if(isMove) {
             //-- 進める
-            if (isTimer == false) {
+            if (!isTimer) {
                 int plus = 1;
                 if(squareNo > moveToSquareNo) plus = -1;
                 if(squareNo != moveToSquareNo) {
@@ -93,7 +92,7 @@ public class Piece {
                 }
                 pos = boardSurface.getPos(squareNo);
                 pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-                pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+                pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
                 isTimer = true;
             }
             //-- タイマー
@@ -116,16 +115,14 @@ public class Piece {
         }
         pos = boardSurface.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-        pos.y += HEIGHT*Math.floor((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))/LINE_MAX);
+        pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
         return false;
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
-        batch.begin();
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
         sprite.draw(batch);
-        batch.end();
 
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(Color.BLACK);
@@ -138,6 +135,7 @@ public class Piece {
     }
 
     public void dispose () {
+        atlas.dispose();
     }
 
     public void move( int squareNo, boolean isAnimation ) {
@@ -167,4 +165,7 @@ public class Piece {
         return boardSurface.getPos(squareNo);
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
 }

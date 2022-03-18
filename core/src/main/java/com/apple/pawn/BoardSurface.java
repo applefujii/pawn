@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class BoardSurface {
-    public static int TILE_WIDTH = 256;
-    public static int TILE_HEIGHT = 256;
-    public static int SQUARE_COUNT = 65;
-    public static Array<Vector2> MAP_ADDRESS;
+    public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
+    public static final int TILE_WIDTH = 256, TILE_HEIGHT = 256;
+    public static final int SQUARE_COUNT = 65;
+    public static final Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
 //    private final TextureAtlas mapAtlas;
@@ -69,7 +69,7 @@ public class BoardSurface {
 //                            squareJson.get("document").asText(),
 //                            mapAtlas
 //                    ));
-                    aSquare.add(new EventSquare(vec, type, count, squareJson.get("document").asText()));
+                    aSquare.add(new EventSquare(vec, type, count));
                 } else {
 //                    aSquare.add(new Square(
 //                            vec,
@@ -78,7 +78,7 @@ public class BoardSurface {
 //                            squareJson.get("document").asText(),
 //                            mapAtlas
 //                    ));
-                    aSquare.add(new Square(vec, squareJson.get("type").asInt(), count, squareJson.get("document").asText()));
+                    aSquare.add(new Square(vec, type, count));
                 }
                 count++;
             }
@@ -100,7 +100,7 @@ public class BoardSurface {
 //            backSprite.draw(batch);
 //        }
 
-        batch.draw(mapImg, 0, 0, 4096, 4096, 0, 0, 4096, 4096, false, true);
+        batch.draw(mapImg, 0, 0, MAP_WIDTH, MAP_HEIGHT, 0, 0, MAP_WIDTH, MAP_HEIGHT, false, true);
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {

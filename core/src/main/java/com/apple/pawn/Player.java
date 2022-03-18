@@ -1,14 +1,7 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,13 +19,19 @@ public class Player {
     @JsonProperty
     private boolean isGoal;             // ゴールしているか
     @JsonProperty
-    private int goalNo;                 // 何番目にゴールしたか
+    private int goalNo;
+    @JsonProperty
+    private int goalTurn;
+    @JsonProperty
+    private Array<ResultDetail> resultDetails;// 何番目にゴールしたか
 
     //-- 参照
     @JsonIgnore
     private GameScreen gameScreen;
     @JsonIgnore
     private BoardSurface boardSurface;
+    @JsonIgnore
+    private PlayerManager playerManager;
 
     public Player() {
     }
@@ -43,17 +42,21 @@ public class Player {
         aDiceNo = new Array<Integer>();
         isGoal = false;
         goalNo = 0;
+        goalTurn = 0;
+        resultDetails = new Array<>();
     }
 
-    public void initialize(GameScreen gameScreen, BoardSurface bs) {
+    public void initialize(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
+        this.playerManager = playerManager;
         piece.initialize(bs);
     }
 
-    public void load(GameScreen gameScreen, BoardSurface bs) {
+    public void load(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
+        this.playerManager = playerManager;
         piece.load(bs);
     }
 
@@ -61,7 +64,9 @@ public class Player {
         if(piece.update()) {
             gameScreen.addGoalNo();
             goalNo = gameScreen.getGoalNo();
+            goalTurn = resultDetails.size;
             isGoal = true;
+            playerManager.addGoal(this);
         }
     }
 
@@ -70,10 +75,24 @@ public class Player {
     }
 
     public void dispose () {
+        piece.dispose();
+    }
+
+    public void addResultDetail(Square square, int turn) {
+        resultDetails.add(new ResultDetail(square, turn));
+    }
+
+    public ResultDetail getResultDetail(int turn) {
+        if(turn < 1) return resultDetails.first();
+        else if(turn > resultDetails.size) return resultDetails.peek();
+        else return resultDetails.get(turn-1);
+    }
+
+    public Array<ResultDetail> getResultDetails() {
+        return resultDetails;
     }
 
     public void addADiceNo(int diceNo) {
-        if(aDiceNo.size >=2) aDiceNo.removeIndex(0);
         aDiceNo.add(diceNo);
     }
 
@@ -93,4 +112,11 @@ public class Player {
         return name;
     }
 
+    public int getGoalNo() {
+        return goalNo;
+    }
+
+    public int getGoalTurn() {
+        return goalTurn;
+    }
 }

@@ -9,11 +9,13 @@ public class EventSquare extends Square {
     protected BitmapFont font;
 
 //    public EventSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
-    public EventSquare(Vector2 pos, int type, int count, String document) {
+    public EventSquare(Vector2 pos, int type, int count) {
 //        super(pos, type, count, document, atlas);
-        super(pos, type, count, document);
+        super(pos, type, count);
         move = MathUtils.random(1, 6);
         if(move > BoardSurface.SQUARE_COUNT - this.count) move = BoardSurface.SQUARE_COUNT - this.count;
+
+        document = move+"マス進む";
 
         //確認用の仮文字
         font = new BitmapFont(true);

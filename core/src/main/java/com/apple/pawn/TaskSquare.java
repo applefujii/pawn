@@ -8,9 +8,11 @@ public class TaskSquare extends EventSquare {
 //    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
     public TaskSquare(Vector2 pos, int type, int count, String document) {
 //        super(pos, type, count, document, atlas);
-        super(pos, type, count, document);
+        super(pos, type, count);
         back = MathUtils.random(1, 6);
         if(this.count < back) back = this.count;
+
+        this.document = document+"\n成功で"+move+"マス進む\n失敗で"+back+"マス戻る";
     }
 
     //確認用の仮描画

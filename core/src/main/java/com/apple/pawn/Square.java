@@ -28,11 +28,10 @@ public class Square {
     }
 
 //    public Square(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
-    public Square(Vector2 pos, int type, int count, String document) {
+    public Square(Vector2 pos, int type, int count) {
         this.pos = pos;
         this.type = type;
         this.count = count;
-        this.document = document;
         // マスの種類
 //        sprite = atlas.createSprite(TYPE_STR.get(this.type));
 //        sprite.flip(false, true);
@@ -59,7 +58,7 @@ public class Square {
 
     public Vector2 getAddress() { return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y); }
 
-    public boolean hasDocument() { return !document.isEmpty(); }
+    public boolean hasDocument() { return Objects.nonNull(document); }
 
     public String getDocument() { return document; }
 

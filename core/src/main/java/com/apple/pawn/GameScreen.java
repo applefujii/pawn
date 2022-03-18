@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import java.util.Iterator;
 import java.util.function.IntSupplier;
 
 /**
@@ -45,6 +47,10 @@ public class GameScreen implements Screen {
 	private float zoom;						// ズーム率
 	private int move;
 	private int back;
+	private final float mapCameraZoom;
+	private final float mapCameraHeight;
+	private final float mapCameraWidth;
+	private int turnCount;
 
 	//---- 他のクラス
 	private GameSetting gameSetting;				// ゲームの設定
@@ -72,6 +78,10 @@ public class GameScreen implements Screen {
 		sequenceNo = 1;
 		turnPlayerNo = 1;
 		zoom = 1.0f;
+		mapCameraZoom = (float) BoardSurface.MAP_HEIGHT / Pawn.LOGICAL_HEIGHT;
+		mapCameraHeight = (float) BoardSurface.MAP_HEIGHT / 2;
+		mapCameraWidth = (float) BoardSurface.MAP_WIDTH / 2;
+		turnCount = 1;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -109,12 +119,7 @@ public class GameScreen implements Screen {
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
 		//-- 作成
-//		playerManager.add("1P", 0);
-//		playerManager.add("2P", 4);
-//		playerManager.add("3P", 1);
-//		playerManager.add("4P", 5);
-//		playerManager.add("5P", 3);
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -168,13 +173,19 @@ public class GameScreen implements Screen {
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-			zoom-=0.1;
-			camera.zoom-=0.1;
-		}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-			zoom+=0.1;
-			camera.zoom+=0.1;
+		if(FlagManagement.is(Flag.LOOK_FREE)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W) && zoom > 1) {
+				zoom -= 0.1;
+				camera.zoom -= 0.1;
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				zoom += 0.1;
+				camera.zoom += 0.1;
+			}
+			if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+				zoom = 1.0f;
+				setCameraPositionToTurnPlayer();
+			}
 		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
@@ -211,7 +222,7 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
-		ScreenUtils.clear(0, 0, 0, 1);
+		ScreenUtils.clear(0, 255, 0, 1);
 //		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 //		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//-- 論理表示領域を黒で塗りつぶし
@@ -242,12 +253,12 @@ public class GameScreen implements Screen {
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
 			font.getData().setScale(1, 1);
-			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
-			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
-			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 16*2);
-			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
-			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 16*4);
-			font.draw(batch, "goal_no: " +goalNo , 0, 16*5);
+			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 18*0);
+			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 18*1);
+			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 18*2);
+			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
+			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 18*4);
+			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
 			batch.end();
 		}
 	}
@@ -299,11 +310,14 @@ public class GameScreen implements Screen {
 			}
 			do {
 				turnPlayerNo++;
-				if (turnPlayerNo >= playerManager.getSize()) turnPlayerNo = 0;
+				if (turnPlayerNo >= playerManager.getSize()) {
+					turnPlayerNo = 0;
+					turnCount++;
+				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
-			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("待機");
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
 			sequenceNo++;
 			return 0;
 		}
@@ -345,13 +359,29 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
+					zoom = 1.0f;
 					FlagManagement.set(Flag.LOOK_PIECE);
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
-				if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(-6, 0);
-				if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) camera.translate(6, 0);
-				if (Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(0, -6);
-				if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(0, 6);
+				if(FlagManagement.is(Flag.LOOK_FREE)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット");
+					freeCamera();
+					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+						zoom = mapCameraZoom;
+						camera.zoom = mapCameraZoom;
+						camera.position.x = mapCameraWidth;
+						camera.position.y = mapCameraHeight;
+						FlagManagement.set(Flag.LOOK_MAP);
+					}
+				} else if (FlagManagement.is(Flag.LOOK_MAP)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで詳細マップ");
+					if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+						zoom = 1.0f;
+						setCameraPositionToTurnPlayer();
+						FlagManagement.set(Flag.LOOK_FREE);
+					}
+				}
 			}
 		}
 
@@ -370,12 +400,10 @@ public class GameScreen implements Screen {
 			sequenceNo++;
 		}
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
-			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
-				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-					turnPlayer.addADiceNo(dice.rollStop());
-					sequenceNo = Sequence.PIECE_ADVANCE.no;
-					sequence = this::PieceAdvance;
-				}
+			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				turnPlayer.addADiceNo(dice.rollStop());
+				sequenceNo = Sequence.PIECE_ADVANCE.no;
+				sequence = this::PieceAdvance;
 			}
 		}
 
@@ -410,9 +438,11 @@ public class GameScreen implements Screen {
 		// ターンプレイヤーが居るマス
 		Square visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
 		if(sequenceNo == Sequence.TASK_DO.no) {
+			turnPlayer.addResultDetail(visitSquare, turnCount);
 			if(turnPlayer.isGoal()) {
 				// ※ゴール演出へ
-				sequenceNo = Sequence.TASK_DO.no+1;
+				((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
+				sequenceNo = Sequence.TASK_DO.no+2;
 				return 0;
 			}
 			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());
@@ -435,7 +465,10 @@ public class GameScreen implements Screen {
             int select = ui.getSelect();
 			if(select != -1 ) {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
-				if (select == 1) turnPlayer.getPiece().move(-back, true);
+				if (select == 1){
+					turnPlayer.getPiece().move(-back, true);
+					turnPlayer.getResultDetail(turnCount).setTaskResult(false);
+				}
 				sequenceNo++;
 			}
 		}
@@ -458,7 +491,13 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
-			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全員ゴールしたよ。");
+			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
+			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
+			while(playerIterator.hasNext()) {
+				Player player = playerIterator.next();
+				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
+			}
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());
 			sequenceNo++;
 			return 0;
 		}
@@ -477,6 +516,18 @@ public class GameScreen implements Screen {
 		camera.zoom = zoom;
 	}
 
+	private void freeCamera() {
+		int x = 0;
+		int y = 0;
+		int fast = 1;
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -1;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 1;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -1;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 1;
+		if(x != 0 || y != 0) camera.translate(6*x*fast, 6*y*fast);
+	}
+
 	public int getGoalNo() {
 		return goalNo;
 	}
@@ -485,4 +536,7 @@ public class GameScreen implements Screen {
 		goalNo++;
 	}
 
+	public int getTurnCount() {
+		return turnCount;
+	}
 }

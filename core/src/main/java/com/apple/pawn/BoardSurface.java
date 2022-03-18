@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
@@ -19,8 +18,6 @@ public class BoardSurface {
     public static final Array<Vector2> MAP_ADDRESS;
 
     private final Array<Square> aSquare;
-//    private final TextureAtlas mapAtlas;
-//    private final Sprite backSprite;
 
     private final Texture mapImg;
 
@@ -37,9 +34,6 @@ public class BoardSurface {
     }
 
     public BoardSurface() {
-//        mapAtlas = new TextureAtlas("map_atlas.txt");
-//        backSprite = mapAtlas.createSprite("back");
-//        backSprite.flip(false, true);
         mapImg = new Texture(Gdx.files.local("map.png"));
         aSquare = new Array<>();
     }
@@ -52,34 +46,9 @@ public class BoardSurface {
             for(JsonNode squareJson : aSquareJson) {
                 Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
                 int type = squareJson.get("type").asInt();
-                if(type == 4) {
-//                    aSquare.add(new TaskSquare(
-//                            vec,
-//                            squareJson.get("type").asInt(),
-//                            count,
-//                            squareJson.get("document").asText(),
-//                            mapAtlas
-//                    ));
-                    aSquare.add(new TaskSquare(vec, type, count, squareJson.get("document").asText()));
-                } else if(type == 3) {
-//                    aSquare.add(new EventSquare(
-//                            vec,
-//                            squareJson.get("type").asInt(),
-//                            count,
-//                            squareJson.get("document").asText(),
-//                            mapAtlas
-//                    ));
-                    aSquare.add(new EventSquare(vec, type, count));
-                } else {
-//                    aSquare.add(new Square(
-//                            vec,
-//                            squareJson.get("type").asInt(),
-//                            count,
-//                            squareJson.get("document").asText(),
-//                            mapAtlas
-//                    ));
-                    aSquare.add(new Square(vec, type, count));
-                }
+                if(type == 4) aSquare.add(new TaskSquare(vec, type, count, squareJson.get("document").asText()));
+                else if(type == 3) aSquare.add(new EventSquare(vec, type, count));
+                else aSquare.add(new Square(vec, type, count));
                 count++;
             }
         } catch (IOException e) {
@@ -87,12 +56,11 @@ public class BoardSurface {
         }
     }
 
-    public void update() {}
+    public void update() { }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
 
-//        backSprite.setSize(TILE_LENGTH, TILE_LENGTH);
 //        Iterator<Vector2> mapAddressIterator = new Array.ArrayIterator<>(MAP_ADDRESS);
 //        while(mapAddressIterator.hasNext()) {
 //            Vector2 vec = mapAddressIterator.next();
@@ -102,26 +70,21 @@ public class BoardSurface {
 
         batch.draw(mapImg, 0, 0, MAP_WIDTH, MAP_HEIGHT, 0, 0, MAP_WIDTH, MAP_HEIGHT, false, true);
 
-        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.draw(batch);
-        }
-
         batch.end();
     }
 
     public void dispose () {
-        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.dispose();
-        }
-//        mapAtlas.dispose();
+//        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+//        while(squareIterator.hasNext()) {
+//            Square square = squareIterator.next();
+//            square.dispose();
+//        }
         mapImg.dispose();
     }
 
-    public Square getSquare(int squareNo) { return aSquare.get(squareNo); }
+    public Square getSquare(int squareNo) {
+        return aSquare.get(squareNo);
+    }
 
     public Vector2 getPos(int squareNo) {
         Square s;
@@ -130,5 +93,7 @@ public class BoardSurface {
         return s.getAddress();
     }
 
-    public int getSquareCount() { return aSquare.size; }
+    public int getSquareCount() {
+        return aSquare.size;
+    }
 }

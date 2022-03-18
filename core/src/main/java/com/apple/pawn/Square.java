@@ -9,8 +9,6 @@ import java.util.Objects;
 public class Square {
     public static Array<String> TYPE_STR;
 
-//    protected final Sprite sprite;
-
     protected final Vector2 pos;
     protected final int type;
     protected final int count;
@@ -32,21 +30,14 @@ public class Square {
         this.pos = pos;
         this.type = type;
         this.count = count;
-        // マスの種類
-//        sprite = atlas.createSprite(TYPE_STR.get(this.type));
-//        sprite.flip(false, true);
         aPiece = new Array<>();
     }
 
     public void update() {}
 
-    public void draw (Batch batch) {
-//        sprite.setSize(BoardSurface.TILE_LENGTH, BoardSurface.TILE_LENGTH);
-//        sprite.setPosition(pos.x*BoardSurface.TILE_LENGTH, pos.y*BoardSurface.TILE_LENGTH);
-//        sprite.draw(batch);
-    }
+    public void draw (Batch batch) { }
 
-    public void dispose () {}
+    public void dispose () { }
 
     public void addPiece(Piece piece) {
         aPiece.add(piece);
@@ -56,15 +47,27 @@ public class Square {
         aPiece.removeValue(piece, false);
     }
 
-    public Vector2 getAddress() { return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y); }
+    public Vector2 getAddress() {
+        return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y);
+    }
 
-    public boolean hasDocument() { return Objects.nonNull(document); }
+    public boolean hasDocument() {
+        return Objects.nonNull(document);
+    }
 
-    public String getDocument() { return document; }
+    public String getDocument() {
+        return document;
+    }
 
-    public int getType() { return type; }
+    public int getType() {
+        return type;
+    }
 
-    public int getMove() { return move; }
+    public int getMove() {
+        return move;
+    }
 
-    public int getBack() { return back; }
+    public int getBack() {
+        return back;
+    }
 }

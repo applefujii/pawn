@@ -167,6 +167,7 @@ public class GameScreen implements Screen {
 			game.setScreen(new TitleScreen(game));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
+			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
 			fileIO.save();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {

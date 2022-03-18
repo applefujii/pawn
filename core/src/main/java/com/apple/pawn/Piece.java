@@ -51,9 +51,6 @@ public class Piece {
 
     public Piece(int pieceColorNo) {
         this.colorNo = pieceColorNo;
-        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        sprite = atlas.createSprite(COLOR[pieceColorNo]);
-        sprite.flip(false, true);
         squareNo = 0;
         moveToSquareNo = 0;
         pos = new Vector2();
@@ -69,6 +66,9 @@ public class Piece {
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
         pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
+        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        sprite.flip(false, true);
     }
 
     public void load(BoardSurface bs) {

@@ -170,6 +170,10 @@ public class GameScreen implements Screen {
 			fileIO.save();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
+			fileIO.load();
+			GameScreen gameScreen = new GameScreen(game);
+			gameScreen.load(fileIO.getSaveData());
+			game.setScreen(gameScreen);
 		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -472,7 +476,7 @@ public class GameScreen implements Screen {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
 				if (select == 1){
 					turnPlayer.getPiece().move(-back, true);
-					turnPlayer.getResultDetail(turnCount).setTaskResult(false);
+//					turnPlayer.getResultDetail(turnCount).setTaskResult(false);
 				}
 				sequenceNo++;
 			}

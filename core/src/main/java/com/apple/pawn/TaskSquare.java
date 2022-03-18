@@ -5,9 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
-//    public TaskSquare(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
     public TaskSquare(Vector2 pos, int type, int count, String document) {
-//        super(pos, type, count, document, atlas);
         super(pos, type, count);
         back = MathUtils.random(1, 6);
         if(this.count < back) back = this.count;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -13,7 +14,6 @@ public class PlayerManager {
     public static final int RED = 1;
 
     private Array<Player> aPlayer;
-    private Array<Player> goalPlayer;
 
     //-- 参照
     private GameScreen gameScreen;
@@ -21,7 +21,6 @@ public class PlayerManager {
 
     public PlayerManager() {
         aPlayer = new Array<>();
-        goalPlayer = new Array<>();
     }
 
     public void initialize(GameScreen gameScreen) {
@@ -30,8 +29,10 @@ public class PlayerManager {
 
     public void load(Array<Player> aPlayer) {
         this.aPlayer = aPlayer;
-        for(Player p : aPlayer) {
-            p.load(gameScreen, boardSurface, this);
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(this.aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
+            player.load(gameScreen, boardSurface, this);
         }
     }
 
@@ -66,10 +67,6 @@ public class PlayerManager {
         p.initialize(gameScreen, boardSurface, this);
         aPlayer.add(p);
         return aPlayer.size;
-    }
-
-    public void addGoal(Player player) {
-        goalPlayer.add(player);
     }
 
     public boolean isAllGoal() {
@@ -109,6 +106,14 @@ public class PlayerManager {
     }
 
     public Array<Player> getGoalPlayer() {
+        Array<Player> goalPlayer = new Array<>();
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
+        while(playerIterator.hasNext()) {
+            Player player = playerIterator.next();
+            if(player.isGoal()) goalPlayer.add(player);
+        }
+
+        goalPlayer.sort(Comparator.comparingInt(Player::getGoalNo));
         return goalPlayer;
     }
 }

@@ -22,8 +22,8 @@ public class Player {
     private int goalNo;
     @JsonProperty
     private int goalTurn;
-//    @JsonProperty
-//    private Array<ResultDetail> resultDetails;// 何番目にゴールしたか
+    @JsonProperty
+    private Array<Integer> aResultDetail;
 
     //-- 参照
     @JsonIgnore
@@ -43,7 +43,8 @@ public class Player {
         isGoal = false;
         goalNo = 0;
         goalTurn = 0;
-//        resultDetails = new Array<>();
+        aResultDetail = new Array<>();
+        aResultDetail.add(0, 0, 0);
     }
 
     public void initialize(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
@@ -64,9 +65,8 @@ public class Player {
         if(piece.update()) {
             gameScreen.addGoalNo();
             goalNo = gameScreen.getGoalNo();
-//            goalTurn = resultDetails.size;
+            goalTurn = gameScreen.getTurnCount();
             isGoal = true;
-            playerManager.addGoal(this);
         }
     }
 
@@ -78,19 +78,14 @@ public class Player {
         piece.dispose();
     }
 
-    public void addResultDetail(Square square, int turn) {
-//        resultDetails.add(new ResultDetail(square, turn));
+    public void addResultDetail(Square visitSquare) {
+        int type = visitSquare.getType() - 2;
+        if(type >= 0) {
+            int count = aResultDetail.get(type);
+            count++;
+            aResultDetail.insert(type, count);
+        }
     }
-
-//    public ResultDetail getResultDetail(int turn) {
-//        if(turn < 1) return resultDetails.first();
-//        else if(turn > resultDetails.size) return resultDetails.peek();
-//        else return resultDetails.get(turn-1);
-//    }
-
-//    public Array<ResultDetail> getResultDetails() {
-//        return resultDetails;
-//    }
 
     public void addADiceNo(int diceNo) {
         aDiceNo.add(diceNo);

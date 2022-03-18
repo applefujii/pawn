@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
@@ -61,14 +62,13 @@ public class BoardSurface {
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
 
-//        Iterator<Vector2> mapAddressIterator = new Array.ArrayIterator<>(MAP_ADDRESS);
-//        while(mapAddressIterator.hasNext()) {
-//            Vector2 vec = mapAddressIterator.next();
-//            backSprite.setPosition(TILE_LENGTH*vec.x, TILE_LENGTH*vec.y);
-//            backSprite.draw(batch);
-//        }
-
         batch.draw(mapImg, 0, 0, MAP_WIDTH, MAP_HEIGHT, 0, 0, MAP_WIDTH, MAP_HEIGHT, false, true);
+
+        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+        while(squareIterator.hasNext()) {
+            Square square = squareIterator.next();
+            square.draw(batch);
+        }
 
         batch.end();
     }

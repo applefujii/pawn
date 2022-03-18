@@ -442,14 +442,9 @@ public class GameScreen implements Screen {
 	private int taskDo() {
 		// ターンプレイヤーが居るマス
 		Square visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
+
 		if(sequenceNo == Sequence.TASK_DO.no) {
-			turnPlayer.addResultDetail(visitSquare, turnCount);
-			if(turnPlayer.isGoal()) {
-				// ※ゴール演出へ
-				((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-				sequenceNo = Sequence.TASK_DO.no+2;
-				return 0;
-			}
+			turnPlayer.addResultDetail(visitSquare);
 			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());
 			if(visitSquare.getType() == 4) {
 				move = visitSquare.getMove();
@@ -470,15 +465,16 @@ public class GameScreen implements Screen {
             int select = ui.getSelect();
 			if(select != -1 ) {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
-				if (select == 1){
-					turnPlayer.getPiece().move(-back, true);
-					turnPlayer.getResultDetail(turnCount).setTaskResult(false);
-				}
+				if (select == 1)turnPlayer.getPiece().move(-back, true);
 				sequenceNo++;
 			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
+				if(turnPlayer.isGoal()) {
+					// ※ゴール演出へ
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
+				}
 				timerRap = timer;
 				sequenceNo++;
 			}

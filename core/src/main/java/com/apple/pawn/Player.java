@@ -25,7 +25,7 @@ public class Player {
     private int goalTurn;
     @JsonProperty
     private Array<Integer> aResultDetail;
-    @JsonIgnore     //※
+    @JsonProperty
     private final int order;
 
     //-- 参照
@@ -39,7 +39,7 @@ public class Player {
     public Player(String name, int pieceColorNo) {
         this.name = name;
         piece = new Piece(pieceColorNo);
-        aDiceNo = new Array<Integer>();
+        aDiceNo = new Array<>();
         isGoal = false;
         goalNo = 0;
         goalTurn = 0;

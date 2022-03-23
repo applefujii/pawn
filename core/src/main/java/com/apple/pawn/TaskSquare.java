@@ -11,7 +11,7 @@ public class TaskSquare extends EventSquare {
     }
 
     public TaskSquare(Vector2 pos, int type, int count, String document, int move, int back) {
-        super(pos, type, count, move);
+        super(pos, type, count, document, move);
         this.back = Math.min(this.count, back);
 
         this.document = document+"\n成功で"+this.move+"マス進む\n失敗で"+this.back+"マス戻る";

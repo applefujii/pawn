@@ -48,7 +48,7 @@ public class BoardSurface {
                 Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
                 int type = squareJson.get("type").asInt();
                 if(type == 4) aSquare.add(new TaskSquare(vec, type, count, squareJson.get("document").asText()));
-                else if(type == 3) aSquare.add(new EventSquare(vec, type, count));
+                else if(type == 3) aSquare.add(new EventSquare(vec, type, count, squareJson.get("document").asText()));
                 else aSquare.add(new Square(vec, type, count));
                 count++;
             }

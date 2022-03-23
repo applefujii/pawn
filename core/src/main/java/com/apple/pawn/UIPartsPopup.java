@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,6 +25,9 @@ public class UIPartsPopup extends UIParts{
     private float alpha = 0;
     private int state = 0;      // 0:fadein 1:show 2:fadeout 3:end
 
+    protected TextureAtlas atlas;
+    protected Sprite sprite;
+
     public UIPartsPopup(String name, int x, int y, int width, int height, String text, float time_show) {
         super(name, x, y, width, height);
         this.text = text;
@@ -36,6 +41,9 @@ public class UIPartsPopup extends UIParts{
                 stringRow.add(row.group());
             }
         }
+        atlas = new TextureAtlas(Gdx.files.internal("ui_atlas.txt"));
+        sprite = atlas.createSprite("popup");
+        sprite.flip(false, true);
     }
 
     @Override
@@ -72,12 +80,16 @@ public class UIPartsPopup extends UIParts{
 
     @Override
     public void draw(Batch batch, ShapeRenderer renderer, BitmapFont font) {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0.8f,0.8f,0.8f,alpha);
-        renderer.box(x,y,0,width,height,0);
-        renderer.end();
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(0.8f,0.8f,0.8f,alpha);
+//        renderer.box(x,y,0,width,height,0);
+//        renderer.end();
 
         batch.begin();
+        sprite.setSize(width, height);
+        sprite.setPosition(x, y);
+        sprite.setAlpha(alpha);
+        sprite.draw(batch);
         Color color = font.getColor();
         color.a = alpha;
         font.setColor(color);
@@ -91,7 +103,7 @@ public class UIPartsPopup extends UIParts{
 
     @Override
     public void dispose() {
-
+        atlas.dispose();
     }
 
 }

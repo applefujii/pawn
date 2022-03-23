@@ -1,7 +1,10 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
@@ -19,6 +22,9 @@ public class UIPartsExplanation extends UIParts {
     private final int strHeight = 18;
     private final int charsNoRow;
 
+    protected TextureAtlas atlas;
+    protected Sprite sprite;
+
     public UIPartsExplanation(String name, int x, int y, int width, int height, String expl) {
         super(name, x, y, width, height);
         explanation = expl;
@@ -31,6 +37,9 @@ public class UIPartsExplanation extends UIParts {
                 stringRow.add(row.group());
             }
         }
+        atlas = new TextureAtlas(Gdx.files.internal("ui_atlas.txt"));
+        sprite = atlas.createSprite("explanation");
+        sprite.flip(false, true);
     }
 
     public void initialize(Pawn game) {
@@ -42,12 +51,15 @@ public class UIPartsExplanation extends UIParts {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0.8f,0.8f,0.8f,1);
-        renderer.box(x,y,0,width,height,0);
-        renderer.end();
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(0.8f,0.8f,0.8f,1);
+//        renderer.box(x,y,0,width,height,0);
+//        renderer.end();
 
         batch.begin();
+        sprite.setSize(width, height);
+        sprite.setPosition(x, y);
+        sprite.draw(batch);
         for(int i = 0; i < stringRow.size; i++) {
             font.draw(batch,stringRow.get(i),x+px,y+py+2+strHeight*i);
         }
@@ -55,6 +67,7 @@ public class UIPartsExplanation extends UIParts {
     }
 
     public void dispose () {
+        atlas.dispose();
     }
 
     public void setExplanation(String expl) {

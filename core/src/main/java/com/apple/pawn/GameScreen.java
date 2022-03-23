@@ -431,7 +431,7 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			    int diceNumber = dice.rollStop();
-			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進むむむむむむむむむむむむむむむむむむ\nGO", 1));
+			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進む", 1));
 				turnPlayer.addADiceNo(diceNumber);
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
@@ -500,15 +500,20 @@ public class GameScreen implements Screen {
 				if(turnPlayer.isGoal()) {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
+					ui.add(new UIPartsPopup("test", 600,50,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 4));
+					sequenceNo++;
 				}
 				timerRap = timer;
 				sequenceNo++;
 			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +3) {
-			if(timer-timerRap >= 0.5f) sequenceNo++;
+			if(timer-timerRap >= 0.5f) sequenceNo+=2;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +4) {
+			if(timer-timerRap >= 5.0f) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.TASK_DO.no +5) {
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

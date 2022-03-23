@@ -25,7 +25,7 @@ public class Player {
     private int goalTurn;
     @JsonProperty
     private Array<Integer> aResultDetail;
-    @JsonIgnore
+    @JsonIgnore     //※
     private final int order;
 
     //-- 参照

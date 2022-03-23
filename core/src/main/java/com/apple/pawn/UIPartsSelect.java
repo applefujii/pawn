@@ -32,7 +32,7 @@ public class UIPartsSelect extends UIParts {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectUp();
         if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectDown();
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) return confirm();
-        return -1;
+        return -2;
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {

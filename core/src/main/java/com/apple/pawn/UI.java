@@ -40,18 +40,24 @@ public class UI {
         Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
         while(uiPartsIterator.hasNext()) {
             UIParts ui = uiPartsIterator.next();
-            ui.update();
+            if(ui.update() == -1) {
+                remove(ui.getName());
+            }
         }
         if(uiPartsSelect.size > 0) {
             UIPartsSelect ui = uiPartsSelect.peek();
             int ret = ui.update();
-            if (ret != -1) {
-                select = ret;
+            if (ret == -1) {
                 remove(ui.getName());
-                return ret;
+            } else {
+                if (ret != -2) {
+                    select = ret;
+                    remove(ui.getName());
+                    return ret;
+                }
             }
         }
-        return -1;
+        return 0;
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {

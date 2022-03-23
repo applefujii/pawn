@@ -9,9 +9,12 @@ public class EventSquare extends Square {
     protected BitmapFont font;
 
     public EventSquare(Vector2 pos, int type, int count) {
+        this(pos, type, count, MathUtils.random(1, 6));
+    }
+
+    public EventSquare(Vector2 pos, int type, int count, int move) {
         super(pos, type, count);
-        move = MathUtils.random(1, 6);
-        if(move > BoardSurface.SQUARE_COUNT - this.count) move = BoardSurface.SQUARE_COUNT - this.count;
+        this.move = Math.min(move, BoardSurface.SQUARE_COUNT - this.count);
 
         document = move+"マス進む";
 

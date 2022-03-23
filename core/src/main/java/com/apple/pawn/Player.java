@@ -2,6 +2,7 @@ package com.apple.pawn;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,6 +25,8 @@ public class Player {
     private int goalTurn;
     @JsonProperty
     private Array<Integer> aResultDetail;
+    @JsonIgnore
+    private final int order;
 
     //-- 参照
     @JsonIgnore
@@ -32,9 +35,6 @@ public class Player {
     private BoardSurface boardSurface;
     @JsonIgnore
     private PlayerManager playerManager;
-
-    public Player() {
-    }
 
     public Player(String name, int pieceColorNo) {
         this.name = name;
@@ -45,6 +45,7 @@ public class Player {
         goalTurn = 0;
         aResultDetail = new Array<>();
         aResultDetail.add(0, 0, 0);
+        order = MathUtils.random(0, 255);
     }
 
     public void initialize(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
@@ -113,5 +114,9 @@ public class Player {
 
     public int getGoalTurn() {
         return goalTurn;
+    }
+
+    public int getOrder() {
+        return order;
     }
 }

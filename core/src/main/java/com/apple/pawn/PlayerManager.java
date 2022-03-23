@@ -66,6 +66,7 @@ public class PlayerManager {
         Player p = new Player(name, pieceColorNo);
         p.initialize(gameScreen, boardSurface, this);
         aPlayer.add(p);
+        aPlayer.sort(Comparator.comparingInt(Player::getOrder));
         return aPlayer.size;
     }
 

@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
 	private final float mapCameraHeight;
 	private final float mapCameraWidth;
 	private int turnCount;
+	private String order;
 
 	//---- 他のクラス
 	private GameSetting gameSetting;				// ゲームの設定
@@ -138,11 +139,20 @@ public class GameScreen implements Screen {
 
 	public void initialize(final GameSetting setting) {
 		this.gameSetting = setting;
-		String name[] = gameSetting.getAName();
-		int color[] = gameSetting.getAColorNo();
+		String[] name = gameSetting.getAName();
+		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
 			playerManager.add(name[i], color[i]);
 		}
+
+		StringBuilder orderBuilder = new StringBuilder();
+		Iterator<Player> aPlayerIterator = new Array.ArrayIterator<>(playerManager.getAPlayer());
+		while(aPlayerIterator.hasNext()) {
+			Player player = aPlayerIterator.next();
+			orderBuilder.append(player.getName());
+			if(aPlayerIterator.hasNext()) orderBuilder.append("→");
+		}
+		order = orderBuilder.toString();
 	}
 
 	public void load(final SaveData sd) {
@@ -152,6 +162,15 @@ public class GameScreen implements Screen {
 //		sequenceNo = sd.sequenceNo;
 		turnPlayerNo = sd.turnPlayerNo-1;
 		saveData.aPlayer = playerManager.getAPlayer();
+
+		StringBuilder orderBuilder = new StringBuilder();
+		Iterator<Player> aPlayerIterator = new Array.ArrayIterator<>(playerManager.getAPlayer());
+		while(aPlayerIterator.hasNext()) {
+			Player player = aPlayerIterator.next();
+			orderBuilder.append(player.getName());
+			if(aPlayerIterator.hasNext()) orderBuilder.append("→");
+		}
+		order = orderBuilder.toString();
 	}
 
 	/**
@@ -327,7 +346,7 @@ public class GameScreen implements Screen {
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
-			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
+			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
 			sequenceNo++;
 			return 0;
 		}

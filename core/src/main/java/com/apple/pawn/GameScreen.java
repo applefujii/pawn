@@ -412,7 +412,7 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			    int diceNumber = dice.rollStop();
-			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進む", 1));
+			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進むむむむむむむむむむむむむむむむむむ\nGO", 1));
 				turnPlayer.addADiceNo(diceNumber);
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;

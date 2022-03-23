@@ -24,12 +24,9 @@ public class UI {
     private Pawn game;
     private Dice dice;
 
-    private final Texture img;        // テクスチャ
-
     public UI() {
         uiParts = new Array<UIParts>();
         uiPartsSelect = new Array<UIPartsSelect>();
-        img = new Texture("badlogic.jpg");
     }
 
     public void initialize(Pawn game) {
@@ -53,7 +50,6 @@ public class UI {
                 if (ret != -2) {
                     select = ret;
                     remove(ui.getName());
-                    return ret;
                 }
             }
         }
@@ -75,12 +71,21 @@ public class UI {
     }
 
     public void dispose () {
-        img.dispose();
+        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
+        while(uiPartsIterator.hasNext()){
+            UIParts ui = uiPartsIterator.next();
+            ui.dispose();
+        }
+        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
+        while(uiPartsSelectIterator.hasNext()){
+            UIPartsSelect ui = uiPartsSelectIterator.next();
+            ui.dispose();
+        }
     }
 
     public void add(UIParts parts) {
-        if(parts.getClass().getName().matches(".*Select.*") == false) uiParts.add(parts);
-        else uiPartsSelect.add((UIPartsSelect)parts);
+        if(parts.getClass().getName().matches(".*Select.*") == true) uiPartsSelect.add((UIPartsSelect)parts);
+        else uiParts.add(parts);
     }
 
     public boolean remove(String name) {

@@ -8,6 +8,7 @@ abstract public class UIParts {
     protected String name;
     protected int x, y;
     protected int width, height;
+    protected int px = 10, py = 10;
 
     public UIParts(String name, int x, int y, int width, int height) {
         this.name = name;

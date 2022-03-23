@@ -28,7 +28,7 @@ public class UIPartsPopup extends UIParts{
         this.text = text;
         this.time_show = time_show;
         stringRow = new Array<>();
-        charsNoRow = width/strWidth;
+        charsNoRow = (width-px/2)/strWidth;
         String[] splits = Pattern.compile("\\n").split(text);
         for(String split : splits) {
             Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(split);
@@ -82,7 +82,7 @@ public class UIPartsPopup extends UIParts{
         color.a = alpha;
         font.setColor(color);
         for(int i = 0; i < stringRow.size; i++) {
-            font.draw(batch,stringRow.get(i),x,y+2+strHeight*i);
+            font.draw(batch,stringRow.get(i),x+px,y+(height/2)-(strHeight*stringRow.size/2)+2+strHeight*i);
         }
         color.a = 1.0f;
         font.setColor(color);

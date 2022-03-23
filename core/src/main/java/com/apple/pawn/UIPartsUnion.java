@@ -7,11 +7,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 // ※実装するか迷い中
-public class UIUnion {
+public class UIPartsUnion {
 
     private Array<UIParts> uiParts;
 
-    public UIUnion() {
+    public UIPartsUnion() {
         uiParts = new Array<UIParts>();
     }
 

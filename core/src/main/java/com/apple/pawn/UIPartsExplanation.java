@@ -38,7 +38,7 @@ public class UIPartsExplanation extends UIParts {
     }
 
     public int update() {
-        return -1;
+        return 0;
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {

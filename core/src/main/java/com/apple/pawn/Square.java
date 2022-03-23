@@ -25,7 +25,6 @@ public class Square {
         TYPE_STR.add("task");
     }
 
-//    public Square(Vector2 pos, int type, int count, String document, TextureAtlas atlas) {
     public Square(Vector2 pos, int type, int count) {
         this.pos = pos;
         this.type = type;

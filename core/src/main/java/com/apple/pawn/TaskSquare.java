@@ -6,11 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
     public TaskSquare(Vector2 pos, int type, int count, String document) {
-        super(pos, type, count);
-        back = MathUtils.random(1, 6);
-        if(this.count < back) back = this.count;
+        this(pos, type, count, document, MathUtils.random(1, 6), MathUtils.random(1, 6));
 
-        this.document = document+"\n成功で"+move+"マス進む\n失敗で"+back+"マス戻る";
+    }
+
+    public TaskSquare(Vector2 pos, int type, int count, String document, int move, int back) {
+        super(pos, type, count, document, move);
+        this.back = Math.min(this.count, back);
+
+        this.document = document+"\n成功で"+this.move+"マス進む\n失敗で"+this.back+"マス戻る";
     }
 
     //確認用の仮描画

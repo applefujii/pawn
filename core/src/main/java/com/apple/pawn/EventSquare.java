@@ -8,12 +8,15 @@ import com.badlogic.gdx.math.Vector2;
 public class EventSquare extends Square {
     protected BitmapFont font;
 
-    public EventSquare(Vector2 pos, int type, int count) {
-        super(pos, type, count);
-        move = MathUtils.random(1, 6);
-        if(move > BoardSurface.SQUARE_COUNT - this.count) move = BoardSurface.SQUARE_COUNT - this.count;
+    public EventSquare(Vector2 pos, int type, int count, String document) {
+        this(pos, type, count, document, MathUtils.random(1, 6));
+    }
 
-        document = move+"マス進む";
+    public EventSquare(Vector2 pos, int type, int count, String document, int move) {
+        super(pos, type, count);
+        this.move = Math.min(move, BoardSurface.SQUARE_COUNT - this.count);
+
+        this.document = document+"\n"+move+"マス進む";
 
         //確認用の仮文字
         font = new BitmapFont(true);

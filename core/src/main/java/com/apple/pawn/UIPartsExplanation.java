@@ -23,7 +23,7 @@ public class UIPartsExplanation extends UIParts {
         super(name, x, y, width, height);
         explanation = expl;
         stringRow = new Array<>();
-        charsNoRow = width/strWidth;
+        charsNoRow = (width-px*2)/strWidth;
         String[] splits = Pattern.compile("\\n").split(explanation);
         for(String split : splits) {
             Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(split);
@@ -49,7 +49,7 @@ public class UIPartsExplanation extends UIParts {
 
         batch.begin();
         for(int i = 0; i < stringRow.size; i++) {
-            font.draw(batch,stringRow.get(i),x,y+2+strHeight*i);
+            font.draw(batch,stringRow.get(i),x+px,y+py+2+strHeight*i);
         }
         batch.end();
     }

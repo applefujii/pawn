@@ -26,7 +26,7 @@ public class Player {
     @JsonProperty
     private Array<Integer> aResultDetail;
     @JsonProperty
-    private final int order;
+    private int order;
 
     //-- 参照
     @JsonIgnore
@@ -35,6 +35,9 @@ public class Player {
     private BoardSurface boardSurface;
     @JsonIgnore
     private PlayerManager playerManager;
+
+    public Player() {
+    }
 
     public Player(String name, int pieceColorNo) {
         this.name = name;

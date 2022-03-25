@@ -1,0 +1,21 @@
+{
+    "mapdata" : {
+        "normal" : {
+            "x":3,
+            "y":2
+        },
+        "event" : {
+            "x":3,
+            "y":2,
+            "document":"2マス進む",
+            "move" : 2
+        },
+        "task" : {
+            "x":3,
+            "y":2,
+            "document":"5分間で自己紹介をする。",
+            "success" : 2,
+            "fail" : -2
+        }
+    }
+}

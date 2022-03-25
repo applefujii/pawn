@@ -245,7 +245,9 @@ public class GameScreen implements Screen {
 		update();
 
 		// カメラの更新
-		if(FlagManagement.is(Flag.LOOK_PIECE)) setCameraPositionToTurnPlayer();
+		if(FlagManagement.is(Flag.LOOK_PIECE)) {
+		    setCameraPositionToTurnPlayer();
+        }
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
@@ -544,7 +546,7 @@ public class GameScreen implements Screen {
 	}
 
 	private void setCameraPositionToTurnPlayer() {
-		Vector2 pv = turnPlayer.getPiece().getPosition();
+		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
 		camera.position.x = pv.x;
 		camera.position.y = pv.y;
 		camera.zoom = zoom;

@@ -1,397 +1,331 @@
 [
     {
-        "x":3,
-        "y":2,
+        "address":35,
         "type":0,
         "document":""
     },
     {
-        "x":4,
-        "y":2,
+        "address":36,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":2,
+        "address":37,
         "type":3,
         "document":"あああああ"
     },
     {
-        "x":6,
-        "y":2,
+        "address":38,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":2,
+        "address":39,
         "type":4,
         "document":"5分間で自己紹介をする。"
     },
     {
-        "x":8,
-        "y":2,
+        "address":40,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":2,
+        "address":41,
         "type":3,
         "document":"ううううう"
     },
     {
-        "x":10,
-        "y":2,
+        "address":42,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":2,
+        "address":43,
         "type":4,
         "document":"前の番の人とじゃんけんをする。勝ったら成功、負けたら失敗。"
     },
     {
-        "x":12,
-        "y":2,
+        "address":44,
         "type":2,
         "document":""
     },
     {
-        "x":12,
-        "y":3,
+        "address":60,
         "type":3,
         "document":"おおおおお"
     },
     {
-        "x":12,
-        "y":4,
+        "address":76,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":4,
+        "address":75,
         "type":4,
         "document":"かかかかか"
     },
     {
-        "x":10,
-        "y":4,
+        "address":74,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":4,
+        "address":73,
         "type":3,
         "document":"ききききき"
     },
     {
-        "x":8,
-        "y":4,
+        "address":72,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":4,
+        "address":71,
         "type":4,
         "document":"くくくくく"
     },
     {
-        "x":6,
-        "y":4,
+        "address":70,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":4,
+        "address":69,
         "type":3,
         "document":"けけけけけ"
     },
     {
-        "x":4,
-        "y":4,
+        "address":68,
         "type":2,
         "document":""
     },
     {
-        "x":3,
-        "y":4,
+        "address":67,
         "type":4,
         "document":"こここここ"
     },
     {
-        "x":3,
-        "y":5,
+        "address":83,
         "type":2,
         "document":""
     },
     {
-        "x":3,
-        "y":6,
+        "address":99,
         "type":3,
         "document":"さささささ"
     },
     {
-        "x":4,
-        "y":6,
+        "address":100,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":6,
+        "address":101,
         "type":4,
         "document":"ししししし"
     },
     {
-        "x":6,
-        "y":6,
+        "address":102,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":6,
+        "address":103,
         "type":3,
         "document":"すすすすす"
     },
     {
-        "x":8,
-        "y":6,
+        "address":104,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":6,
+        "address":105,
         "type":4,
         "document":"せせせせせ"
     },
     {
-        "x":10,
-        "y":6,
+        "address":106,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":6,
+        "address":107,
         "type":3,
         "document":"そそそそそ"
     },
     {
-        "x":12,
-        "y":6,
+        "address":108,
         "type":2,
         "document":""
     },
     {
-        "x":12,
-        "y":7,
+        "address":124,
         "type":4,
         "document":"たたたたた"
     },
     {
-        "x":12,
-        "y":8,
+        "address":140,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":8,
+        "address":139,
         "type":3,
         "document":"ちちちちち"
     },
     {
-        "x":10,
-        "y":8,
+        "address":138,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":8,
+        "address":137,
         "type":4,
         "document":"つつつつつ"
     },
     {
-        "x":8,
-        "y":8,
+        "address":136,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":8,
+        "address":135,
         "type":3,
         "document":"ててててて"
     },
     {
-        "x":6,
-        "y":8,
+        "address":134,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":8,
+        "address":133,
         "type":4,
         "document":"ととととと"
     },
     {
-        "x":4,
-        "y":8,
+        "address":132,
         "type":2,
         "document":""
     },
     {
-        "x":3,
-        "y":8,
+        "address":131,
         "type":3,
         "document":"ななななな"
     },
     {
-        "x":3,
-        "y":9,
+        "address":147,
         "type":2,
         "document":""
     },
     {
-        "x":3,
-        "y":10,
+        "address":163,
         "type":4,
         "document":"ににににに"
     },
     {
-        "x":4,
-        "y":10,
+        "address":164,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":10,
+        "address":165,
         "type":3,
         "document":"ぬぬぬぬぬ"
     },
     {
-        "x":6,
-        "y":10,
+        "address":166,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":10,
+        "address":167,
         "type":4,
         "document":"ねねねねね"
     },
     {
-        "x":8,
-        "y":10,
+        "address":168,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":10,
+        "address":169,
         "type":3,
         "document":"ののののの"
     },
     {
-        "x":10,
-        "y":10,
+        "address":170,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":10,
+        "address":171,
         "type":4,
         "document":"ははははは"
     },
     {
-        "x":12,
-        "y":10,
+        "address":172,
         "type":2,
         "document":""
     },
     {
-        "x":12,
-        "y":11,
+        "address":188,
         "type":3,
         "document":"ひひひひひ"
     },
     {
-        "x":12,
-        "y":12,
+        "address":204,
         "type":2,
         "document":""
     },
     {
-        "x":11,
-        "y":12,
+        "address":203,
         "type":4,
         "document":"ふふふふふ"
     },
     {
-        "x":10,
-        "y":12,
+        "address":202,
         "type":2,
         "document":""
     },
     {
-        "x":9,
-        "y":12,
+        "address":201,
         "type":3,
         "document":"へへへへへ"
     },
     {
-        "x":8,
-        "y":12,
+        "address":200,
         "type":2,
         "document":""
     },
     {
-        "x":7,
-        "y":12,
+        "address":199,
         "type":4,
         "document":"ほほほほほ"
     },
     {
-        "x":6,
-        "y":12,
+        "address":198,
         "type":2,
         "document":""
     },
     {
-        "x":5,
-        "y":12,
+        "address":197,
         "type":3,
         "document":"ままままま"
     },
     {
-        "x":4,
-        "y":12,
+        "address":196,
         "type":2,
         "document":""
     },
     {
-        "x":3,
-        "y":12,
+        "address":195,
         "type":4,
         "document":"みみみみみ"
     },
     {
-        "x":3,
-        "y":13,
+        "address":211,
         "type":1,
         "document":""
     }

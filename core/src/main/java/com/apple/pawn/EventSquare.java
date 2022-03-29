@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.Vector2;
 public class EventSquare extends Square {
     protected BitmapFont font;
 
-    public EventSquare(Vector2 pos, int type, int count, String document) {
-        this(pos, type, count, document, MathUtils.random(1, 6));
+    public EventSquare(Vector2 coo, int type, int count, String document) {
+        this(coo, type, count, document, MathUtils.random(1, 6));
     }
 
-    public EventSquare(Vector2 pos, int type, int count, String document, int move) {
-        super(pos, type, count);
+    public EventSquare(Vector2 coo, int type, int count, String document, int move) {
+        super(coo, type, count);
         this.move = Math.min(move, BoardSurface.SQUARE_COUNT - this.count);
 
         this.document = document+"\n"+move+"マス進む";
@@ -27,6 +27,6 @@ public class EventSquare extends Square {
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
-        font.draw(batch, "move:" + move, pos.x*256+64, pos.y*256+64);
+        font.draw(batch, "move:" + move, position.x+64, position.y+64);
     }
 }

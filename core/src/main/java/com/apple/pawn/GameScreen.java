@@ -201,13 +201,14 @@ public class GameScreen implements Screen {
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			if (Gdx.input.isKeyPressed(Input.Keys.W) && zoom > 1) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 				zoom -= 0.1;
-				camera.zoom -= 0.1;
+				if(zoom < 1) zoom=1.0f;
+				camera.zoom = zoom;
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 				zoom += 0.1;
-				camera.zoom += 0.1;
+				camera.zoom = zoom;
 			}
 			if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
 				zoom = 1.0f;

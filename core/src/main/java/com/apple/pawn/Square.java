@@ -1,17 +1,24 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 
 import java.util.Objects;
 
 public class Square {
-    public static Array<String> TYPE_STR;
+    public static final String[] TYPE_STR = {"start", "goal", "normal", "event", "task"};
+    public static final int SQUARE_WIDTH = 256, SQUARE_HEIGHT = 256;
 
-    protected final Vector2 pos;
+    protected final Vector2 coordinate;
+    protected final Vector2 position;
     protected final int type;
     protected final int count;
+
+    protected Sprite sprite;
     protected String document;
     protected int move;
     protected int back;
@@ -19,22 +26,25 @@ public class Square {
     //-- 参照
     protected Array<Piece> aPiece;
 
-    static {
-        TYPE_STR = new Array<>();
-        TYPE_STR.add("start", "goal", "normal", "event");
-        TYPE_STR.add("task");
-    }
-
-    public Square(Vector2 pos, int type, int count) {
-        this.pos = pos;
+    public Square(Vector2 coo, int type, int count) {
+        coordinate = coo;
+        position = new Vector2(SQUARE_WIDTH*coordinate.x, SQUARE_HEIGHT*coordinate.y);
         this.type = type;
         this.count = count;
         aPiece = new Array<>();
     }
 
-    public void update() {}
+    public void initialize(TextureAtlas atlas) {
+        sprite = atlas.createSprite(TYPE_STR[type]);
+        sprite.flip(false, true);
+        sprite.setPosition(position.x, position.y);
+    }
 
-    public void draw (Batch batch) { }
+    public void update() { }
+
+    public void draw (Batch batch) {
+        sprite.draw(batch);
+    }
 
     public void dispose () { }
 
@@ -46,15 +56,15 @@ public class Square {
         aPiece.removeValue(piece, false);
     }
 
-    public Vector2 getAddress() {
-        return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y);
+    public Vector2 getPos() {
+        return position.cpy();
     }
 
     public boolean hasDocument() {
         return Objects.nonNull(document);
     }
 
-    public String getDocument() {
+    public @Null String getDocument() {
         return document;
     }
 

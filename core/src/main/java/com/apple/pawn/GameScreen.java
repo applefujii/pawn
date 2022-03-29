@@ -547,8 +547,8 @@ public class GameScreen implements Screen {
 
 	private void setCameraPositionToTurnPlayer() {
 		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
-		camera.position.x = pv.x;
-		camera.position.y = pv.y;
+		camera.position.x = pv.x+Piece.WIDTH/2;
+		camera.position.y = pv.y+Piece.HEIGHT/2;
 		camera.zoom = zoom;
 	}
 

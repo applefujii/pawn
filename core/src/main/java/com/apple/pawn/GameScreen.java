@@ -528,7 +528,7 @@ public class GameScreen implements Screen {
 		}
 		if(sequenceNo == Sequence.RESULT.no +1) {
 			FlagManagement.set(Flag.RESULT_SHOW);
-			ui.add(new Result("result",Pawn.LOGICAL_WIDTH/10-100,Pawn.LOGICAL_HEIGHT/4-50,Pawn.LOGICAL_WIDTH-350,Pawn.LOGICAL_HEIGHT-200,game));
+			ui.add(new Result("result",Pawn.LOGICAL_WIDTH/10-100,Pawn.LOGICAL_HEIGHT/4-50,Pawn.LOGICAL_WIDTH-350,Pawn.LOGICAL_HEIGHT-150,game));
 			timerRap = timer;
 			sequenceNo++;
 		}

@@ -32,10 +32,32 @@ import java.util.function.IntSupplier;
 public class Result extends UIParts {
 
     private final BitmapFont font;
+    private final Sprite spPiece[];
 
     public Result(String name, int x, int y, int width, int height,final Pawn game) {
         super(name,x,y,width,height);
         font = game.font;
+
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+        spPiece = new Sprite[6];
+        spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
+        spPiece[0].flip(false, true);
+        spPiece[0].setSize(80,120);
+        spPiece[1] = atlas.createSprite(Piece.COLOR[1]);
+        spPiece[1].flip(false, true);
+        spPiece[1].setSize(80,120);
+        spPiece[2] = atlas.createSprite(Piece.COLOR[2]);
+        spPiece[2].flip(false, true);
+        spPiece[2].setSize(80,120);
+        spPiece[3] = atlas.createSprite(Piece.COLOR[3]);
+        spPiece[3].flip(false, true);
+        spPiece[3].setSize(80,120);
+        spPiece[4] = atlas.createSprite(Piece.COLOR[4]);
+        spPiece[4].flip(false, true);
+        spPiece[4].setSize(80,120);
+        spPiece[5] = atlas.createSprite(Piece.COLOR[5]);
+        spPiece[5].flip(false, true);
+        spPiece[5].setSize(80,120);
     }
 
 
@@ -87,10 +109,26 @@ public class Result extends UIParts {
         batch.begin();
         font.getData().setScale(1, 1);
         font.draw(batch, "すごろくゲーム", 100, 500);
-        batch.end();
+//        spPiece[0].setPosition(80, 150);
+//        spPiece[1].setPosition(80, 300);
+//        spPiece[2].setPosition(80, 450);
+//        spPiece[3].setPosition(80, 600);
+//        spPiece[0].draw(batch);
+//        spPiece[1].draw(batch);
+//        spPiece[2].draw(batch);
+//        spPiece[3].draw(batch);
 
-        StringBuilder txt = new StringBuilder("全員ゴールしたよ");
-        txt.toString();
+
+        int j=150;
+        for(int i=0; i<4; i++){
+            spPiece[i].setPosition(80, j);
+            spPiece[i].draw(batch);
+            j += 140;
+        }
+
+        batch.end();
+        //StringBuilder txt = new StringBuilder("全員ゴールしたよ");
+        //txt.toString();
     }
 
     /**

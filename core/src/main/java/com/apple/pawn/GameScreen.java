@@ -61,7 +61,6 @@ public class GameScreen implements Screen {
 	private final UI ui;							// UI
 	private final FileIO fileIO;					// セーブファイルの読み書き
 	private final SaveData saveData;				// セーブファイル
-	private final Result result;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -110,13 +109,11 @@ public class GameScreen implements Screen {
 		ui = new UI();
 		fileIO = new FileIO();
 		saveData = new SaveData();
-		result = new Result();
 		//-- 初期化
 		board.initialize();
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
-		result.initialize(playerManager);
 		//-- 参照セット
 		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
@@ -224,7 +221,7 @@ public class GameScreen implements Screen {
 			playerManager.update();
 			dice.update();
 			board.update();
-			if(FlagManagement.is(Flag.RESULT_SHOW)) result.update();
+
 		}
 
 		// Flag.PLAY == false
@@ -271,7 +268,7 @@ public class GameScreen implements Screen {
 		//------ メイン描画
 		board.draw(batch, renderer);
 		playerManager.draw(batch, renderer);
-		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
+
 
 		//------ ui描画
 		uiCamera.update();
@@ -326,7 +323,7 @@ public class GameScreen implements Screen {
 		playerManager.dispose();
 		dice.dispose();
 		board.dispose();
-		result.dispose();
+
 	}
 
 	private int turnStandby() {
@@ -531,6 +528,7 @@ public class GameScreen implements Screen {
 		}
 		if(sequenceNo == Sequence.RESULT.no +1) {
 			FlagManagement.set(Flag.RESULT_SHOW);
+			ui.add(new Result("result",Pawn.LOGICAL_WIDTH/10-100,Pawn.LOGICAL_HEIGHT/4-50,Pawn.LOGICAL_WIDTH-350,Pawn.LOGICAL_HEIGHT-200,game));
 			timerRap = timer;
 			sequenceNo++;
 		}

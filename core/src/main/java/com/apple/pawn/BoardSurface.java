@@ -1,7 +1,9 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -14,9 +16,12 @@ import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
+    public static final int BACK_HEIGHT = 2700;
     public static final int SQUARE_COUNT = 65;
     public static final Array<Vector2> MAP_COORDINATE;
 
+    private final Texture backImg;
+    private final Sprite backSprite;
     private final Array<Square> aSquare;
     private final TextureAtlas squareAtlas;
 
@@ -33,6 +38,11 @@ public class BoardSurface {
     }
 
     public BoardSurface() {
+        backImg = new Texture(Gdx.files.local("assets/background.png"));
+        backSprite = new Sprite(backImg);
+        backSprite.flip(false, true);
+        backSprite.setScale((float) MAP_HEIGHT / BACK_HEIGHT);
+        backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
         squareAtlas = new TextureAtlas(Gdx.files.local("assets/map_atlas.txt"));
         aSquare = new Array<>();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -64,12 +74,14 @@ public class BoardSurface {
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         //仮のマップ背景描写
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        renderer.setColor(0, 1, 0, 1);
-        renderer.rect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-        renderer.end();
+//        renderer.begin(ShapeRenderer.ShapeType.Filled);
+//        renderer.setColor(0, 1, 0, 1);
+//        renderer.rect(0, 0, MAP_WIDTH, MAP_HEIGHT);
+//        renderer.end();
 
         batch.begin();
+
+        backSprite.draw(batch);
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
@@ -87,6 +99,7 @@ public class BoardSurface {
 //            square.dispose();
 //        }
 //        mapImg.dispose();
+        backImg.dispose();
         squareAtlas.dispose();
     }
 

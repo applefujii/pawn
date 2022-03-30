@@ -6,8 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
     public TaskSquare(Vector2 coo, int type, int count, String document) {
-        this(coo, type, count, document, MathUtils.random(1, 6), MathUtils.random(1, 6));
+        this(coo, type, count, document, MathUtils.random(1, 6));
 
+    }
+
+    public TaskSquare(Vector2 coo, int type, int count, String document, int move) {
+        this(coo, type, count, document, move, MathUtils.random(1, 6));
     }
 
     public TaskSquare(Vector2 coo, int type, int count, String document, int move, int back) {

@@ -548,21 +548,34 @@ public class GameScreen implements Screen {
 
 	private void setCameraPositionToTurnPlayer() {
 		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
-		camera.position.x = pv.x+Piece.WIDTH/2;
-		camera.position.y = pv.y+Piece.HEIGHT/2;
+		camera.position.x = pv.x+ (Piece.WIDTH >> 1);
+		camera.position.y = pv.y+ (Piece.HEIGHT >> 1);
 		camera.zoom = zoom;
 	}
 
 	private void freeCamera() {
-		int x = 0;
-		int y = 0;
+		float x = 0;
+		float y = 0;
 		int fast = 1;
+		Vector3 pos = camera.position.cpy();
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -1;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -1;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 1;
-		if(x != 0 || y != 0) camera.translate(6*x*fast, 6*y*fast);
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -6*fast;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 6*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -6*fast;
+		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 6*fast;
+		pos.x += x;
+		pos.y += y;
+		if (pos.x < Pawn.LOGICAL_WIDTH >> 1) {
+			x = (Pawn.LOGICAL_WIDTH >> 1) - camera.position.x;
+		} else if (pos.x > BoardSurface.MAP_WIDTH - (Pawn.LOGICAL_WIDTH>>1)) {
+			x = BoardSurface.MAP_WIDTH - (Pawn.LOGICAL_WIDTH >> 1) - camera.position.x;
+		}
+		if (pos.y < Pawn.LOGICAL_HEIGHT >> 1) {
+			y = (Pawn.LOGICAL_HEIGHT >> 1) - camera.position.y;
+		} else if (pos.y > BoardSurface.MAP_HEIGHT - (Pawn.LOGICAL_HEIGHT >> 1)) {
+			y = BoardSurface.MAP_HEIGHT - (Pawn.LOGICAL_HEIGHT >> 1) - camera.position.y;
+		}
+		if(x != 0 || y != 0) camera.translate(x, y);
 	}
 
 	public int getGoalNo() {

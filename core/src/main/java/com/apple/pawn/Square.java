@@ -34,7 +34,7 @@ public class Square {
         aPiece = new Array<>();
     }
 
-    public void initialize(TextureAtlas atlas) {
+    public void initialize(TextureAtlas atlas, int size) {
         sprite = atlas.createSprite(TYPE_STR[type]);
         sprite.flip(false, true);
         sprite.setPosition(position.x, position.y);

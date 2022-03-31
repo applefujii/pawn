@@ -554,27 +554,19 @@ public class GameScreen implements Screen {
 	}
 
 	private void freeCamera() {
+		float m = 6; //通常時の速さ(px/f)
 		float x = 0;
 		float y = 0;
 		int fast = 1;
-		Vector3 pos = camera.position.cpy();
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -6*fast;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 6*fast;
-		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -6*fast;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 6*fast;
-		pos.x += x;
-		pos.y += y;
-		if (pos.x < Pawn.LOGICAL_WIDTH >> 1) {
-			x = (Pawn.LOGICAL_WIDTH >> 1) - camera.position.x;
-		} else if (pos.x > BoardSurface.MAP_WIDTH - (Pawn.LOGICAL_WIDTH>>1)) {
-			x = BoardSurface.MAP_WIDTH - (Pawn.LOGICAL_WIDTH >> 1) - camera.position.x;
-		}
-		if (pos.y < Pawn.LOGICAL_HEIGHT >> 1) {
-			y = (Pawn.LOGICAL_HEIGHT >> 1) - camera.position.y;
-		} else if (pos.y > BoardSurface.MAP_HEIGHT - (Pawn.LOGICAL_HEIGHT >> 1)) {
-			y = BoardSurface.MAP_HEIGHT - (Pawn.LOGICAL_HEIGHT >> 1) - camera.position.y;
-		}
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) x -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x += m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP)) y -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) y += m*fast;
+		x = Math.max(-camera.position.x, x);
+		x = Math.min(BoardSurface.MAP_WIDTH - camera.position.x, x);
+		y = Math.max(-camera.position.y, y);
+		y = Math.min(BoardSurface.MAP_HEIGHT - camera.position.y, y);
 		if(x != 0 || y != 0) camera.translate(x, y);
 	}
 

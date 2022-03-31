@@ -17,7 +17,6 @@ import java.util.Iterator;
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
     public static final int BACK_HEIGHT = 2700;
-    public static final int SQUARE_COUNT = 65;
     public static final Array<Vector2> MAP_COORDINATE;
 
     private final Texture backImg;
@@ -41,7 +40,7 @@ public class BoardSurface {
         backImg = new Texture(Gdx.files.local("assets/background.png"));
         backSprite = new Sprite(backImg);
         backSprite.flip(false, true);
-        backSprite.setScale((float) MAP_HEIGHT / BACK_HEIGHT);
+        backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);
         backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
         squareAtlas = new TextureAtlas(Gdx.files.local("assets/map_atlas.txt"));
         aSquare = new Array<>();
@@ -52,9 +51,9 @@ public class BoardSurface {
             for(JsonNode squareJson : aSquareJson) {
                 int add = squareJson.get("address").asInt();
                 int type = squareJson.get("type").asInt();
-                if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add), type, count, squareJson.get("document").asText()));
-                else if(type == 3) aSquare.add(new EventSquare(MAP_COORDINATE.get(add), type, count, squareJson.get("document").asText()));
-                else aSquare.add(new Square(MAP_COORDINATE.get(add), type, count));
+                if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add).cpy(), type, count, squareJson.get("document").asText()));
+                else if(type == 3) aSquare.add(new EventSquare(MAP_COORDINATE.get(add).cpy(), type, count));
+                else aSquare.add(new Square(MAP_COORDINATE.get(add).cpy(), type, count));
                 count++;
             }
         } catch (IOException e) {
@@ -66,7 +65,7 @@ public class BoardSurface {
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
-            square.initialize(squareAtlas);
+            square.initialize(squareAtlas, aSquare.size - 1);
         }
     }
 

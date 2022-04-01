@@ -563,11 +563,22 @@ public class GameScreen implements Screen {
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x += m*fast;
 		if(Gdx.input.isKeyPressed(Input.Keys.UP)) y -= m*fast;
 		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) y += m*fast;
-		x = Math.max(-camera.position.x, x);
-		x = Math.min(BoardSurface.MAP_WIDTH - camera.position.x, x);
-		y = Math.max(-camera.position.y, y);
-		y = Math.min(BoardSurface.MAP_HEIGHT - camera.position.y, y);
+		x = median(x, -camera.position.x, BoardSurface.MAP_WIDTH - camera.position.x);
+		y = median(y, -camera.position.y, BoardSurface.MAP_HEIGHT - camera.position.y);
 		if(x != 0 || y != 0) camera.translate(x, y);
+	}
+
+	private float median(float a, float b, float c) {
+		int n = 0;
+		if(a < b) n++;
+		else if(a == b) return a;
+		if(b > c) n++;
+		else if(b == c) return b;
+		//(a<b<c)または(a>b>c)の場合
+		if(n == 1) return b;
+		//(a>b<c, n=0)または(a<b>c, n=2)の場合
+		if(n == 0) return Math.min(a, c);
+		else return Math.max(a, c);
 	}
 
 	public int getGoalNo() {

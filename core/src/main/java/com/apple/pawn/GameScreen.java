@@ -3,10 +3,12 @@ package com.apple.pawn;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -36,6 +38,8 @@ public class GameScreen implements Screen {
 	private final FitViewport uiViewport;
 	private final Stage stage;					// カメラとビューポートの管理
 	private Stage uiStage;					// UIのカメラとビューポートの管理
+
+	private final AssetManager manager;
 
 	private float timer;
 	private float timerRap;
@@ -102,6 +106,7 @@ public class GameScreen implements Screen {
 
 		//---- その他の初期化
 		//-- new
+		manager = new AssetManager();
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
 		playerManager = new PlayerManager();
@@ -112,7 +117,12 @@ public class GameScreen implements Screen {
 		saveData = new SaveData();
 		result = new Result();
 		//-- 初期化
-		board.initialize();
+		manager.load("assets/map_atlas.txt", TextureAtlas.class);
+		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
+		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
+		manager.update();
+		manager.finishLoading();
+		board.initialize(manager);
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
@@ -180,6 +190,7 @@ public class GameScreen implements Screen {
 		timer += Gdx.graphics.getDeltaTime();
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
+		manager.update();
 
 		//------ 入力
 		if (Gdx.input.isKeyPressed(Input.Keys.F1)) {
@@ -330,6 +341,7 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		result.dispose();
+		manager.dispose();
 	}
 
 	private int turnStandby() {
@@ -579,6 +591,10 @@ public class GameScreen implements Screen {
 		//(a>b<c, n=0)または(a<b>c, n=2)の場合
 		if(n == 0) return Math.min(a, c);
 		else return Math.max(a, c);
+	}
+
+	public AssetManager getManager() {
+		return manager;
 	}
 
 	public int getGoalNo() {

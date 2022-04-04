@@ -1,7 +1,7 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 public class TaskSquare extends EventSquare {
@@ -15,8 +15,8 @@ public class TaskSquare extends EventSquare {
     }
 
     @Override
-    public void initialize(TextureAtlas atlas, int size) {
-        super.initialize(atlas, size);
+    public void initialize(AssetManager manager, int size) {
+        super.initialize(manager, size);
         back = Math.min(back, count);
         document = doc + "\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
     }

@@ -1,8 +1,8 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 public class EventSquare extends Square {
@@ -18,8 +18,8 @@ public class EventSquare extends Square {
     }
 
     @Override
-    public void initialize(TextureAtlas atlas, int size) {
-        super.initialize(atlas, size);
+    public void initialize(AssetManager manager, int size) {
+        super.initialize(manager, size);
         move = Math.min(move, size - count);
         document = move+"マス進む";
     }

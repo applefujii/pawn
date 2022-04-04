@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,7 +23,6 @@ public class BoardSurface {
     private final Texture backImg;
     private final Sprite backSprite;
     private final Array<Square> aSquare;
-    private final TextureAtlas squareAtlas;
 
     static {
         MAP_COORDINATE = new Array<>();
@@ -42,7 +42,6 @@ public class BoardSurface {
         backSprite.flip(false, true);
         backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);
         backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
-        squareAtlas = new TextureAtlas(Gdx.files.local("assets/map_atlas.txt"));
         aSquare = new Array<>();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -61,11 +60,11 @@ public class BoardSurface {
         }
     }
 
-    public void initialize() {
+    public void initialize(AssetManager manager) {
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
-            square.initialize(squareAtlas, aSquare.size - 1);
+            square.initialize(manager, aSquare.size - 1);
         }
     }
 
@@ -93,7 +92,6 @@ public class BoardSurface {
 //        }
 //        mapImg.dispose();
         backImg.dispose();
-        squareAtlas.dispose();
     }
 
     public Square getSquare(int squareNo) {

@@ -72,12 +72,6 @@ public class BoardSurface {
     public void update() { }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
-        //仮のマップ背景描写
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(0, 1, 0, 1);
-//        renderer.rect(0, 0, MAP_WIDTH, MAP_HEIGHT);
-//        renderer.end();
-
         batch.begin();
 
         backSprite.draw(batch);

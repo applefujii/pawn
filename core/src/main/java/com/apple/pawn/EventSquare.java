@@ -3,15 +3,10 @@ package com.apple.pawn;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class EventSquare extends Square {
     protected BitmapFont font;
-
-    public EventSquare(Vector2 coo, int type, int count) {
-        this(coo, type, count, MathUtils.random(1, 6));
-    }
 
     public EventSquare(Vector2 coo, int type, int count, int move) {
         super(coo, type, count);

@@ -10,18 +10,18 @@
 	{
 		"address":37,
 		"type":3,
-		"move":3
+		"move":1
 	},
 	{
 		"address":38,
-		"type":4,
-		"document":"5分間で自己紹介をする。",
-		"move":5,
-		"back":3
+		"type":2
 	},
 	{
 		"address":39,
-		"type":2
+		"type":4,
+		"document":"4~6分ほどの自己紹介をしてください。",
+		"move":2,
+		"back":4
 	},
 	{
 		"address":40,
@@ -29,7 +29,8 @@
 	},
 	{
 		"address":41,
-		"type":2
+		"type":3,
+		"move":4
 	},
 	{
 		"address":42,
@@ -37,7 +38,10 @@
 	},
 	{
 		"address":43,
-		"type":2
+		"type":4,
+		"document":"前の番の人とじゃんけんをしてください。勝てば成功、負ければ失敗。",
+		"move":5,
+		"back":6
 	},
 	{
 		"address":44,
@@ -45,7 +49,8 @@
 	},
 	{
 		"address":60,
-		"type":2
+		"type":3,
+		"move":5
 	},
 	{
 		"address":76,
@@ -53,7 +58,10 @@
 	},
 	{
 		"address":75,
-		"type":2
+		"type":4,
+		"document":"自分が考えるコミュニケーションの大切さについて説明してください。",
+		"move":2,
+		"back":4
 	},
 	{
 		"address":74,
@@ -61,7 +69,8 @@
 	},
 	{
 		"address":73,
-		"type":2
+		"type":3,
+		"move":6
 	},
 	{
 		"address":72,
@@ -69,7 +78,10 @@
 	},
 	{
 		"address":71,
-		"type":2
+		"type":4,
+		"document":"本日より企業の実習に向かいます。職場を想定して初日のあいさつをしてください。",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":70,
@@ -77,7 +89,8 @@
 	},
 	{
 		"address":69,
-		"type":2
+		"type":3,
+		"move":3
 	},
 	{
 		"address":68,
@@ -85,7 +98,10 @@
 	},
 	{
 		"address":67,
-		"type":2
+		"type":4,
+		"document":"自分が話すときに気を付けていることを教えてください。",
+		"move":6,
+		"back":3
 	},
 	{
 		"address":83,
@@ -93,7 +109,8 @@
 	},
 	{
 		"address":99,
-		"type":2
+		"type":3,
+		"move":2
 	},
 	{
 		"address":100,
@@ -101,7 +118,10 @@
 	},
 	{
 		"address":101,
-		"type":2
+		"type":4,
+		"document":"自分が考える話しやすい人はどんな人か説明してください。",
+		"move":1,
+		"back":3
 	},
 	{
 		"address":102,
@@ -109,7 +129,8 @@
 	},
 	{
 		"address":103,
-		"type":2
+		"type":3,
+		"move":6
 	},
 	{
 		"address":104,
@@ -117,7 +138,10 @@
 	},
 	{
 		"address":105,
-		"type":2
+		"type":4,
+		"document":"自分の休日の習慣について教えてください。なければ一番最近の休日どう過ごしたか教えてください。",
+		"move":6,
+		"back":6
 	},
 	{
 		"address":106,
@@ -125,7 +149,8 @@
 	},
 	{
 		"address":107,
-		"type":2
+		"type":3,
+		"move":4
 	},
 	{
 		"address":108,
@@ -133,7 +158,10 @@
 	},
 	{
 		"address":124,
-		"type":2
+		"type":4,
+		"document":"自分が企業に求めるこれだけは譲れないという条件を教えてください。",
+		"move":4,
+		"back":3
 	},
 	{
 		"address":140,
@@ -141,7 +169,8 @@
 	},
 	{
 		"address":139,
-		"type":2
+		"type":3,
+		"move":2
 	},
 	{
 		"address":138,
@@ -149,7 +178,10 @@
 	},
 	{
 		"address":137,
-		"type":2
+		"type":4,
+		"document":"自分にとって「働く」とはどういうことだと思っているか説明してください。",
+		"move":1,
+		"back":6
 	},
 	{
 		"address":136,
@@ -157,7 +189,8 @@
 	},
 	{
 		"address":135,
-		"type":2
+		"type":3,
+		"move":6
 	},
 	{
 		"address":134,
@@ -165,7 +198,10 @@
 	},
 	{
 		"address":133,
-		"type":2
+		"type":4,
+		"document":"普段、訓練が終わった後どのように過ごしているのか説明してください。",
+		"move":6,
+		"back":6
 	},
 	{
 		"address":132,
@@ -173,7 +209,8 @@
 	},
 	{
 		"address":131,
-		"type":2
+		"type":3,
+		"move":4
 	},
 	{
 		"address":147,
@@ -181,7 +218,10 @@
 	},
 	{
 		"address":163,
-		"type":2
+		"type":4,
+		"document":"自分は家族や友人からどのような人だといわれていますか。",
+		"move":1,
+		"back":4
 	},
 	{
 		"address":164,
@@ -189,7 +229,8 @@
 	},
 	{
 		"address":165,
-		"type":2
+		"type":3,
+		"move":5
 	},
 	{
 		"address":166,
@@ -197,7 +238,10 @@
 	},
 	{
 		"address":167,
-		"type":2
+		"type":4,
+		"document":"自分の性格について説明してください。",
+		"move":4,
+		"back":4
 	},
 	{
 		"address":168,
@@ -205,7 +249,8 @@
 	},
 	{
 		"address":169,
-		"type":2
+		"type":3,
+		"move":2
 	},
 	{
 		"address":170,
@@ -213,7 +258,10 @@
 	},
 	{
 		"address":171,
-		"type":2
+		"type":4,
+		"document":"自分のストレス発散方法について説明してください。",
+		"move":4,
+		"back":2
 	},
 	{
 		"address":172,
@@ -221,7 +269,8 @@
 	},
 	{
 		"address":188,
-		"type":2
+		"type":3,
+		"move":1
 	},
 	{
 		"address":204,
@@ -229,7 +278,10 @@
 	},
 	{
 		"address":203,
-		"type":2
+		"type":4,
+		"document":"尊敬している人、またはどのような人の行動が尊敬できるのか教えてください。",
+		"move":5,
+		"back":3
 	},
 	{
 		"address":202,
@@ -237,7 +289,8 @@
 	},
 	{
 		"address":201,
-		"type":2
+		"type":3,
+		"move":5
 	},
 	{
 		"address":200,
@@ -245,7 +298,10 @@
 	},
 	{
 		"address":199,
-		"type":2
+		"type":4,
+		"document":"一つだけ得意なことあげるとすれば何ですか。",
+		"move":4,
+		"back":5
 	},
 	{
 		"address":198,
@@ -253,7 +309,8 @@
 	},
 	{
 		"address":197,
-		"type":2
+		"type":3,
+		"move":3
 	},
 	{
 		"address":196,
@@ -261,7 +318,10 @@
 	},
 	{
 		"address":195,
-		"type":2
+		"type":4,
+		"document":"一番最近のうれしかった出来事を教えてください。",
+		"move":1,
+		"back":1
 	},
 	{
 		"address":211,

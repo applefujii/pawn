@@ -46,13 +46,13 @@ public class BoardSurface {
         aSquare = new Array<>();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode aSquareJson = objectMapper.readTree(Gdx.files.local("assets/a_square_json.jsonc").file());
+            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/map.jsonc").file());
             int count = 0;
-            for(JsonNode squareJson : aSquareJson) {
-                int add = squareJson.get("address").asInt();
-                int type = squareJson.get("type").asInt();
-                if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add).cpy(), type, count, squareJson.get("document").asText()));
-                else if(type == 3) aSquare.add(new EventSquare(MAP_COORDINATE.get(add).cpy(), type, count));
+            for(JsonNode mJ : mapJson) {
+                int add = mJ.path("address").asInt();
+                int type = mJ.path("type").asInt();
+                if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add).cpy(), type, count, mJ.path("document").asText(), mJ.path("move").asInt(), mJ.path("back").asInt()));
+                else if(type == 3) aSquare.add(new EventSquare(MAP_COORDINATE.get(add).cpy(), type, count, mJ.path("move").asInt()));
                 else aSquare.add(new Square(MAP_COORDINATE.get(add).cpy(), type, count));
                 count++;
             }

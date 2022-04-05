@@ -3,6 +3,7 @@ package com.apple.pawn;
 import java.math.BigDecimal;
 import java.sql.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 
 public class Achievement {
 
@@ -18,13 +19,15 @@ public class Achievement {
     private float time;
 
     //-- 参照
+    private AssetManager manager;
     private UI ui;
 
     public Achievement(float time) {
         this.time = time;
     }
 
-    public void initialize(UI ui) {
+    public void initialize(AssetManager manager, UI ui) {
+        this.manager = manager;
         this.ui = ui;
     }
 
@@ -49,9 +52,9 @@ public class Achievement {
                 stUpdatePlayData.setBigDecimal(1, updateTotalTime);
                 stUpdatePlayData.setInt(2, updateTotalTurn);
                 int st = stUpdatePlayData.executeUpdate();
-                Gdx.app.debug("achievement", "Update" + st);
-                Gdx.app.debug("achievement", "total_time=" + updateTotalTime);
-                Gdx.app.debug("achievement", "total_turn=" + updateTotalTurn);
+//                Gdx.app.debug("achievement", "Update" + st);
+//                Gdx.app.debug("achievement", "total_time=" + updateTotalTime);
+//                Gdx.app.debug("achievement", "total_turn=" + updateTotalTurn);
 
                 //-- 実績を達成したか確認
                 ResultSet rs2 = stAchievement.executeQuery();
@@ -64,7 +67,7 @@ public class Achievement {
                         case 1:
                             if(updateTotalTime.compareTo(new BigDecimal(60*60)) == 1) {
                                 Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
+                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
                                 stUpdateAchievement.setInt(1, id);
                                 stUpdateAchievement.executeUpdate();
                             }
@@ -72,7 +75,7 @@ public class Achievement {
                         case 2:
                             if(updateTotalTurn >= 1) {
                                 Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
+                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
                                 stUpdateAchievement.setInt(1, id);
                                 stUpdateAchievement.executeUpdate();
                             }
@@ -80,7 +83,7 @@ public class Achievement {
                         case 3:
                             if(updateTotalTurn >= 10) {
                                 Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
+                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
                                 stUpdateAchievement.setInt(1, id);
                                 stUpdateAchievement.executeUpdate();
                             }

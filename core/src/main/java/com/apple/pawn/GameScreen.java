@@ -137,7 +137,7 @@ public class GameScreen implements Screen {
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
-		game.achievement.initialize(ui);
+		game.achievement.initialize(manager, ui);
 		//-- 作成
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		// フラグ初期化

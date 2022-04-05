@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,10 +23,9 @@ public class UIPartsExplanation extends UIParts {
     private final int strHeight = 18;
     private final int charsNoRow;
 
-    protected TextureAtlas atlas;
     protected Sprite sprite;
 
-    public UIPartsExplanation(String name, int x, int y, int width, int height, String expl) {
+    public UIPartsExplanation(String name, AssetManager manager, int x, int y, int width, int height, String expl) {
         super(name, x, y, width, height);
         explanation = expl;
         stringRow = new Array<>();
@@ -37,8 +37,7 @@ public class UIPartsExplanation extends UIParts {
                 stringRow.add(row.group());
             }
         }
-        atlas = new TextureAtlas(Gdx.files.internal("ui_atlas.txt"));
-        sprite = atlas.createSprite("explanation");
+        sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("explanation");
         sprite.flip(false, true);
     }
 
@@ -66,9 +65,7 @@ public class UIPartsExplanation extends UIParts {
         batch.end();
     }
 
-    public void dispose () {
-        atlas.dispose();
-    }
+    public void dispose () { }
 
     public void setExplanation(String expl) {
         explanation = expl;

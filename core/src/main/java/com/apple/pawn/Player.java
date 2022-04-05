@@ -55,14 +55,14 @@ public class Player {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
         this.playerManager = playerManager;
-        piece.initialize(bs);
+        piece.initialize(bs, this.gameScreen.getManager());
     }
 
     public void load(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
         this.playerManager = playerManager;
-        piece.load(bs);
+        piece.load(bs, this.gameScreen.getManager());
     }
 
     public void update() {

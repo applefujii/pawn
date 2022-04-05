@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,8 +43,6 @@ public class Piece {
 
     //-- リソース
     @JsonIgnore
-    private TextureAtlas atlas;
-    @JsonIgnore
     private Sprite sprite;
 
     //-- 参照
@@ -65,23 +64,21 @@ public class Piece {
         isMove = false;
     }
 
-    public void initialize(BoardSurface bs) {
+    public void initialize(BoardSurface bs, AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
         pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
         camPos = pos.cpy();
-        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
-    public void load(BoardSurface bs) {
+    public void load(BoardSurface bs, AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
-        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
@@ -158,9 +155,7 @@ public class Piece {
 //        renderer.end();
     }
 
-    public void dispose () {
-        atlas.dispose();
-    }
+    public void dispose () { }
 
     public void move( int squareNo, boolean isAnimation ) {
         //-- アニメーションさせる

@@ -1,19 +1,14 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Array;
-
-import java.time.LocalDateTime;
 
 /**
  * @author fujii
@@ -34,11 +29,14 @@ public class Dice {
     public Dice(Pawn game) {
         this.font = game.font;
         random = game.random;
-        img = new Texture("dice.png");
         isRoll = false;
         no = 1;
-        aNo = new Array<Integer>();
+        aNo = new Array<>();
         aNo.setSize(10);
+    }
+
+    public void initialize(AssetManager manager) {
+        img = manager.get("assets/dice.png", Texture.class);
     }
 
     public void update() {

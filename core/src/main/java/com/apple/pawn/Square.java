@@ -1,5 +1,6 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -34,8 +35,8 @@ public class Square {
         aPiece = new Array<>();
     }
 
-    public void initialize(TextureAtlas atlas) {
-        sprite = atlas.createSprite(TYPE_STR[type]);
+    public void initialize(AssetManager manager, int size) {
+        sprite = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[type]);
         sprite.flip(false, true);
         sprite.setPosition(position.x, position.y);
     }

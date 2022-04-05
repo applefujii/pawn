@@ -21,6 +21,7 @@ buildscript {
 				because("CVE-2021-44228, CVE-2021-45046, CVE-2021-45105: Log4j vulnerable to remote code execution and other critical security vulnerabilities")
 			}
 		}
+
 	}
 }
 
@@ -34,6 +35,15 @@ configure(subprojects) {
 	sourceCompatibility = 1.8
 	compileJava {
 		options.incremental = true
+	}
+	repositories {
+		mavenCentral()
+		maven { url 'https://s01.oss.sonatype.org' }
+		mavenLocal()
+		google()
+		gradlePluginPortal()
+		maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+		maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
 	}
 	dependencies {
 		// This follows advice from https://blog.gradle.org/log4j-vulnerability
@@ -49,6 +59,10 @@ configure(subprojects) {
 		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.0'
 		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
 		implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.0'
+
+		implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.36.0.3'
+//		implementation fileTree(dir: 'libs', include: ['*.jar'])
+//		implementation files('libs/sqlite-jdbc-3.36.0.3.jar')
 	}
 
 }

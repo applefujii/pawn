@@ -137,6 +137,7 @@ public class GameScreen implements Screen {
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
+		game.achievement.initialize(manager, ui);
 		//-- 作成
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		// フラグ初期化
@@ -192,7 +193,7 @@ public class GameScreen implements Screen {
 	 * update 更新。メインループの描画以外。
 	 */
 	private void update() {
-		timer += Gdx.graphics.getDeltaTime();
+		timer = game.getTimer();
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
 		manager.update();
@@ -537,6 +538,8 @@ public class GameScreen implements Screen {
 			if(timer-timerRap >= 5.0f) sequenceNo++;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +5) {
+			// ゲーム情報の更新
+			game.achievement.update(timer);
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

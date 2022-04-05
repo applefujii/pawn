@@ -81,6 +81,7 @@ public class GameScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
+		manager = game.manager;
 		timer = 0;
 		goalNo = 0;
 		sequenceNo = 1;
@@ -108,7 +109,6 @@ public class GameScreen implements Screen {
 
 		//---- その他の初期化
 		//-- new
-		manager = new AssetManager();
 		screenOrigin = new Vector3();
 		touchPos = new Vector3();
 		playerManager = new PlayerManager();
@@ -119,8 +119,8 @@ public class GameScreen implements Screen {
 		saveData = new SaveData();
 		result = new Result();
 		//-- 初期化
+		if(!manager.isLoaded("assets/piece_atlas.txt")) manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 		manager.load("assets/map_atlas.txt", TextureAtlas.class);
-		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
 		manager.load("assets/dice.png", Texture.class);
 		manager.load("assets/background.png", Texture.class);
@@ -346,7 +346,10 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		result.dispose();
-		manager.dispose();
+		manager.unload("assets/map_atlas.txt");
+		manager.unload("assets/ui_atlas.txt");
+		manager.unload("assets/dice.png");
+		manager.unload("assets/background.png");
 	}
 
 	private int turnStandby() {

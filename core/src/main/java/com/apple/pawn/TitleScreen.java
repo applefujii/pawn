@@ -3,6 +3,7 @@ package com.apple.pawn;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -46,12 +47,14 @@ public class TitleScreen implements Screen {
 
 	private GameSetting gameSetting;
 
+	private final AssetManager manager;
+
 	private int playerNo;
 	private double rad;
 
 	//-- リソース
-	private BitmapFont fontTitle;
-	private final Sprite spPiece[];
+	private final BitmapFont fontTitle;
+	private final Sprite[] spPiece;
 
 
 	/**
@@ -62,17 +65,21 @@ public class TitleScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
+		manager = game.manager;
+		if(!manager.isLoaded("assets/piece_atlas.txt", TextureAtlas.class)) manager.load("assets/piece_atlas.txt", TextureAtlas.class);
+		manager.update();
+		manager.finishLoading();
 
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, game.LOGICAL_WIDTH, game.LOGICAL_HEIGHT);
-		viewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
-		uiViewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,camera);
+		camera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		viewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,camera);
+		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,camera);
 		stage = new Stage(viewport);
 		uiStage = new Stage(uiViewport);
 
 		uiCamera = new OrthographicCamera();
-		uiCamera.setToOrtho(true, game.LOGICAL_WIDTH, game.LOGICAL_HEIGHT);
-		FitViewport uiViewport = new FitViewport(game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT,uiCamera);
+		uiCamera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		FitViewport uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,uiCamera);
 		stage = new Stage(uiViewport);
 
 		screenOrigin = new Vector3();
@@ -95,7 +102,7 @@ public class TitleScreen implements Screen {
 		param.flip = true;					// 上下反転
 		fontTitle = game.fontGenerator.generateFont(param);
 
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
+		TextureAtlas atlas = manager.get("assets/piece_atlas.txt", TextureAtlas.class);
 		spPiece = new Sprite[6];
 		spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
 		spPiece[0].flip(false, true);

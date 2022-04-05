@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -25,10 +26,9 @@ public class UIPartsPopup extends UIParts{
     private float alpha = 0;
     private int state = 0;      // 0:fadein 1:show 2:fadeout 3:end
 
-    protected TextureAtlas atlas;
     protected Sprite sprite;
 
-    public UIPartsPopup(String name, int x, int y, int width, int height, String text, float time_show) {
+    public UIPartsPopup(String name, AssetManager manager, int x, int y, int width, int height, String text, float time_show) {
         super(name, x, y, width, height);
         this.text = text;
         this.time_show = time_show;
@@ -41,8 +41,7 @@ public class UIPartsPopup extends UIParts{
                 stringRow.add(row.group());
             }
         }
-        atlas = new TextureAtlas(Gdx.files.internal("ui_atlas.txt"));
-        sprite = atlas.createSprite("popup");
+        sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("popup");
         sprite.flip(false, true);
     }
 
@@ -94,7 +93,7 @@ public class UIPartsPopup extends UIParts{
         color.a = alpha;
         font.setColor(color);
         for(int i = 0; i < stringRow.size; i++) {
-            font.draw(batch,stringRow.get(i),x+px,y+(height/2)-(strHeight*stringRow.size/2)+2+strHeight*i);
+            font.draw(batch,stringRow.get(i),x+px,y+(height>>1)-(strHeight*stringRow.size>>1)+2+strHeight*i);
         }
         color.a = 1.0f;
         font.setColor(color);
@@ -102,8 +101,6 @@ public class UIPartsPopup extends UIParts{
     }
 
     @Override
-    public void dispose() {
-        atlas.dispose();
-    }
+    public void dispose() { }
 
 }

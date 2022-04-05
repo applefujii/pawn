@@ -6,9 +6,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -120,9 +122,12 @@ public class GameScreen implements Screen {
 		manager.load("assets/map_atlas.txt", TextureAtlas.class);
 		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
+		manager.load("assets/dice.png", Texture.class);
+		manager.load("assets/background.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		board.initialize(manager);
+		dice.initialize(manager);
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
@@ -133,7 +138,7 @@ public class GameScreen implements Screen {
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
 		//-- 作成
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -446,7 +451,7 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			    int diceNumber = dice.rollStop();
-			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進む", 1));
+			    ui.add(new UIPartsPopup("test", manager, 600,50,300,100, diceNumber+"マス進む", 1));
 				turnPlayer.addADiceNo(diceNumber);
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
@@ -515,7 +520,7 @@ public class GameScreen implements Screen {
 				if(turnPlayer.isGoal()) {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-					ui.add(new UIPartsPopup("test", 600,50,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 4));
+					ui.add(new UIPartsPopup("test", manager, 600,50,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 4));
 					sequenceNo++;
 				}
 				timerRap = timer;

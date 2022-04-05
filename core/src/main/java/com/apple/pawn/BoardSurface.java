@@ -20,8 +20,7 @@ public class BoardSurface {
     public static final int BACK_HEIGHT = 2700;
     public static final Array<Vector2> MAP_COORDINATE;
 
-    private final Texture backImg;
-    private final Sprite backSprite;
+    private Sprite backSprite;
     private final Array<Square> aSquare;
 
     static {
@@ -37,11 +36,6 @@ public class BoardSurface {
     }
 
     public BoardSurface() {
-        backImg = new Texture(Gdx.files.local("assets/background.png"));
-        backSprite = new Sprite(backImg);
-        backSprite.flip(false, true);
-        backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);
-        backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
         aSquare = new Array<>();
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -61,6 +55,10 @@ public class BoardSurface {
     }
 
     public void initialize(AssetManager manager) {
+        backSprite = new Sprite(manager.get("assets/background.png", Texture.class));
+        backSprite.flip(false, true);
+        backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);
+        backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
@@ -90,8 +88,6 @@ public class BoardSurface {
 //            Square square = squareIterator.next();
 //            square.dispose();
 //        }
-//        mapImg.dispose();
-        backImg.dispose();
     }
 
     public Square getSquare(int squareNo) {

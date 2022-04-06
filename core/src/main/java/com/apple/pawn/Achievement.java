@@ -2,8 +2,11 @@ package com.apple.pawn;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.Array;
 
 public class Achievement {
 
@@ -39,7 +42,7 @@ public class Achievement {
         }
     }
 
-    public void update(float time) {
+    public void update(float time, Player player) {
         float diff = time - this.time;
         this.time = time;
         try {
@@ -71,7 +74,7 @@ public class Achievement {
                     if(rs2.getInt("state") == 1) continue;
                     int id = rs2.getInt("id");
                     boolean isGet = false;
-                    Gdx.app.debug("achievement", "id = " + id);
+                    int[] ret;
                     switch(id) {
                         case 1:
                             if(updateTotalTime.compareTo(new BigDecimal(60*10)) == 1) isGet = true;
@@ -112,15 +115,17 @@ public class Achievement {
                         case 13:
                             if(updateTotalTurn >= 1000) isGet = true;
                             break;
-                        // ※条件を付ける
                         case 14:
-                            if(false) isGet = true;
+                            ret = dicedSerialCheck(player.getaDiceNo());
+                            if(ret[0] == 6  &&  ret[1] == 2) isGet = true;
                             break;
                         case 15:
-                            if(false) isGet = true;
+                            ret = dicedSerialCheck(player.getaDiceNo());
+                            if(ret[0] == 6  &&  ret[1] == 3) isGet = true;
                             break;
                         case 16:
-                            if(false) isGet = true;
+                            ret = dicedSerialCheck(player.getaDiceNo());
+                            if(ret[0] == 1  &&  ret[1] == 2) isGet = true;
                             break;
                     }
                     if(isGet) {
@@ -164,6 +169,23 @@ public class Achievement {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 同じ目が何回連続で出たか返す
+     * @param aDicedNo
+     * @return [0]何の目が [1]何回
+     */
+    private int[] dicedSerialCheck(Array<Integer> aDicedNo) {
+        Iterator<Integer> ite = new Array.ArrayIterator<>(aDicedNo);
+        int count = 1, dd = -1;
+        while(ite.hasNext()) {
+            int d = ite.next();
+            if(dd == -1) dd = d;
+            else if(dd == d) count++;
+            else break;
+        }
+        return new int[]{dd, count};
     }
 
 }

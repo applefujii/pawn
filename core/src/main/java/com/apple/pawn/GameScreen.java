@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -270,6 +271,7 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		ScreenUtils.clear(0, 255, 0, 1);
 //		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 //		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -539,7 +541,7 @@ public class GameScreen implements Screen {
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +5) {
 			// ゲーム情報の更新
-			game.achievement.update(timer);
+			game.achievement.update(timer, turnPlayer);
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}

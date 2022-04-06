@@ -29,6 +29,14 @@ public class Achievement {
     public void initialize(AssetManager manager, UI ui) {
         this.manager = manager;
         this.ui = ui;
+        try {
+            Class.forName(DRIVE_NAME);
+            connection = DriverManager.getConnection(DB_URL);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(float time) {
@@ -37,11 +45,10 @@ public class Achievement {
         try {
             Class.forName(DRIVE_NAME);
 
-            Connection connection = DriverManager.getConnection(DB_URL);
             stPlayData = connection.prepareStatement("select * from play_data");
             stUpdatePlayData = connection.prepareStatement("update play_data set total_time = ?, total_turn = ? where id = 1");
             stAchievement = connection.prepareStatement("select * from achievement");
-            stUpdateAchievement = connection.prepareStatement("update achievement set state = 1 where id = ?");
+            stUpdateAchievement = connection.prepareStatement("update achievement set state = 1, timestamp = ? where id = ?");
 
             ResultSet rs = stPlayData.executeQuery();
             while (rs.next()) {
@@ -57,37 +64,70 @@ public class Achievement {
 //                Gdx.app.debug("achievement", "total_turn=" + updateTotalTurn);
 
                 //-- 実績を達成したか確認
+                Timestamp ts = new Timestamp(System.currentTimeMillis());
                 ResultSet rs2 = stAchievement.executeQuery();
                 while (rs2.next()) {
                     // 取得済みはスルー
                     if(rs2.getInt("state") == 1) continue;
                     int id = rs2.getInt("id");
+                    boolean isGet = false;
                     Gdx.app.debug("achievement", "id = " + id);
                     switch(id) {
                         case 1:
-                            if(updateTotalTime.compareTo(new BigDecimal(60*60)) == 1) {
-                                Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
-                                stUpdateAchievement.setInt(1, id);
-                                stUpdateAchievement.executeUpdate();
-                            }
+                            if(updateTotalTime.compareTo(new BigDecimal(60*10)) == 1) isGet = true;
                             break;
                         case 2:
-                            if(updateTotalTurn >= 1) {
-                                Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
-                                stUpdateAchievement.setInt(1, id);
-                                stUpdateAchievement.executeUpdate();
-                            }
+                            if(updateTotalTime.compareTo(new BigDecimal(60*30)) == 1) isGet = true;
                             break;
                         case 3:
-                            if(updateTotalTurn >= 10) {
-                                Gdx.app.debug("achievement", "get id = " + id);
-                                ui.add(new UIPartsPopup("achievement", manager, 50,50,300,100, rs2.getString("title")+"\n"+rs2.getString("detail"), 10));
-                                stUpdateAchievement.setInt(1, id);
-                                stUpdateAchievement.executeUpdate();
-                            }
+                            if(updateTotalTime.compareTo(new BigDecimal(60*60*1)) == 1) isGet = true;
                             break;
+                        case 4:
+                            if(updateTotalTime.compareTo(new BigDecimal(60*60*3)) == 1) isGet = true;
+                            break;
+                        case 5:
+                            if(updateTotalTime.compareTo(new BigDecimal(60*60*5)) == 1) isGet = true;
+                            break;
+                        case 6:
+                            if(updateTotalTime.compareTo(new BigDecimal(60*60*10)) == 1) isGet = true;
+                            break;
+                        case 7:
+                            if(updateTotalTurn >= 1) isGet = true;
+                            break;
+                        case 8:
+                            if(updateTotalTurn >= 10) isGet = true;
+                            break;
+                        case 9:
+                            if(updateTotalTurn >= 25) isGet = true;
+                            break;
+                        case 10:
+                            if(updateTotalTurn >= 50) isGet = true;
+                            break;
+                        case 11:
+                            if(updateTotalTurn >= 100) isGet = true;
+                            break;
+                        case 12:
+                            if(updateTotalTurn >= 300) isGet = true;
+                            break;
+                        case 13:
+                            if(updateTotalTurn >= 1000) isGet = true;
+                            break;
+                        // ※条件を付ける
+                        case 14:
+                            if(false) isGet = true;
+                            break;
+                        case 15:
+                            if(false) isGet = true;
+                            break;
+                        case 16:
+                            if(false) isGet = true;
+                            break;
+                    }
+                    if(isGet) {
+                        ui.add(new UIPartsPopup("achievement", manager, 50, 50, 300, 100, rs2.getString("title") + "\n" + rs2.getString("detail"), 10));
+                        stUpdateAchievement.setTimestamp(1, ts);
+                        stUpdateAchievement.setInt(2, id);
+                        stUpdateAchievement.executeUpdate();
                     }
                 }
             }
@@ -113,13 +153,17 @@ public class Achievement {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
+
+    public void dispose() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

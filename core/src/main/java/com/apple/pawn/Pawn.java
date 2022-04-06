@@ -122,6 +122,7 @@ public class Pawn extends Game {
 		font.dispose();
 		renderer.dispose();
 		fpsTimer.cancel();
+		achievement.dispose();
 	}
 
 	public float getTimer() {

@@ -33,31 +33,24 @@ public class Result extends UIParts {
 
     private final BitmapFont font;
     private final Sprite spPiece[];
+    private PlayerManager playerManager;
+//    private Player player;
+    private GameScreen gamescreen;
+
 
     public Result(String name, int x, int y, int width, int height,final Pawn game) {
         super(name,x,y,width,height);
         font = game.font;
+        //playerManager = new PlayerManager();
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         spPiece = new Sprite[6];
-        spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
-        spPiece[0].flip(false, true);
-        spPiece[0].setSize(80,120);
-        spPiece[1] = atlas.createSprite(Piece.COLOR[1]);
-        spPiece[1].flip(false, true);
-        spPiece[1].setSize(80,120);
-        spPiece[2] = atlas.createSprite(Piece.COLOR[2]);
-        spPiece[2].flip(false, true);
-        spPiece[2].setSize(80,120);
-        spPiece[3] = atlas.createSprite(Piece.COLOR[3]);
-        spPiece[3].flip(false, true);
-        spPiece[3].setSize(80,120);
-        spPiece[4] = atlas.createSprite(Piece.COLOR[4]);
-        spPiece[4].flip(false, true);
-        spPiece[4].setSize(80,120);
-        spPiece[5] = atlas.createSprite(Piece.COLOR[5]);
-        spPiece[5].flip(false, true);
-        spPiece[5].setSize(80,120);
+        for(int i=0; i<6; i++){
+            spPiece[i] = atlas.createSprite(Piece.COLOR[i]);
+            spPiece[i].flip(false, true);
+            spPiece[i].setSize(80,120);
+        }
+        playerManager = new PlayerManager();
     }
 
 
@@ -66,10 +59,10 @@ public class Result extends UIParts {
      * initialize　インスタンス作成時以降にしないといけない初期化処理
      * @param playerManager プレイヤー全体を管理。ここから各プレイヤーやそのプレイヤーが持っている駒の情報を取得する
      */
-    public void initialize(PlayerManager playerManager,Pawn game) {
+    public void initialize(PlayerManager playerManager) {
 
 
-//        this.playerManager = playerManager;
+       this.playerManager = playerManager;
 //
 //        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 //        param.size = 20;
@@ -101,6 +94,20 @@ public class Result extends UIParts {
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.end();
 
+        //StringBuilder orderBuilder = new StringBuilder();
+        //Player player = new Player();
+
+        StringBuilder txt = new StringBuilder("全員ゴールしたよ");
+        Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
+        //Player player = playerIterator.next();
+        //player = playerIterator.next();
+        //txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
+
+//        while(playerIterator.hasNext()) {
+//            Player player = playerIterator.next();
+//            txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
+//        }
+
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(1.0f,0.8f,0.8f,1);
         renderer.box(x,y,0,width,height,0);
@@ -108,22 +115,24 @@ public class Result extends UIParts {
 
         batch.begin();
         font.getData().setScale(1, 1);
-        font.draw(batch, "すごろくゲーム", 100, 500);
-//        spPiece[0].setPosition(80, 150);
-//        spPiece[1].setPosition(80, 300);
-//        spPiece[2].setPosition(80, 450);
-//        spPiece[3].setPosition(80, 600);
-//        spPiece[0].draw(batch);
-//        spPiece[1].draw(batch);
-//        spPiece[2].draw(batch);
-//        spPiece[3].draw(batch);
+        //font.draw(batch, "すごろくゲーム", 100, 500);
+        //font.draw(batch, player.getName(), 200, 600);
+        //font.draw(batch, player.getName(), 200, 130);
+        //font.draw(batch, player.getName(), 200, 270);
+        //font.draw(batch,gamescreen.getTurnCount(), 200, 600);
+        font.draw(batch, "ターン数", 320, 130);
+        //player.getName()
+        //"あいうえお"
 
-
-        int j=150;
+        int j=80,turn=130;
         for(int i=0; i<4; i++){
+            Player player = playerIterator.next();
             spPiece[i].setPosition(80, j);
             spPiece[i].draw(batch);
+            //font.draw(batch, player.getName(), 200, turn);
+            font.draw(batch, i+1+"P", 200, turn);
             j += 140;
+            turn += 140;
         }
 
         batch.end();

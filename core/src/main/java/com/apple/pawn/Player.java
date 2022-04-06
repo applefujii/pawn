@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+//import com.badlogic.gdx.Gdx;
 
 /**
  * @author fujii
@@ -67,6 +68,7 @@ public class Player {
             gameScreen.addGoalNo();
             goalNo = gameScreen.getGoalNo();
             goalTurn = gameScreen.getTurnCount();
+            //Gdx.app.debug("fps", "goalturn="+goalTurn);
             isGoal = true;
         }
     }

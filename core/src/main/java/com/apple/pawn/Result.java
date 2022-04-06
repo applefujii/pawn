@@ -36,6 +36,7 @@ public class Result extends UIParts {
     private PlayerManager playerManager;
 //    private Player player;
     private GameScreen gamescreen;
+    private int goalTurn;
 
 
     public Result(String name, int x, int y, int width, int height,final Pawn game) {
@@ -119,7 +120,10 @@ public class Result extends UIParts {
         //font.draw(batch, player.getName(), 200, 600);
         //font.draw(batch, player.getName(), 200, 130);
         //font.draw(batch, player.getName(), 200, 270);
-        //font.draw(batch,gamescreen.getTurnCount(), 200, 600);
+        //null
+        //font.draw(batch,gamescreen.getTurnCount()+"ターン", 320, 130);
+        //goalTurn = gamescreen.getTurnCount();
+        //font.draw(batch, goalTurn+"ターン", 320, 130);
         font.draw(batch, "ターン数", 320, 130);
         //player.getName()
         //"あいうえお"

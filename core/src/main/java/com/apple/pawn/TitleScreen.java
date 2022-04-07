@@ -22,6 +22,7 @@ import java.util.function.IntSupplier;
 
 public class TitleScreen implements Screen {
 	private final static int DISTANCE = 240;
+	private final static float SPEED = 0.02f;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -196,6 +197,7 @@ public class TitleScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
+		ui.draw(batch, renderer, font);
 		font.getData().setScale(1, 1);
 		batch.begin();
 		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
@@ -203,8 +205,6 @@ public class TitleScreen implements Screen {
 		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 16*2);
 		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
 		batch.end();
-
-		ui.draw(batch, renderer, font);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class TitleScreen implements Screen {
 			sequenceSubNo++;
 		}
 		if(sequenceSubNo == 2) {
-			rad += 0.02f;
+			rad += SPEED;
 			if(rad >360) rad %= 360;
 			int select = ui.getSelect();
 			// 開始
@@ -263,8 +263,10 @@ public class TitleScreen implements Screen {
 				sequenceNo = 3;
 				sequenceSubNo = 1;
 			}
-			// 設定
+			// 実績確認
 			if (select == 2) {
+				sequence = this::achievementViewSequence;
+				sequenceNo = 4;
 				sequenceSubNo = 1;
 			}
 		}
@@ -278,8 +280,15 @@ public class TitleScreen implements Screen {
 		}
 		// 人数
 		if(sequenceSubNo == 2) {
-			rad += 0.02f;
+			rad += SPEED;
 			if(rad >360) rad %= 360;
+			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				ui.remove("setting_menu");
+				sequence = this::homeSequence;
+				sequenceNo = 1;
+				sequenceSubNo = 1;
+				return 0;
+			}
 			playerNo = ui.getCursor()+2;
 			int select = ui.getSelect();
 			if(select != -1 ) {
@@ -308,6 +317,23 @@ public class TitleScreen implements Screen {
 			GameScreen gameScreen = new GameScreen(game);
 			gameScreen.load(fileIO.getSaveData());
 			game.setScreen(gameScreen);
+		}
+		return 0;
+	}
+
+	private int achievementViewSequence() {
+		if (sequenceSubNo == 1) {
+			ui.add( new UIPartsAchievementView("achievement",50,30,1180,660 ));
+			sequenceSubNo++;
+		}
+		if (sequenceSubNo == 2) {
+			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				ui.remove("achievement");
+				sequence = this::homeSequence;
+				sequenceNo = 1;
+				sequenceSubNo = 1;
+				return 0;
+			}
 		}
 		return 0;
 	}

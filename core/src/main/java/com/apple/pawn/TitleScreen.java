@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -244,7 +245,7 @@ public class TitleScreen implements Screen {
 
 	private int homeSequence() {
 		if(sequenceSubNo == 1) {
-			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", "続きから", "設定"));
+			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", "続きから", "実績"));
 			sequenceSubNo++;
 		}
 		if(sequenceSubNo == 2) {
@@ -303,10 +304,17 @@ public class TitleScreen implements Screen {
 	}
 
 	private int startSetting2Sequence() {
+		// ※名前の入力
 		if (sequenceSubNo == 1) {
 			GameScreen gameScreen = new GameScreen(game);
 			gameScreen.initialize(gameSetting);
 			game.setScreen(gameScreen);
+		}
+		if (sequenceSubNo == 2) {
+		}
+		if (sequenceSubNo == 3) {
+		}
+		if (sequenceSubNo == 4) {
 		}
 		return 0;
 	}

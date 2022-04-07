@@ -38,6 +38,7 @@ public class Square {
     public void initialize(AssetManager manager, int size) {
         sprite = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[type]);
         sprite.flip(false, true);
+        sprite.setScale((float) SQUARE_WIDTH / sprite.getWidth(), (float) SQUARE_HEIGHT / sprite.getHeight());
         sprite.setPosition(position.x, position.y);
     }
 

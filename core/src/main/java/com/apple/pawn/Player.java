@@ -92,7 +92,8 @@ public class Player {
     }
 
     public void addADiceNo(int diceNo) {
-        aDiceNo.add(diceNo);
+        if(aDiceNo.size > 10-1) aDiceNo.pop();
+        aDiceNo.insert(0, diceNo);
     }
 
     public boolean isGoal() {
@@ -121,5 +122,9 @@ public class Player {
 
     public int getOrder() {
         return order;
+    }
+
+    public Array<Integer> getaDiceNo() {
+        return aDiceNo;
     }
 }

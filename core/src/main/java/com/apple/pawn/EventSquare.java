@@ -23,11 +23,4 @@ public class EventSquare extends Square {
         move = Math.min(move, size - count);
         document = move+"マス進む";
     }
-
-    //確認用の仮描画
-    @Override
-    public void draw(Batch batch) {
-        super.draw(batch);
-        font.draw(batch, "move:" + move, position.x+64, position.y+64);
-    }
 }

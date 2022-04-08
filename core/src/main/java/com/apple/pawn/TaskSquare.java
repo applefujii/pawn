@@ -20,11 +20,4 @@ public class TaskSquare extends EventSquare {
         back = Math.min(back, count);
         document = doc + "\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
     }
-
-    //確認用の仮描画
-    @Override
-    public void draw(Batch batch) {
-        super.draw(batch);
-        font.draw(batch, "back:" + back, position.x+64, position.y+192);
-    }
 }

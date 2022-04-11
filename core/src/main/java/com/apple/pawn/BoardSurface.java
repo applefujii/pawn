@@ -70,6 +70,7 @@ public class BoardSurface {
 
     public void draw (Batch batch, ShapeRenderer renderer) {
         batch.begin();
+        batch.disableBlending();
 
         backSprite.draw(batch);
 
@@ -79,6 +80,7 @@ public class BoardSurface {
             square.draw(batch);
         }
 
+        batch.enableBlending();
         batch.end();
     }
 

@@ -142,14 +142,6 @@ public class TitleScreen implements Screen {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
 
-		//-- 入力
-		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)  |  Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ENTER)) {
-			gameSetting.init(4);
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.initialize(gameSetting);
-			game.setScreen(gameScreen);
-		}
-
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 		sequence.getAsInt();
 	}
@@ -174,7 +166,7 @@ public class TitleScreen implements Screen {
 		renderer.end();
 
 		//------ 描画
-		if(sequenceNo == 1  ||  sequenceNo == 2) {
+		if(sequenceNo == 1  ||  sequenceNo == 2 || sequenceNo == 3) {
 			int px= Pawn.LOGICAL_WIDTH >> 1, py= Pawn.LOGICAL_HEIGHT >> 1;
 			double tRad = rad, sa = Math.toRadians((double) 360/playerNo);
 			batch.begin();
@@ -185,11 +177,13 @@ public class TitleScreen implements Screen {
 			}
 			batch.end();
 
-			fontTitle.getData().setScale(1, 1);
-			batch.begin();
-			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
-			batch.end();
-		} else if(sequenceNo == 3) {
+			if(sequenceNo == 1) {
+				fontTitle.getData().setScale(1, 1);
+				batch.begin();
+				fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
+				batch.end();
+			}
+		} else if(sequenceNo == 4) {
 
 		}
 
@@ -242,13 +236,13 @@ public class TitleScreen implements Screen {
 	public void dispose () { }
 
 	private int homeSequence() {
+		rad += SPEED;
+		if(rad >360) rad %= 360;
 		if(sequenceSubNo == 1) {
 			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", "続きから", "実績"));
 			sequenceSubNo++;
 		}
 		if(sequenceSubNo == 2) {
-			rad += SPEED;
-			if(rad >360) rad %= 360;
 			int select = ui.getSelect();
 			// 開始
 			if (select == 0) {
@@ -273,14 +267,14 @@ public class TitleScreen implements Screen {
 	}
 
 	private int startSettingSequence() {
+		rad += SPEED;
+		if(rad >360) rad %= 360;
 		if(sequenceSubNo == 1) {
 			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 2, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
 			sequenceSubNo++;
 		}
 		// 人数
 		if(sequenceSubNo == 2) {
-			rad += SPEED;
-			if(rad >360) rad %= 360;
 			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 				ui.remove("setting_menu");
 				sequence = this::homeSequence;
@@ -302,17 +296,63 @@ public class TitleScreen implements Screen {
 	}
 
 	private int startSetting2Sequence() {
+		rad += SPEED;
+		if(rad >360) rad %= 360;
 		// ※名前の入力
 		if (sequenceSubNo == 1) {
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.initialize(gameSetting);
-			game.setScreen(gameScreen);
+			//-- 名前入力ダイアログ
+			Gdx.input.getTextInput(new Input.TextInputListener() {
+				@Override
+				public void input(String text) {
+					Gdx.app.debug("info", "input");
+					sequenceSubNo++;
+				}
+				@Override
+				public void canceled() {
+					// ※直ぐにキャンセルになってしまう
+					Gdx.app.debug("info", "canceled");
+					sequenceSubNo++;
+				}
+			}, "title" , "text", "hint");
 		}
 		if (sequenceSubNo == 2) {
+			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "ステージ選択", "ステージ1","ステージ2","ステージ3"));
+			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 3) {
+			int select = ui.getSelect();
+			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				ui.remove("stage_select");
+				sequence = this::startSettingSequence;
+				sequenceNo = 2;
+				sequenceSubNo = 1;
+				return 0;
+			}
+			if(select != -1 ) {
+				gameSetting.setStageNo(select);
+				ui.add(new UIPartsSelect("start_confirm", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始！", "設定をやり直す"));
+				sequenceSubNo++;
+			}
 		}
 		if (sequenceSubNo == 4) {
+			int select = ui.getSelect();
+			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+				ui.remove("start_confirm");
+				sequenceSubNo = 2;
+				return 0;
+			}
+			if(select != -1 ) {
+				if(select == 0) {
+					GameScreen gameScreen = new GameScreen(game);
+					gameScreen.initialize(gameSetting);
+					game.setScreen(gameScreen);
+				} else if(select == 1) {
+					sequence = this::startSettingSequence;
+					sequenceNo = 2;
+					sequenceSubNo = 1;
+					return 0;
+				}
+			}
 		}
 		return 0;
 	}

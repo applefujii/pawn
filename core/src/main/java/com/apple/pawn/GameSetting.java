@@ -10,6 +10,7 @@ public class GameSetting {
     private String[] aName;
     private int[] aColorNo;
     private int[] aSquareNo;
+    private int stageNo;
 
     public GameSetting() {
     }
@@ -19,11 +20,12 @@ public class GameSetting {
         aName = new String[playerNo];
         aColorNo = new int[playerNo];
         aSquareNo = new int[playerNo];
-        for(int i : IntStream.range(0,playerNo).toArray()) {
-            aName[i] = (i+1)+"P";
+        for (int i : IntStream.range(0, playerNo).toArray()) {
+            aName[i] = (i + 1) + "P";
             aColorNo[i] = i;
             aSquareNo[i] = 0;
         }
+        stageNo = 0;
     }
 
     public void setAName(int no, String name) {
@@ -32,6 +34,10 @@ public class GameSetting {
 
     public void setAColorNo(int no, int colorNo) {
         aColorNo[no] = colorNo;
+    }
+
+    public void setStageNo(int stageNo) {
+        this.stageNo = stageNo;
     }
 
     public int getPlayerNo() {
@@ -44,5 +50,9 @@ public class GameSetting {
 
     public int[] getAColorNo() {
         return aColorNo;
+    }
+
+    public int getStageNo() {
+        return stageNo;
     }
 }

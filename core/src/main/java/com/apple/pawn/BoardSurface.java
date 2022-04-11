@@ -19,6 +19,11 @@ public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
     public static final int BACK_HEIGHT = 2700;
     public static final Array<Vector2> MAP_COORDINATE;
+    private static final String MAPDATA_NAME[] = {
+            "map.jsonc",
+            "map2.jsonc",
+            "map3.jsonc"
+    };
 
     private Sprite backSprite;
     private final Array<Square> aSquare;
@@ -37,9 +42,13 @@ public class BoardSurface {
 
     public BoardSurface() {
         aSquare = new Array<>();
+    }
+
+    public void initialize(AssetManager manager, int mapNo) {
+
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/map.jsonc").file());
+            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+MAPDATA_NAME[mapNo]).file());
             int count = 0;
             for(JsonNode mJ : mapJson) {
                 int add = mJ.path("address").asInt();
@@ -52,9 +61,7 @@ public class BoardSurface {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
-    public void initialize(AssetManager manager) {
         backSprite = new Sprite(manager.get("assets/background.png", Texture.class));
         backSprite.flip(false, true);
         backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);

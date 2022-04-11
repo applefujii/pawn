@@ -5,8 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,28 +29,26 @@ public class TitleScreen implements Screen {
 	private final Pawn game;
 	// 動作させるシークエンス
 	private IntSupplier sequence;
-	private SpriteBatch batch;
-	private BitmapFont font;
-	private ShapeRenderer renderer;
+	private final SpriteBatch batch;
+	private final BitmapFont font;
+	private final ShapeRenderer renderer;
 
-	private OrthographicCamera camera;		// カメラ
-	private OrthographicCamera uiCamera;	// UIカメラ
-	private FitViewport viewport;
-	private FitViewport uiViewport;
+	private final OrthographicCamera camera;		// カメラ
+	private final OrthographicCamera uiCamera;	// UIカメラ
+	private final FitViewport viewport;
+	private final FitViewport uiViewport;
 	private Stage stage;					// カメラとビューポートの管理
-	private Stage uiStage;					// UIのカメラとビューポートの管理
+	private final Stage uiStage;					// UIのカメラとビューポートの管理
 
-	private Vector3 screenOrigin;
-	private Vector3 touchPos;
+	private final Vector3 screenOrigin;
+	private final Vector3 touchPos;
 	private int sequenceNo;					// シークエンス番号
 	private int sequenceSubNo;				// サブシークエンス番号
 
-	private UI ui;							// UI
+	private final UI ui;							// UI
 	private final FileIO fileIO;			// セーブファイルの読み書き
 
-	private GameSetting gameSetting;
-
-	private final AssetManager manager;
+	private final GameSetting gameSetting;
 
 	private int playerNo;
 	private double rad;
@@ -67,7 +66,7 @@ public class TitleScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
-		manager = game.manager;
+		AssetManager manager = game.manager;
 		if(!manager.isLoaded("assets/piece_atlas.txt", TextureAtlas.class)) manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 		manager.update();
 		manager.finishLoading();
@@ -171,16 +170,16 @@ public class TitleScreen implements Screen {
 		//-- 論理表示領域を黒で塗りつぶし
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.setColor(0.5f,0.1f,0.5f,1);
-		renderer.rect(screenOrigin.x, screenOrigin.y,game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT);
+		renderer.rect(screenOrigin.x, screenOrigin.y, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
 		renderer.end();
 
 		//------ 描画
 		if(sequenceNo == 1  ||  sequenceNo == 2) {
+			int px= Pawn.LOGICAL_WIDTH >> 1, py= Pawn.LOGICAL_HEIGHT >> 1;
+			double tRad = rad, sa = Math.toRadians((double) 360/playerNo);
 			batch.begin();
-			int px=game.LOGICAL_WIDTH/2-40, py=game.LOGICAL_HEIGHT/2-60;
-			double tRad = rad, sa = Math.toRadians(360/playerNo);
 			for(int i=0 ; i<playerNo ; i++) {
-				spPiece[i].setPosition((int) (Math.cos(tRad) * DISTANCE + px), (int) (Math.sin(tRad) * DISTANCE + py));
+				spPiece[i].setCenter(Math.round(Math.cos(tRad) * DISTANCE + px), Math.round(Math.sin(tRad) * DISTANCE + py));
 				spPiece[i].draw(batch);
 				tRad += sa;
 			}
@@ -188,7 +187,7 @@ public class TitleScreen implements Screen {
 
 			fontTitle.getData().setScale(1, 1);
 			batch.begin();
-			fontTitle.draw(batch, "すごろくゲーム", game.LOGICAL_WIDTH / 2 - 329, game.LOGICAL_HEIGHT / 2 - 100);
+			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
 			batch.end();
 		} else if(sequenceNo == 3) {
 
@@ -201,10 +200,10 @@ public class TitleScreen implements Screen {
 		ui.draw(batch, renderer, font);
 		font.getData().setScale(1, 1);
 		batch.begin();
-		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 16*0);
-		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 16*1);
-		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 16*2);
-		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 16*3);
+		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 18*0);
+		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 18*1);
+		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 18*2);
+		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
 		batch.end();
 	}
 
@@ -240,8 +239,7 @@ public class TitleScreen implements Screen {
 	 * dispose 解放
 	 */
 	@Override
-	public void dispose () {
-	}
+	public void dispose () { }
 
 	private int homeSequence() {
 		if(sequenceSubNo == 1) {

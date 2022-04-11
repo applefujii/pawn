@@ -143,14 +143,6 @@ public class TitleScreen implements Screen {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
 
-		//-- 入力
-		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)  |  Gdx.input.isKeyPressed(Input.Keys.NUMPAD_ENTER)) {
-			gameSetting.init(4);
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.initialize(gameSetting);
-			game.setScreen(gameScreen);
-		}
-
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 		sequence.getAsInt();
 	}
@@ -306,15 +298,42 @@ public class TitleScreen implements Screen {
 	private int startSetting2Sequence() {
 		// ※名前の入力
 		if (sequenceSubNo == 1) {
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.initialize(gameSetting);
-			game.setScreen(gameScreen);
+			//-- 名前入力ダイアログ
+			Gdx.input.getTextInput(new Input.TextInputListener() {
+				@Override
+				public void input(String text) {
+					Gdx.app.debug("info", "input");
+					sequenceSubNo++;
+				}
+				@Override
+				public void canceled() {
+					// ※直ぐにキャンセルになってしまう
+					Gdx.app.debug("info", "canceled");
+					sequenceSubNo++;
+				}
+			}, "title" , "text", "hint");
 		}
 		if (sequenceSubNo == 2) {
+			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 3) {
+			ui.add(new UIPartsSelect("start_button", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始！", "設定をやり直す"));
+			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 4) {
+			int select = ui.getSelect();
+			if(select != -1 ) {
+				if(select == 0) {
+					GameScreen gameScreen = new GameScreen(game);
+					gameScreen.initialize(gameSetting);
+					game.setScreen(gameScreen);
+				} else if(select == 1) {
+					sequence = this::startSettingSequence;
+					sequenceNo = 2;
+					sequenceSubNo = 1;
+					return 0;
+				}
+			}
 		}
 		return 0;
 	}

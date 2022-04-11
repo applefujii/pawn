@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Gdx;
 
 /**
  * @author fujii
@@ -107,12 +107,11 @@ public class Player {
     }
 
     public String getName() {
+        //Gdx.app.debug("fps", "name="+name);
         return name;
     }
 
-    public int getGoalNo() {
-        return goalNo;
-    }
+    public int getGoalNo() { return goalNo; }
 
     public int getGoalTurn() {
         return goalTurn;

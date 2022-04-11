@@ -498,6 +498,7 @@ public class GameScreen implements Screen {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 				}
+				//Gdx.app.debug("fps", turnPlayer.getName()+"が"+turnCount+"ターンでゴールした！");
 				timerRap = timer;
 				sequenceNo++;
 			}

@@ -22,6 +22,6 @@ public class Lwjgl3Launcher {
 //		config.setResizable(false);
 //		config.setDecorated(false);
 
-		new Lwjgl3Application(new Pawn(), config);
+		new ExtendedLwjgl3Application(new Pawn(), config);
 	}
 }

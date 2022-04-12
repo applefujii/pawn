@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -44,11 +45,14 @@ public class TitleScreen implements Screen {
 	private final Vector3 touchPos;
 	private int sequenceNo;					// シークエンス番号
 	private int sequenceSubNo;				// サブシークエンス番号
+	private int dialogNo;					// 何人目の入力中か
 
 	private final UI ui;							// UI
 	private final FileIO fileIO;			// セーブファイルの読み書き
 
 	private final GameSetting gameSetting;
+
+	private final AssetManager manager;
 
 	private int playerNo;
 	private double rad;
@@ -66,8 +70,7 @@ public class TitleScreen implements Screen {
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
-		AssetManager manager = game.manager;
-		if(!manager.isLoaded("assets/piece_atlas.txt", TextureAtlas.class)) manager.load("assets/piece_atlas.txt", TextureAtlas.class);
+		manager = game.manager;
 		manager.update();
 		manager.finishLoading();
 
@@ -132,6 +135,7 @@ public class TitleScreen implements Screen {
 
 		sequenceNo = 1;
 		sequenceSubNo = 1;
+		dialogNo = 1;
 		sequence = this::homeSequence;
 	}
 
@@ -141,6 +145,7 @@ public class TitleScreen implements Screen {
 	private void update() {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
+		manager.update();
 
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 		sequence.getAsInt();
@@ -290,6 +295,7 @@ public class TitleScreen implements Screen {
 				sequence = this::startSetting2Sequence;
 				sequenceNo = 3;
 				sequenceSubNo = 1;
+				dialogNo = 1;
 			}
 		}
 		return 0;
@@ -299,21 +305,29 @@ public class TitleScreen implements Screen {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
 		// ※名前の入力
-		if (sequenceSubNo == 1) {
-			//-- 名前入力ダイアログ
-			Gdx.input.getTextInput(new Input.TextInputListener() {
-				@Override
-				public void input(String text) {
-					Gdx.app.debug("info", "input");
-					sequenceSubNo++;
-				}
-				@Override
-				public void canceled() {
-					// ※直ぐにキャンセルになってしまう
-					Gdx.app.debug("info", "canceled");
-					sequenceSubNo++;
-				}
-			}, "title" , "text", "hint");
+		if (sequenceSubNo == 1 && !FlagManagement.is(Flag.DIALOG_SHOW)) {
+			if (dialogNo <= playerNo) {
+				FlagManagement.set(Flag.DIALOG_SHOW);
+				//-- 名前入力ダイアログ
+				Gdx.input.getTextInput(new Input.TextInputListener() {
+					@Override
+					public void input(String text) {
+						gameSetting.setAName(dialogNo - 1, text);
+						Gdx.app.debug("info", text);
+						FlagManagement.fold(Flag.DIALOG_SHOW);
+						dialogNo++;
+					}
+
+					@Override
+					public void canceled() {
+						Gdx.app.debug("info", "canceled");
+						FlagManagement.fold(Flag.DIALOG_SHOW);
+						sequenceSubNo = 5;
+					}
+				}, dialogNo + "Pの名前", null, "名前を入力してください");
+			} else {
+				sequenceSubNo++;
+			}
 		}
 		if (sequenceSubNo == 2) {
 			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "ステージ選択", "ステージ1","ステージ2","ステージ3"));
@@ -347,12 +361,15 @@ public class TitleScreen implements Screen {
 					gameScreen.initialize(gameSetting);
 					game.setScreen(gameScreen);
 				} else if(select == 1) {
-					sequence = this::startSettingSequence;
-					sequenceNo = 2;
-					sequenceSubNo = 1;
-					return 0;
+					sequenceSubNo++;
 				}
 			}
+		}
+		if(sequenceSubNo == 5) {
+			sequence = this::startSettingSequence;
+			sequenceNo = 2;
+			sequenceSubNo = 1;
+			return 0;
 		}
 		return 0;
 	}

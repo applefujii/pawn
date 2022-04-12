@@ -120,7 +120,6 @@ public class GameScreen implements Screen {
 		saveData = new SaveData();
 		result = new Result();
 		//-- 初期化
-		if(!manager.isLoaded("assets/piece_atlas.txt")) manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 		manager.load("assets/map_atlas.txt", TextureAtlas.class);
 		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
 		manager.load("assets/dice.png", Texture.class);

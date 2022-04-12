@@ -8,6 +8,7 @@ public enum Flag {
     UI_INPUT_ENABLE(20, -1, true, "UIを操作可能か"),
     INPUT_ENABLE(21, -1, true, "UI以外を操作可能か"),
     RESULT_SHOW(30, -1, false, "リザルトの表示"),
+    DIALOG_SHOW(40, -1, false, "ウィンドウダイアログを表示しているか"),
     PIECE_MOVE(100, -1, false, "駒が移動中"),
     LOOK_FREE(200, 200, false, "視線が自由"),
     LOOK_PIECE(201, 200, false, "駒に視線"),

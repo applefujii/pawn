@@ -2,6 +2,7 @@ package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class GameSetting {
@@ -29,7 +30,12 @@ public class GameSetting {
     }
 
     public void setAName(int no, String name) {
-        aName[no] = name;
+        if(Objects.nonNull(name)) {
+            String na = name.trim();
+            if(!na.isEmpty()) {
+                aName[no] = name;
+            }
+        }
     }
 
     public void setAColorNo(int no, int colorNo) {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.RandomXS128;
@@ -60,6 +61,7 @@ public class Pawn extends Game {
 		font = fontGenerator.generateFont(param);
 		random = new RandomXS128(System.currentTimeMillis());
 		manager = new AssetManager();
+		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, LOGICAL_WIDTH, LOGICAL_HEIGHT);

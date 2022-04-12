@@ -2,7 +2,6 @@ package com.apple.pawn.lwjgl3;
 
 import com.apple.pawn.Pawn;
 import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class Lwjgl3Launcher {
@@ -10,6 +9,7 @@ public class Lwjgl3Launcher {
 		Graphics.DisplayMode displayMode = Lwjgl3ApplicationConfiguration.getDisplayMode();
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("ポーン");
+		config.setWindowIcon("assets/dice_icon.png");
 
 		//---- 開発用
 		config.setWindowedMode(1280, 720);

@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
 	private int turnCount;
 	private String order;
 
+
 	//---- 他のクラス
 	private GameSetting gameSetting;				// ゲームの設定
 	private final PlayerManager playerManager;		// プレイヤー管理
@@ -137,6 +138,7 @@ public class GameScreen implements Screen {
 	public void initialize(final GameSetting setting) {
 		this.gameSetting = setting;
 		String[] name = gameSetting.getAName();
+		//Gdx.app.debug("fps", "name="+name);
 		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
 			playerManager.add(name[i], color[i]);
@@ -498,7 +500,17 @@ public class GameScreen implements Screen {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 				}
+				int[] pturn = gameSetting.getASquareNo();
+				String[] name = gameSetting.getAName();
+
+				for(int i=0 ; i<name.length ; i++) {
+					if(turnPlayer.getName() == name[i]){
+						pturn[i] = turnCount;
+					}
+					Gdx.app.debug("fps", name[i]+":"+pturn[i]);
+				}
 				//Gdx.app.debug("fps", turnPlayer.getName()+"が"+turnCount+"ターンでゴールした！");
+				//Gdx.app.debug("fps", "Aname="+gameSetting.getAName());
 				timerRap = timer;
 				sequenceNo++;
 			}

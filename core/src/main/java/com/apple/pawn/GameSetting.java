@@ -39,10 +39,16 @@ public class GameSetting {
     }
 
     public String[] getAName() {
+        //Gdx.app.debug("fps", "aName="+aName);
         return aName;
     }
 
     public int[] getAColorNo() {
         return aColorNo;
     }
+
+    public int[] getASquareNo() {
+        return aSquareNo;
+    }
+
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -59,6 +60,7 @@ public class GameScreen implements Screen {
 	private final float mapCameraWidth;
 	private int turnCount;
 	private String order;
+	private final Sprite cursor;
 
 	//---- 他のクラス
 	private GameSetting gameSetting;				// ゲームの設定
@@ -124,6 +126,7 @@ public class GameScreen implements Screen {
 		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
 		manager.load("assets/dice.png", Texture.class);
 		manager.load("assets/background.png", Texture.class);
+		manager.load("assets/cursor.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		dice.initialize(manager);
@@ -131,6 +134,9 @@ public class GameScreen implements Screen {
 		turnPlayerNo = -1;
 		ui.initialize(game);
 		result.initialize(playerManager);
+		cursor = new Sprite(manager.get("assets/cursor.png", Texture.class));
+		cursor.flip(false, true);
+		cursor.setCenter(Pawn.LOGICAL_WIDTH >> 1, Pawn.LOGICAL_HEIGHT >> 1);
 		//-- 参照セット
 		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
@@ -139,10 +145,11 @@ public class GameScreen implements Screen {
 		game.achievement.initialize(manager, ui);
 		//-- 作成
 		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsOperatingMethod(UI.OPERATING_METHOD, "操作説明欄"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
-		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+//		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);
@@ -154,7 +161,7 @@ public class GameScreen implements Screen {
 
 	public void initialize(final GameSetting setting) {
 		this.gameSetting = setting;
-		board.initialize(manager,setting.getStageNo());
+		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
 		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
@@ -231,6 +238,11 @@ public class GameScreen implements Screen {
 				zoom = 1.0f;
 				setCameraPositionToTurnPlayer();
 			}
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
+		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Q]キーで詳細マップ\n[Space]キーで戻る");
+		} else {
+			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("上下キーで選択\n[Space]キーで決定");
 		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
@@ -241,7 +253,7 @@ public class GameScreen implements Screen {
 			//-- その他の動作
 			playerManager.update();
 			dice.update();
-			board.update();
+			board.update(this);
 			if(FlagManagement.is(Flag.RESULT_SHOW)) result.update();
 		}
 
@@ -311,6 +323,11 @@ public class GameScreen implements Screen {
 			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
 			batch.end();
 		}
+		if(FlagManagement.is(Flag.LOOK_FREE)) {
+			batch.begin();
+			cursor.draw(batch);
+			batch.end();
+		}
 	}
 
 	/**
@@ -352,6 +369,7 @@ public class GameScreen implements Screen {
 		manager.unload("assets/ui_atlas.txt");
 		manager.unload("assets/dice.png");
 		manager.unload("assets/background.png");
+		manager.unload("assets/cursor.png");
 	}
 
 	private int turnStandby() {
@@ -413,13 +431,13 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
 					zoom = 1.0f;
 					FlagManagement.set(Flag.LOOK_PIECE);
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("カーソルを合わせると情報が確認できます");
 					freeCamera();
 					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 						zoom = mapCameraZoom;
@@ -429,7 +447,7 @@ public class GameScreen implements Screen {
 						FlagManagement.set(Flag.LOOK_MAP);
 					}
 				} else if (FlagManagement.is(Flag.LOOK_MAP)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで詳細マップ");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全体マップ");
 					if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 						zoom = 1.0f;
 						setCameraPositionToTurnPlayer();
@@ -618,5 +636,13 @@ public class GameScreen implements Screen {
 
 	public int getTurnCount() {
 		return turnCount;
+	}
+
+	public Vector3 getCameraPos() {
+		return camera.position;
+	}
+
+	public void setUIPartsExplanation(String text) {
+		((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(text);
 	}
 }

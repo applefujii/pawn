@@ -143,12 +143,27 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
             }
         }
 
+        String osName = System.getProperty("os.name").toLowerCase();
+        Gdx.app.debug("info", osName);
+
         try {
             Robot rb = new Robot();
-            rb.keyPress(KeyEvent.VK_ALT);
-            rb.keyPress(244);
-            rb.keyRelease(244);
-            rb.keyRelease(KeyEvent.VK_ALT);
+            if(osName.startsWith("windows")) {
+                rb.keyPress(KeyEvent.VK_ALT);
+                rb.keyPress(244);
+                rb.keyRelease(244);
+                rb.keyRelease(KeyEvent.VK_ALT);
+            }
+            if(osName.startsWith("linux")) {
+                rb.keyPress(KeyEvent.VK_CONTROL);
+                rb.keyPress(KeyEvent.VK_SPACE);
+                rb.keyRelease(KeyEvent.VK_SPACE);
+                rb.keyRelease(KeyEvent.VK_CONTROL);
+            }
+            if(osName.startsWith("mac")) {
+                rb.keyPress(102);
+                rb.keyRelease(102);
+            }
         }catch (AWTException e) {
             e.printStackTrace();
         }

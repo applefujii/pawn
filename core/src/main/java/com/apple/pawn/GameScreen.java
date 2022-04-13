@@ -437,7 +437,7 @@ public class GameScreen implements Screen {
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("カーソルを合わせると情報が確認できます");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("カーソルを合わせるとマスの情報が確認できます");
 					freeCamera();
 					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
 						zoom = mapCameraZoom;

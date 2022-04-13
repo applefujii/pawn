@@ -304,7 +304,7 @@ public class TitleScreen implements Screen {
 	private int startSetting2Sequence() {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
-		// ※名前の入力
+		// 名前の入力
 		if (sequenceSubNo == 1 && !FlagManagement.is(Flag.DIALOG_SHOW)) {
 			if (dialogNo <= playerNo) {
 				FlagManagement.set(Flag.DIALOG_SHOW);
@@ -313,14 +313,14 @@ public class TitleScreen implements Screen {
 					@Override
 					public void input(String text) {
 						gameSetting.setAName(dialogNo - 1, text);
-						Gdx.app.debug("info", text);
+//						Gdx.app.debug("info", text);
 						FlagManagement.fold(Flag.DIALOG_SHOW);
 						dialogNo++;
 					}
 
 					@Override
 					public void canceled() {
-						Gdx.app.debug("info", "canceled");
+//						Gdx.app.debug("info", "canceled");
 						FlagManagement.fold(Flag.DIALOG_SHOW);
 						sequenceSubNo = 5;
 					}

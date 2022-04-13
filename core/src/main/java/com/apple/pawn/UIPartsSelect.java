@@ -31,7 +31,9 @@ public class UIPartsSelect extends UIParts {
     public int update() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) selectUp();
         if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) selectDown();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) return confirm();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.ENTER) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_ENTER) ) return confirm();
         return -2;
     }
 

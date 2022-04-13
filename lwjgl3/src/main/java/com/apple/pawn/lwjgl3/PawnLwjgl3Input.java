@@ -1,10 +1,16 @@
 package com.apple.pawn.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.DefaultLwjgl3Input;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Robot;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
@@ -44,6 +50,20 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
                 final JTextField textField = new JTextField(20);
                 textField.setText(text);
                 textField.setAlignmentX(0.0f);
+                textField.addFocusListener(new FocusListener(){
+                    @Override
+                    public void focusGained(FocusEvent fe){
+                        try {
+                            textField.getInputContext().setCompositionEnabled(true);
+                        } catch(UnsupportedOperationException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void focusLost(FocusEvent fe){
+                        kanjiEnd(textField.getText());
+                    }
+                });
                 textPanel.add(textField);
 
                 final JLabel placeholderLabel = new JLabel(hint);
@@ -113,5 +133,24 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
 
             }
         });
+    }
+
+    private static void kanjiEnd(String s) {
+        if(s == null) return;
+        if (s.length()>0) {
+            if (s.charAt(s.length()-1) <= 0x127) {
+                return;
+            }
+        }
+
+        try {
+            Robot rb = new Robot();
+            rb.keyPress(KeyEvent.VK_ALT);
+            rb.keyPress(244);
+            rb.keyRelease(244);
+            rb.keyRelease(KeyEvent.VK_ALT);
+        }catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
 }

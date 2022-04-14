@@ -550,6 +550,7 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
+			fileIO.delete();
 			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
 			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
 			while(playerIterator.hasNext()) {

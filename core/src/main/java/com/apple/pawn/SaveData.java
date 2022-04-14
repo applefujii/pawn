@@ -16,6 +16,8 @@ public class SaveData {
     @JsonProperty
     public float timer;
     @JsonProperty
+    public int mapNo;
+    @JsonProperty
     public int goalNo;
     @JsonProperty
     public int sequenceNo;					// シークエンス番号
@@ -36,8 +38,9 @@ public class SaveData {
         this.aPlayer = aPlayer;
     }
 
-    public void setGameState(float timer, int goalNo, int sequenceNo, int turnPlayerNo) {
+    public void setGameState(float timer, int mapNo, int goalNo, int sequenceNo, int turnPlayerNo) {
         this.timer = timer;
+        this.mapNo = mapNo;
         this.goalNo = goalNo;
         this.sequenceNo = sequenceNo;
         this.turnPlayerNo = turnPlayerNo;

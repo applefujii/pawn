@@ -2,12 +2,14 @@ package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +21,7 @@ public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
     public static final int BACK_HEIGHT = 2700;
     public static final Array<Vector2> MAP_COORDINATE;
-    private static final String MAPDATA_NAME[] = {
+    private static final String MAP_DATA_NAME[] = {
             "map.jsonc",
             "map2.jsonc",
             "map3.jsonc"
@@ -27,6 +29,7 @@ public class BoardSurface {
 
     private Sprite backSprite;
     private final Array<Square> aSquare;
+    private final Vector2 cameraPos;
     private int mapNo;
 
     static {
@@ -43,14 +46,15 @@ public class BoardSurface {
 
     public BoardSurface() {
         aSquare = new Array<>();
+        cameraPos = new Vector2();
     }
 
-    public void initialize(AssetManager manager, int mapNo) {
+    public void initialize(AssetManager manager, int mapNo, BitmapFont font) {
 
         this.mapNo = mapNo;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+MAPDATA_NAME[mapNo]).file());
+            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ MAP_DATA_NAME[mapNo]).file());
             int count = 0;
             for(JsonNode mJ : mapJson) {
                 int add = mJ.path("address").asInt();
@@ -71,13 +75,22 @@ public class BoardSurface {
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
-            square.initialize(manager, aSquare.size - 1);
+            square.initialize(manager, aSquare.size - 1, font);
         }
     }
 
-    public void update() { }
+    public void update(GameScreen gameScreen) {
+        if(FlagManagement.is(Flag.LOOK_FREE)) {
+            cameraPos.set(gameScreen.getCameraPos().x, gameScreen.getCameraPos().y);
+            Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+            while (squareIterator.hasNext()) {
+                Square square = squareIterator.next();
+                 square.update(gameScreen, cameraPos);
+            }
+        }
+    }
 
-    public void draw (Batch batch, ShapeRenderer renderer) {
+    public void draw (SpriteBatch batch, ShapeRenderer renderer) {
         batch.begin();
         batch.disableBlending();
 
@@ -90,6 +103,13 @@ public class BoardSurface {
         }
 
         batch.enableBlending();
+
+        squareIterator = new Array.ArrayIterator<>(aSquare);
+        while(squareIterator.hasNext()) {
+            Square square = squareIterator.next();
+            square.drawFont(batch);
+        }
+
         batch.end();
     }
 

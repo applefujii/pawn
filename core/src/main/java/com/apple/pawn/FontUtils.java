@@ -10,6 +10,7 @@ public class FontUtils {
         Array<String> fontSplits = new Array<>();
         String[] splits = Pattern.compile("\\n").split(text);
         for (String split : splits) {
+            if(split.isEmpty()) split = " ";
             int i = 0;
             for(int j = 1; j <= split.length(); j++) {
                 float fWidth = fontCache.setText(split.substring(i, j), 0, 0).width;

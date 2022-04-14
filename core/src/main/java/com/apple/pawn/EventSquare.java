@@ -21,6 +21,8 @@ public class EventSquare extends Square {
 
     @Override
     public void drawFont(SpriteBatch batch) {
-        font.draw(batch, document, position.x + 16, position.y + 16);
+        if(!FlagManagement.is(Flag.LOOK_MAP)) {
+            font.draw(batch, document, position.x + 16, position.y + 16);
+        }
     }
 }

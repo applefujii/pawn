@@ -225,19 +225,6 @@ public class GameScreen implements Screen {
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-				zoom -= 0.1;
-				if(zoom < 1) zoom=1.0f;
-				camera.zoom = zoom;
-			}
-			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-				zoom += 0.1;
-				camera.zoom = zoom;
-			}
-			if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-				zoom = 1.0f;
-				setCameraPositionToTurnPlayer();
-			}
 			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
 		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
 			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Q]キーで詳細マップ\n[Space]キーで戻る");
@@ -283,14 +270,7 @@ public class GameScreen implements Screen {
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		ScreenUtils.clear(0, 255, 0, 1);
-//		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//-- 論理表示領域を黒で塗りつぶし
-//		renderer.begin(ShapeRenderer.ShapeType.Filled);
-//		renderer.setColor(0,0,0,1);
-//		renderer.rect(screenOrigin.x, screenOrigin.y,game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT);
-//		renderer.end();
+		ScreenUtils.clear(0, 0, 0, 1);
 
 		//------ 描画
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -542,7 +522,7 @@ public class GameScreen implements Screen {
 				if(turnPlayer.isGoal()) {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-					ui.add(new UIPartsPopup("test", manager, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 4));
+					ui.add(new UIPartsPopup("test", manager, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
 					sequenceNo++;
 				}
 				timerRap = timer;
@@ -594,6 +574,9 @@ public class GameScreen implements Screen {
 		camera.zoom = zoom;
 	}
 
+	/**
+	 * Flag.LOOK_FREEが立っているときのカメラの操作
+	 */
 	private void freeCamera() {
 		float m = 6; //通常時の速さ(px/f)
 		float x = 0;
@@ -607,8 +590,30 @@ public class GameScreen implements Screen {
 		x = median(x, -camera.position.x, BoardSurface.MAP_WIDTH - camera.position.x);
 		y = median(y, -camera.position.y, BoardSurface.MAP_HEIGHT - camera.position.y);
 		if(x != 0 || y != 0) camera.translate(x, y);
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			zoom -= 0.1;
+			if(zoom < 1) zoom=1.0f;
+			camera.zoom = zoom;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			zoom += 0.1;
+			if(zoom > 5) zoom = 5.0f;
+			camera.zoom = zoom;
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+			zoom = 1.0f;
+			setCameraPositionToTurnPlayer();
+		}
 	}
 
+	/**
+	 * 三つの値の中央値を求めるメソッド
+	 *
+	 * @param a float
+	 * @param b float
+	 * @param c float
+	 * @return a,b,cの中央値float
+	 */
 	private float median(float a, float b, float c) {
 		int n = 0;
 		if(a < b) n++;
@@ -618,7 +623,7 @@ public class GameScreen implements Screen {
 		//(a<b<c)または(a>b>c)の場合
 		if(n == 1) return b;
 		//(a>b<c, n=0)または(a<b>c, n=2)の場合
-		if(n == 0) return Math.min(a, c);
+		else if(n == 0) return Math.min(a, c);
 		else return Math.max(a, c);
 	}
 

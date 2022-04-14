@@ -53,8 +53,10 @@ public class TaskSquare extends Square {
 
     @Override
     public void drawFont(SpriteBatch batch) {
-        for(int i = 0; i < drawDoc.size; i++) {
-            font.draw(batch, drawDoc.get(i), position.x + 16, position.y + 16 + (18 * i));
+        if(!FlagManagement.is(Flag.LOOK_MAP)) {
+            for (int i = 0; i < drawDoc.size; i++) {
+                font.draw(batch, drawDoc.get(i), position.x + 16, position.y + 16 + (18 * i));
+            }
         }
     }
 }

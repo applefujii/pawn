@@ -36,6 +36,8 @@ public class UIPartsPopup extends UIParts{
         charsNoRow = (width-px/2)/strWidth;
         String[] splits = Pattern.compile("\\n").split(text);
         for(String split : splits) {
+            // 連続改行できるように、空文字列だったらスペースにする。
+            if(split.isEmpty()) split = " ";
             Matcher row = Pattern.compile("[\\s\\S]{1,"+charsNoRow+"}").matcher(split);
             while(row.find()) {
                 stringRow.add(row.group());

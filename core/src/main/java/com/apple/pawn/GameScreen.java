@@ -179,7 +179,7 @@ public class GameScreen implements Screen {
 	}
 
 	public void load(final SaveData sd) {
-		board.initialize(manager,sd.mapNo);
+		board.initialize(manager,sd.mapNo,font);
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;
 		goalNo = sd.goalNo;

@@ -129,7 +129,7 @@ public class Achievement {
                             break;
                     }
                     if(isGet) {
-                        ui.add(new UIPartsPopup("achievement", manager, 50, 50, 300, 100, rs2.getString("title") + "\n" + rs2.getString("detail"), 10));
+                        ui.add(new UIPartsPopup("achievement", manager, 50, 50, 300, 100, rs2.getString("title") + "\n\n" + rs2.getString("detail"), 10));
                         stUpdateAchievement.setTimestamp(1, ts);
                         stUpdateAchievement.setInt(2, id);
                         stUpdateAchievement.executeUpdate();

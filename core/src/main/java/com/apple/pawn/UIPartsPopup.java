@@ -10,9 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class UIPartsPopup extends UIParts{
 
     private String text;

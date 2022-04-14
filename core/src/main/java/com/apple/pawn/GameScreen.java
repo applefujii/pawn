@@ -179,6 +179,7 @@ public class GameScreen implements Screen {
 	}
 
 	public void load(final SaveData sd) {
+		board.initialize(manager,sd.mapNo,font);
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;
 		goalNo = sd.goalNo;
@@ -210,7 +211,7 @@ public class GameScreen implements Screen {
 			game.setScreen(new TitleScreen(game));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
-			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
+			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo);
 			fileIO.save();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
@@ -438,7 +439,7 @@ public class GameScreen implements Screen {
 		}
 
 		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
-			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
+			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo);
 			fileIO.save();
 			sequenceNo = Sequence.ACTION_SELECT.no;
 		}
@@ -547,6 +548,7 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
+			fileIO.delete();
 			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
 			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
 			while(playerIterator.hasNext()) {

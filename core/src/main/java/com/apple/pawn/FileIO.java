@@ -57,6 +57,16 @@ public class FileIO {
         return true;
     }
 
+    public void delete() {
+        File file = new File("./save/savedata1.sav");
+        file.delete();
+    }
+
+    public boolean isExistsSavedata() {
+        File file = new File("./save/savedata1.sav");
+        return file.exists();
+    }
+
     public SaveData getSaveData() {
         return saveData;
     }

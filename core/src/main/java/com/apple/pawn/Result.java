@@ -37,13 +37,18 @@ public class Result extends UIParts {
 //    private Player player;
     private GameScreen gamescreen;
     private int goalTurn;
+    int[] aSquareNo;
 
-
-    public Result(String name, int x, int y, int width, int height,final Pawn game) {
+    public Result(String name, int x, int y, int width, int height,final Pawn game,int[] aSquareNo) {
         super(name,x,y,width,height);
         font = game.font;
+        this.aSquareNo = new int[6];
+        //this.aSquareNo[0] = 0;
+        Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
+        for(int i=0 ; i<aSquareNo.length ; i++) {
+            this.aSquareNo[i] = aSquareNo[i];
+        }
         //playerManager = new PlayerManager();
-
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
         spPiece = new Sprite[6];
         for(int i=0; i<6; i++){
@@ -124,19 +129,21 @@ public class Result extends UIParts {
         //font.draw(batch,gamescreen.getTurnCount()+"ターン", 320, 130);
         //goalTurn = gamescreen.getTurnCount();
         //font.draw(batch, goalTurn+"ターン", 320, 130);
-        font.draw(batch, "ターン数", 320, 130);
+        font.draw(batch, aSquareNo[0]+"ターン", 320, 130);
+        //font.draw(batch, "ターン数", 320, 130);
         //player.getName()
         //"あいうえお"
 
-        int j=80,turn=130;
+        int j=80,k=130;
         for(int i=0; i<4; i++){
             Player player = playerIterator.next();
             spPiece[i].setPosition(80, j);
             spPiece[i].draw(batch);
             //font.draw(batch, player.getName(), 200, turn);
-            font.draw(batch, i+1+"P", 200, turn);
+            font.draw(batch, i+1+"P", 200, k);
+            font.draw(batch, aSquareNo[i]+"ターン", 320, k);
             j += 140;
-            turn += 140;
+            k += 140;
         }
 
         batch.end();

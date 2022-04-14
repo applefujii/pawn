@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
-
+	int[] aSquareNo;
 
 	/**
 	 * コンストラクタ 初期化、読み込み
@@ -500,14 +500,14 @@ public class GameScreen implements Screen {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 				}
-				int[] pturn = gameSetting.getASquareNo();
+				aSquareNo = gameSetting.getASquareNo();
 				String[] name = gameSetting.getAName();
 
 				for(int i=0 ; i<name.length ; i++) {
 					if(turnPlayer.getName() == name[i]){
-						pturn[i] = turnCount;
+						aSquareNo[i] = turnCount;
 					}
-					Gdx.app.debug("fps", name[i]+":"+pturn[i]);
+					Gdx.app.debug("fps", name[i]+":"+aSquareNo[i]);
 				}
 				//Gdx.app.debug("fps", turnPlayer.getName()+"が"+turnCount+"ターンでゴールした！");
 				//Gdx.app.debug("fps", "Aname="+gameSetting.getAName());
@@ -543,7 +543,8 @@ public class GameScreen implements Screen {
 			FlagManagement.set(Flag.RESULT_SHOW);
 			int select = ui.getSelect();
 			if(select != -1 ) {
-				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game);
+				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
+				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game,aSquareNo);
 				result.initialize(playerManager);
 				ui.add(result);
 			}

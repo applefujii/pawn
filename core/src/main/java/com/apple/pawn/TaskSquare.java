@@ -1,19 +1,19 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TaskSquare extends Square {
     private final String doc;
-    private final Array<String> drawDoc;
+    private Array<String> drawDoc;
 
     public TaskSquare(Vector2 coo, int type, int count, String document, int move, int back) {
         super(coo, type, count);
@@ -26,26 +26,24 @@ public class TaskSquare extends Square {
     @Override
     public void initialize(AssetManager manager, int size, BitmapFont font) {
         super.initialize(manager, size, font);
+        BitmapFontCache fontCache = font.getCache();
         move = Math.min(move, size - count);
         back = Math.min(back, count);
         document = doc + "\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
         uiDoc = uiDoc + "\n" + document;
         if(Objects.nonNull(doc)) {
-            int charsNoRow = (SQUARE_WIDTH - 32) / 18;
             int charsNoCol = (SQUARE_HEIGHT - 32) / 18;
-            String[] splits = Pattern.compile("\\n").split(doc);
-            for (String split : splits) {
-                Matcher row = Pattern.compile("[\\s\\S]{1," + charsNoRow + "}").matcher(split);
-                while (row.find()) {
-                    drawDoc.add(row.group());
-                }
-            }
+            drawDoc = FontUtils.fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
             if (drawDoc.size > charsNoCol - 2) {
                 drawDoc.setSize(charsNoCol - 2);
                 String peek = drawDoc.peek();
-                if (peek.length() >= charsNoRow) peek = peek.replaceFirst(".$", "...");
-                else peek += "...";
-                drawDoc.insert(charsNoCol - 3, peek);
+                int i = peek.length() - 1;
+                while(i > 0) {
+                    float fWidth = fontCache.setText(peek.substring(0, i), 0, 0).width;
+                    if(fWidth <= SQUARE_WIDTH - 32) break;
+                    i--;
+                }
+                drawDoc.insert(charsNoCol - 3, peek.substring(0, i) + "...");
             }
         }
         drawDoc.add("成功で"+move+"マス進む", "失敗で"+back+"マス戻る");

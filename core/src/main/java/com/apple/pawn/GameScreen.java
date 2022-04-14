@@ -142,14 +142,14 @@ public class GameScreen implements Screen {
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
-		game.achievement.initialize(manager, ui);
+		game.achievement.initialize(manager, ui, font);
 		//-- 作成
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, font, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		ui.add(new UIPartsOperatingMethod(UI.OPERATING_METHOD, "操作説明欄"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
-//		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);
@@ -522,7 +522,7 @@ public class GameScreen implements Screen {
 				if(turnPlayer.isGoal()) {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-					ui.add(new UIPartsPopup("test", manager, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
+					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
 					sequenceNo++;
 				}
 				timerRap = timer;

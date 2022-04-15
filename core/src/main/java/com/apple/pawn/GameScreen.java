@@ -283,7 +283,7 @@ public class GameScreen implements Screen {
 		renderer.end();
 
 		//------ メイン描画
-		board.draw(batch, renderer);
+		board.draw(batch);
 		playerManager.draw(batch, renderer);
 		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 

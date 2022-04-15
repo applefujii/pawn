@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class UIPartsExplanation extends UIParts {
 
     private Array<String> stringRow;
+    private String explanation;
     private final int strHeight = 18;
     private final BitmapFontCache fontCache;
 
@@ -28,6 +29,7 @@ public class UIPartsExplanation extends UIParts {
     public UIPartsExplanation(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, String expl) {
         super(name, x, y, width, height);
         stringRow = new Array<>();
+        explanation = "";
         fontCache = font.getCache();
         sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("explanation");
         sprite.flip(false, true);
@@ -43,11 +45,6 @@ public class UIPartsExplanation extends UIParts {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(0.8f,0.8f,0.8f,1);
-//        renderer.box(x,y,0,width,height,0);
-//        renderer.end();
-
         batch.begin();
         sprite.draw(batch);
         for(int i = 0; i < stringRow.size; i++) {
@@ -59,6 +56,9 @@ public class UIPartsExplanation extends UIParts {
     public void dispose () { }
 
     public void setExplanation(String expl) {
-        stringRow = FontUtils.fontSplit(expl, width - (px * 2), fontCache);
+        if(!explanation.equals(expl)) {
+            explanation = expl;
+            stringRow = FontUtils.fontSplit(expl, width - (px * 2), fontCache);
+        }
     }
 }

@@ -3,9 +3,18 @@ package com.apple.pawn;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class PawnUtils {
+
+    /**
+     *
+     * @param text String 表示させるテキスト
+     * @param width int 表示させる幅
+     * @param fontCache BitmapFontCache 表示する際のBitmapFontのBitmapFontCache
+     * @return Array<String> 改行に対応しつつ表示幅内に収まるように分割されたテキスト
+     */
     public static Array<String> fontSplit(String text, int width, BitmapFontCache fontCache) {
         Array<String> fontSplits = new Array<>();
         String[] splits = Pattern.compile("\\n").split(text);
@@ -25,23 +34,17 @@ public class PawnUtils {
     }
 
     /**
-     * 三つの値の中央値を求めるメソッド
+     * 引数の数字の中央値を求める
      *
-     * @param a float
-     * @param b float
-     * @param c float
-     * @return a,b,cの中央値float
+     * @param values float[] 中央値を求めたい数値たち
+     * @return float 中央値
      */
-    public static float median(float a, float b, float c) {
-        int n = 0;
-        if(a < b) n++;
-        else if(a == b) return a;
-        if(b > c) n++;
-        else if(b == c) return b;
-        //(a<b<c)または(a>b>c)の場合
-        if(n == 1) return b;
-            //(a>b<c, n=0)または(a<b>c, n=2)の場合
-        else if(n == 0) return Math.min(a, c);
-        else return Math.max(a, c);
+    public static float median(float... values) {
+        Arrays.sort(values);
+        int size = values.length;
+        int index = (int) Math.floor((double) size / 2);
+        float target = values[index];
+        if(size % 2 == 0) target = (values[index] + values[index - 1]) / 2;
+        return target;
     }
 }

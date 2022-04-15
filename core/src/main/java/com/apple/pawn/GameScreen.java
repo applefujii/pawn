@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import static com.apple.pawn.PawnUtils.median;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -12,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -594,7 +595,7 @@ public class GameScreen implements Screen {
 		if(x != 0 || y != 0) camera.translate(x, y);
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			zoom -= 0.1;
-			if(zoom < 1) zoom=1.0f;
+			if(zoom < 1) zoom = 1.0f;
 			camera.zoom = zoom;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -606,27 +607,6 @@ public class GameScreen implements Screen {
 			zoom = 1.0f;
 			setCameraPositionToTurnPlayer();
 		}
-	}
-
-	/**
-	 * 三つの値の中央値を求めるメソッド
-	 *
-	 * @param a float
-	 * @param b float
-	 * @param c float
-	 * @return a,b,cの中央値float
-	 */
-	private float median(float a, float b, float c) {
-		int n = 0;
-		if(a < b) n++;
-		else if(a == b) return a;
-		if(b > c) n++;
-		else if(b == c) return b;
-		//(a<b<c)または(a>b>c)の場合
-		if(n == 1) return b;
-		//(a>b<c, n=0)または(a<b>c, n=2)の場合
-		else if(n == 0) return Math.min(a, c);
-		else return Math.max(a, c);
 	}
 
 	public AssetManager getManager() {

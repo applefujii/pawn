@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
+import static com.apple.pawn.PawnUtils.fontSplit;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,10 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author fujii
@@ -58,7 +55,7 @@ public class UIPartsExplanation extends UIParts {
     public void setExplanation(String expl) {
         if(!explanation.equals(expl)) {
             explanation = expl;
-            stringRow = FontUtils.fontSplit(expl, width - (px * 2), fontCache);
+            stringRow = fontSplit(expl, width - (px * 2), fontCache);
         }
     }
 }

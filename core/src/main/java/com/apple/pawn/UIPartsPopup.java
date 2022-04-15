@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import static com.apple.pawn.PawnUtils.fontSplit;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -12,9 +14,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class UIPartsPopup extends UIParts{
 
-    private String text;
     private final Array<String> stringRow;
-    private final int strWidth = 18;
     private final int strHeight = 18;
     private float time_show;
     private float time_fadein = 0.5f, time_fadeout = 0.5f;
@@ -26,9 +26,8 @@ public class UIPartsPopup extends UIParts{
 
     public UIPartsPopup(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, String text, float time_show) {
         super(name, x, y, width, height);
-        this.text = text;
         this.time_show = time_show;
-        stringRow = FontUtils.fontSplit(text, width - (px * 2), font.getCache());
+        stringRow = fontSplit(text, width - (px * 2), font.getCache());
         sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("popup");
         sprite.flip(false, true);
     }

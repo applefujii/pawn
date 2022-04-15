@@ -1,15 +1,15 @@
 package com.apple.pawn;
 
+import static com.apple.pawn.PawnUtils.fontSplit;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class TaskSquare extends Square {
     private final String doc;
@@ -33,7 +33,7 @@ public class TaskSquare extends Square {
         uiDoc = uiDoc + "\n" + document;
         if(Objects.nonNull(doc)) {
             int charsNoCol = (SQUARE_HEIGHT - 32) / 18;
-            drawDoc = FontUtils.fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
+            drawDoc = fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
             if (drawDoc.size > charsNoCol - 2) {
                 drawDoc.setSize(charsNoCol - 2);
                 String peek = drawDoc.peek();

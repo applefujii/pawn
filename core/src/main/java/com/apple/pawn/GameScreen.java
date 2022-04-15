@@ -66,6 +66,7 @@ public class GameScreen implements Screen {
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
 	int[] aSquareNo;
+	private int playerNo;
 
 	/**
 	 * コンストラクタ 初期化、読み込み
@@ -501,6 +502,7 @@ public class GameScreen implements Screen {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 				}
 				aSquareNo = gameSetting.getASquareNo();
+				playerNo = gameSetting.getPlayerNo();
 				String[] name = gameSetting.getAName();
 
 				for(int i=0 ; i<name.length ; i++) {
@@ -544,7 +546,7 @@ public class GameScreen implements Screen {
 			int select = ui.getSelect();
 			if(select != -1 ) {
 				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
-				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game,aSquareNo);
+				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game,aSquareNo,playerNo);
 				result.initialize(playerManager);
 				ui.add(result);
 			}

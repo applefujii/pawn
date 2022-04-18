@@ -50,6 +50,7 @@ public class TitleScreen implements Screen {
 	private final UI ui;							// UI
 	private final FileIO fileIO;			// セーブファイルの読み書き
 
+	private final ParticleManager particle;
 	private final GameSetting gameSetting;
 
 	private final AssetManager manager;
@@ -93,6 +94,9 @@ public class TitleScreen implements Screen {
 		ui.initialize(game);
 		fileIO = new FileIO();
 
+		particle = new ParticleManager();
+		particle.startParticle(30);
+		particle.skipFrame(60*10);
 		gameSetting = new GameSetting();
 		playerNo = 6;
 		rad = 0;
@@ -145,6 +149,7 @@ public class TitleScreen implements Screen {
 	private void update() {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
+		particle.update(game.getTimer());
 		manager.update();
 
 		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
@@ -170,6 +175,14 @@ public class TitleScreen implements Screen {
 		renderer.rect(screenOrigin.x, screenOrigin.y, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
 		renderer.end();
 
+		uiCamera.update();
+		batch.setProjectionMatrix(uiCamera.combined);
+		renderer.setProjectionMatrix(uiCamera.combined);
+		particle.draw(batch, renderer);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+		renderer.setProjectionMatrix(camera.combined);
+
 		//------ 描画
 		if(sequenceNo == 1  ||  sequenceNo == 2 || sequenceNo == 3) {
 			int px= Pawn.LOGICAL_WIDTH >> 1, py= Pawn.LOGICAL_HEIGHT >> 1;
@@ -191,6 +204,7 @@ public class TitleScreen implements Screen {
 		} else if(sequenceNo == 4) {
 
 		}
+
 
 		//------ ui描画
 		uiCamera.update();
@@ -238,7 +252,9 @@ public class TitleScreen implements Screen {
 	 * dispose 解放
 	 */
 	@Override
-	public void dispose () { }
+	public void dispose () {
+		particle.dispose();
+	}
 
 	private int homeSequence() {
 		rad += SPEED;

@@ -46,7 +46,7 @@ public class Result extends UIParts {
         this.aSquareNo = new int[6];
         this.playerNo = playerNo;
         //this.aSquareNo[0] = 0;
-        Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
+        //Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
         for(int i=0 ; i<aSquareNo.length ; i++) {
             this.aSquareNo[i] = aSquareNo[i];
         }
@@ -120,6 +120,8 @@ public class Result extends UIParts {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(1.0f,0.8f,0.8f,1);
         renderer.box(x,y,0,width,height,0);
+        //renderer.setColor(0,0,255,0);
+        //renderer.box(50,50,0,120,100,0);
         renderer.end();
 
         batch.begin();
@@ -138,6 +140,7 @@ public class Result extends UIParts {
         //"あいうえお"
         font.draw(batch, "名前", 200, 60);
         font.draw(batch, "ターン数", 320, 60);
+        //font.draw(batch, "何ターン目にどのマスに止まったか", 440, 60);
         int j=70,k=110;
         for(int i=0; i<playerNo; i++){
             Player player = playerIterator.next();

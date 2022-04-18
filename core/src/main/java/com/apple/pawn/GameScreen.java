@@ -509,7 +509,7 @@ public class GameScreen implements Screen {
 					if(turnPlayer.getName() == name[i]){
 						aSquareNo[i] = turnCount;
 					}
-					Gdx.app.debug("fps", name[i]+":"+aSquareNo[i]);
+					//Gdx.app.debug("fps", name[i]+":"+aSquareNo[i]);
 				}
 				//Gdx.app.debug("fps", turnPlayer.getName()+"が"+turnCount+"ターンでゴールした！");
 				//Gdx.app.debug("fps", "Aname="+gameSetting.getAName());

@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.IntSupplier;
 
 /**
@@ -180,6 +181,8 @@ public class GameScreen implements Screen {
 	}
 
 	public void load(final SaveData sd) {
+		gameSetting = new GameSetting();
+		gameSetting.setStageNo(sd.mapNo);
 		board.initialize(manager,sd.mapNo,font);
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;

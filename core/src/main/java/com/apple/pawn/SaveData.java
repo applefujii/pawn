@@ -1,11 +1,7 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author fujii
@@ -30,6 +26,15 @@ public class SaveData {
     public SaveData() {
     }
 
+    public SaveData(SaveData sd) {
+        timer = sd.timer;
+        mapNo = sd.mapNo;
+        goalNo = sd.goalNo;
+        sequenceNo = sd.sequenceNo;
+        turnPlayerNo = sd.turnPlayerNo;
+        aPlayer = new Array<>(sd.aPlayer);
+    }
+
     public SaveData(float timer, int goalNo, int sequenceNo, int turnPlayerNo, Array<Player> aPlayer) {
         this.timer = timer;
         this.goalNo = goalNo;
@@ -46,4 +51,7 @@ public class SaveData {
         this.turnPlayerNo = turnPlayerNo;
     }
 
+    public SaveData cpy() {
+        return new SaveData(this);
+    }
 }

@@ -9,11 +9,12 @@ import java.util.regex.Pattern;
 public class PawnUtils {
 
     /**
+     * テキストを改行コードや実際の表示幅を用いて領域内に収めるよう改行させる
      *
      * @param text String 表示させるテキスト
-     * @param width int 表示させる幅
+     * @param width int 領域の幅
      * @param fontCache BitmapFontCache 表示する際のBitmapFontのBitmapFontCache
-     * @return Array<String> 改行に対応しつつ表示幅内に収まるように分割されたテキスト
+     * @return Array<String> 改行に対応しつつ領域内に収まるように分割されたテキスト
      */
     public static Array<String> fontSplit(String text, int width, BitmapFontCache fontCache) {
         Array<String> fontSplits = new Array<>();
@@ -42,7 +43,7 @@ public class PawnUtils {
     public static float median(float... values) {
         Arrays.sort(values);
         int size = values.length;
-        int index = (int) Math.floor((double) size / 2);
+        int index = size >> 1;
         float target = values[index];
         if(size % 2 == 0) target = (values[index] + values[index - 1]) / 2;
         return target;

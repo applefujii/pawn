@@ -35,11 +35,11 @@ public class TaskSquare extends Square {
             int charsNoCol = (SQUARE_HEIGHT - 32) / 18;
             drawDoc = fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
             if (drawDoc.size > charsNoCol - 2) {
-                drawDoc.setSize(charsNoCol - 2);
+                drawDoc.setSize(charsNoCol - 3);
                 String peek = drawDoc.peek();
                 int i = peek.length() - 1;
                 while(i > 0) {
-                    float fWidth = fontCache.setText(peek.substring(0, i), 0, 0).width;
+                    float fWidth = fontCache.setText(peek.substring(0, i) + "...", 0, 0).width;
                     if(fWidth <= SQUARE_WIDTH - 32) break;
                     i--;
                 }

@@ -63,6 +63,7 @@ public class GameScreen implements Screen {
 	private int turnCount;
 	private String order;
 	private final Sprite cursor;
+	private boolean isLoad;					// 続きからのゲームか
 
 	//---- 他のクラス
 	private GameSetting gameSetting;				// ゲームの設定
@@ -96,6 +97,7 @@ public class GameScreen implements Screen {
 		mapCameraHeight = (float) BoardSurface.MAP_HEIGHT / 2;
 		mapCameraWidth = (float) BoardSurface.MAP_WIDTH / 2;
 		turnCount = 1;
+		isLoad = false;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -181,6 +183,7 @@ public class GameScreen implements Screen {
 	}
 
 	public void load(final SaveData sd) {
+		isLoad = true;
 		gameSetting = new GameSetting();
 		gameSetting.setStageNo(sd.mapNo);
 		board.initialize(manager,sd.mapNo,font);
@@ -539,7 +542,7 @@ public class GameScreen implements Screen {
 			if(timer-timerRap >= 0.5f) sequenceNo+=2;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +4) {
-			if(timer-timerRap >= 5.0f) sequenceNo++;
+			if(timer-timerRap >= 3.0f) sequenceNo++;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +5) {
 			// ゲーム情報の更新
@@ -553,7 +556,9 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
-			fileIO.delete();
+			if(isLoad) {
+				fileIO.delete();
+			}
 			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
 			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
 			while(playerIterator.hasNext()) {

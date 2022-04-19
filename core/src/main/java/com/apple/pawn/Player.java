@@ -87,6 +87,7 @@ public class Player {
             int count = aResultDetail.get(type);
             count++;
             aResultDetail.insert(type, count);
+            Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
         }
     }
 
@@ -120,4 +121,6 @@ public class Player {
     public int getOrder() {
         return order;
     }
+
+    public Array<Integer> getResultDetail(){return aResultDetail;}
 }

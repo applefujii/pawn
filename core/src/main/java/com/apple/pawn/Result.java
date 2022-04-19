@@ -39,12 +39,14 @@ public class Result extends UIParts {
     private int goalTurn;
     int[] aSquareNo;
     int playerNo;
+    private Array<Integer> aResultDetail;
 
-    public Result(String name, int x, int y, int width, int height,final Pawn game,int[] aSquareNo,int playerNo) {
+    public Result(String name, int x, int y, int width, int height,final Pawn game,int[] aSquareNo,int playerNo,Array<Integer> aResultDetail) {
         super(name,x,y,width,height);
         font = game.font;
         this.aSquareNo = new int[6];
         this.playerNo = playerNo;
+        this.aResultDetail = aResultDetail;
         //this.aSquareNo[0] = 0;
         //Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
         for(int i=0 ; i<aSquareNo.length ; i++) {
@@ -140,7 +142,7 @@ public class Result extends UIParts {
         //"あいうえお"
         font.draw(batch, "名前", 200, 60);
         font.draw(batch, "ターン数", 320, 60);
-        //font.draw(batch, "何ターン目にどのマスに止まったか", 440, 60);
+        font.draw(batch, "何ターン目にどのマスに止まったか", 440, 60);
         int j=70,k=110;
         for(int i=0; i<playerNo; i++){
             Player player = playerIterator.next();
@@ -149,6 +151,16 @@ public class Result extends UIParts {
             //font.draw(batch, player.getName(), 200, turn);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, aSquareNo[i]+"ターン", 320, k);
+            //font.draw(batch, aResultDetail+"sample", 440, k);
+
+            Iterator<Integer> iterator = aResultDetail.iterator();
+            while(iterator.hasNext()) {
+                int num = iterator.next(); // 「(int)iterator.next();」といったキャストが不要
+                //System.out.println(num);
+                font.draw(batch, num+"sample", 440, k);
+                Gdx.app.debug("fps", "RDetail="+num);
+            }
+
             j += 100;
             k += 100;
         }

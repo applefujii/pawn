@@ -77,7 +77,6 @@ public class ParticleManager {
         float dpf = dpsFlutterDrop/60;
         float m = 0;
         for(int i=0 ; i<n ; i++) {
-            Gdx.app.debug("info", "deploy:"+((int)(dpf+m)-(int)m));
             for(int j=0 ; j<(int)(dpf+m)-(int)m ; j++) aParticle.add(new ParticleFlutterDrop());
             m += dpf;
             Iterator<Particle> ite = aParticle.iterator();

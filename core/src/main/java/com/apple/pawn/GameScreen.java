@@ -231,9 +231,9 @@ public class GameScreen implements Screen {
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\nシフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
 		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
-			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Q]キーで詳細マップ\n[Space]キーで戻る");
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[M]キーで詳細マップ\n[Space]キーで戻る");
 		} else {
 			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("上下キーで選択\n[Space]キーで決定");
 		}
@@ -425,7 +425,7 @@ public class GameScreen implements Screen {
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("カーソルを合わせるとマスの情報が確認できます");
 					freeCamera();
-					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+					if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 						zoom = mapCameraZoom;
 						camera.zoom = mapCameraZoom;
 						camera.position.x = mapCameraWidth;
@@ -434,7 +434,7 @@ public class GameScreen implements Screen {
 					}
 				} else if (FlagManagement.is(Flag.LOOK_MAP)) {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全体マップ");
-					if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+					if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 						zoom = 1.0f;
 						setCameraPositionToTurnPlayer();
 						FlagManagement.set(Flag.LOOK_FREE);
@@ -590,19 +590,23 @@ public class GameScreen implements Screen {
 		float y = 0;
 		int fast = 1;
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) x -= m*fast;
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x += m*fast;
-		if(Gdx.input.isKeyPressed(Input.Keys.UP)) y -= m*fast;
-		if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) y += m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+				Gdx.input.isKeyPressed(Input.Keys.A)) x -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+				Gdx.input.isKeyPressed(Input.Keys.D)) x += m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) ||
+				Gdx.input.isKeyPressed(Input.Keys.W)) y -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+				Gdx.input.isKeyPressed(Input.Keys.S)) y += m*fast;
 		x = median(x, -camera.position.x, BoardSurface.MAP_WIDTH - camera.position.x);
 		y = median(y, -camera.position.y, BoardSurface.MAP_HEIGHT - camera.position.y);
 		if(x != 0 || y != 0) camera.translate(x, y);
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
 			zoom -= 0.1;
 			if(zoom < 1) zoom = 1.0f;
 			camera.zoom = zoom;
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
 			zoom += 0.1;
 			if(zoom > 5) zoom = 5.0f;
 			camera.zoom = zoom;

@@ -24,8 +24,8 @@ import java.util.function.IntSupplier;
 
 
 public class TitleScreen implements Screen {
-	private final static int DISTANCE = 240;
-	private final static float SPEED = 0.02f;
+	private final static int DISTANCE = 280;
+	private final static float SPEED = 0.01f;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -61,6 +61,7 @@ public class TitleScreen implements Screen {
 	//-- リソース
 	private final BitmapFont fontTitle;
 	private final Sprite[] spPiece;
+	private final Sprite mainImage;
 
 
 	/**
@@ -111,6 +112,9 @@ public class TitleScreen implements Screen {
 		fontTitle = game.fontGenerator.generateFont(param);
 
 		TextureAtlas atlas = manager.get("assets/piece_atlas.txt", TextureAtlas.class);
+		manager.load("assets/title.png", Texture.class);
+		manager.update();
+		manager.finishLoading();
 		spPiece = new Sprite[6];
 		spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
 		spPiece[0].flip(false, true);
@@ -130,6 +134,10 @@ public class TitleScreen implements Screen {
 		spPiece[5] = atlas.createSprite(Piece.COLOR[5]);
 		spPiece[5].flip(false, true);
 		spPiece[5].setSize(80,120);
+		mainImage = new Sprite(manager.get("assets/title.png", Texture.class),0,0,1024,591);
+		mainImage.flip(false,true);
+		mainImage.setSize(614,354);
+		mainImage.setPosition(Pawn.LOGICAL_WIDTH/2-307,Pawn.LOGICAL_HEIGHT-354-100);
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -175,32 +183,22 @@ public class TitleScreen implements Screen {
 		renderer.rect(screenOrigin.x, screenOrigin.y, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
 		renderer.end();
 
-		uiCamera.update();
-		batch.setProjectionMatrix(uiCamera.combined);
-		renderer.setProjectionMatrix(uiCamera.combined);
-		particle.draw(batch, renderer);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		renderer.setProjectionMatrix(camera.combined);
-
 		//------ 描画
 		if(sequenceNo == 1  ||  sequenceNo == 2 || sequenceNo == 3) {
-			int px= Pawn.LOGICAL_WIDTH >> 1, py= Pawn.LOGICAL_HEIGHT >> 1;
+			batch.begin();
+			mainImage.draw(batch);
+			batch.end();
+
+			int px= Pawn.LOGICAL_WIDTH >> 1, py= (Pawn.LOGICAL_HEIGHT >> 1);
 			double tRad = rad, sa = Math.toRadians((double) 360/playerNo);
 			batch.begin();
 			for(int i=0 ; i<playerNo ; i++) {
-				spPiece[i].setCenter(Math.round(Math.cos(tRad) * DISTANCE + px), Math.round(Math.sin(tRad) * DISTANCE + py));
+				spPiece[i].setCenter(Math.round(Math.cos(tRad) * (DISTANCE+260) + px), Math.round(Math.sin(tRad) * DISTANCE + py));
 				spPiece[i].draw(batch);
 				tRad += sa;
 			}
 			batch.end();
 
-			if(sequenceNo == 1) {
-				fontTitle.getData().setScale(1, 1);
-				batch.begin();
-				fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
-				batch.end();
-			}
 		} else if(sequenceNo == 4) {
 
 		}
@@ -210,6 +208,13 @@ public class TitleScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
+		particle.draw(batch, renderer);
+		if(sequenceNo == 1) {
+			fontTitle.getData().setScale(1, 1);
+			batch.begin();
+			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
+			batch.end();
+		}
 		ui.draw(batch, renderer, font);
 		font.getData().setScale(1, 1);
 		batch.begin();

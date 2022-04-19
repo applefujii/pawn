@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.function.IntSupplier;
 
 /**
@@ -215,14 +214,14 @@ public class GameScreen implements Screen {
 		manager.update();
 
 		//------ 入力
-		if (Gdx.input.isKeyPressed(Input.Keys.F1)) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
 			game.setScreen(new TitleScreen(game));
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
 			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
 			fileIO.save();
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
 			fileIO.load();
 			GameScreen gameScreen = new GameScreen(game);
 			gameScreen.load(fileIO.getSaveData());

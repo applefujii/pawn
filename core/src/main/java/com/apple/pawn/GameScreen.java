@@ -189,6 +189,7 @@ public class GameScreen implements Screen {
 		goalNo = sd.goalNo;
 //		sequenceNo = sd.sequenceNo;
 		turnPlayerNo = sd.turnPlayerNo-1;
+		turnCount = sd.turnCount;
 		saveData.aPlayer = playerManager.getAPlayer();
 
 		StringBuilder orderBuilder = new StringBuilder();
@@ -215,7 +216,7 @@ public class GameScreen implements Screen {
 			game.setScreen(new TitleScreen(game));
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
-			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo);
+			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
 			fileIO.save();
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
@@ -443,7 +444,7 @@ public class GameScreen implements Screen {
 		}
 
 		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
-			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo);
+			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
 			fileIO.save();
 			sequenceNo = Sequence.ACTION_SELECT.no;
 		}

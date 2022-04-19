@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,8 +25,8 @@ import java.util.function.IntSupplier;
 
 
 public class TitleScreen implements Screen {
-	private final static int DISTANCE = 280;
-	private final static float SPEED = 0.01f;
+	private final static int DISTANCE = 260;
+	private static float SPEED = 0.01f;
 
 	private final Pawn game;
 	// 動作させるシークエンス
@@ -137,7 +138,7 @@ public class TitleScreen implements Screen {
 		mainImage = new Sprite(manager.get("assets/title.png", Texture.class),0,0,1024,591);
 		mainImage.flip(false,true);
 		mainImage.setSize(614,354);
-		mainImage.setPosition(Pawn.LOGICAL_WIDTH/2-307,Pawn.LOGICAL_HEIGHT-354-100);
+		mainImage.setPosition(Pawn.LOGICAL_WIDTH/2-307,Pawn.LOGICAL_HEIGHT-354-130);
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -157,6 +158,18 @@ public class TitleScreen implements Screen {
 	private void update() {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
+
+		//-- 左右で回る駒のスピード変更
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+				Gdx.input.isKeyPressed(Input.Keys.D)) {
+			this.SPEED += this.SPEED/100;
+			if(this.SPEED > 0.05f) this.SPEED = 0.05f;
+		} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+				Gdx.input.isKeyPressed(Input.Keys.A)) {
+			this.SPEED -= this.SPEED/100;
+			if(this.SPEED < 0.002f) this.SPEED = 0.002f;
+		}
+
 		particle.update(game.getTimer());
 		manager.update();
 
@@ -176,6 +189,7 @@ public class TitleScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		ScreenUtils.clear(0.5f, 0.5f, 0.5f, 1);
 		//-- 論理表示領域を黒で塗りつぶし
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -193,7 +207,7 @@ public class TitleScreen implements Screen {
 			double tRad = rad, sa = Math.toRadians((double) 360/playerNo);
 			batch.begin();
 			for(int i=0 ; i<playerNo ; i++) {
-				spPiece[i].setCenter(Math.round(Math.cos(tRad) * (DISTANCE+260) + px), Math.round(Math.sin(tRad) * DISTANCE + py));
+				spPiece[i].setCenter(Math.round(Math.cos(tRad) * (DISTANCE+240) + px), Math.round(Math.sin(tRad) * DISTANCE + py));
 				spPiece[i].draw(batch);
 				tRad += sa;
 			}
@@ -209,10 +223,10 @@ public class TitleScreen implements Screen {
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
 		particle.draw(batch, renderer);
-		if(sequenceNo == 1) {
+		if(sequenceNo != 4) {
 			fontTitle.getData().setScale(1, 1);
 			batch.begin();
-			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 100);
+			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 210);
 			batch.end();
 		}
 		ui.draw(batch, renderer, font);

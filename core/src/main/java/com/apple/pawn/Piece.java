@@ -131,7 +131,7 @@ public class Piece {
                     }
                 }
             }
-        } else {
+        } else if(!FlagManagement.is(Flag.PIECE_MOVE)) {
             pos = boardSurface.getPos(squareNo);
             pos.x += WIDTH * ((boardSurface.getSquare(squareNo).aPiece.indexOf(this, true)) % LINE_MAX);
             pos.y += HEIGHT * Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this, true) / LINE_MAX);

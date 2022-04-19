@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 
 public class Achievement {
@@ -24,14 +25,16 @@ public class Achievement {
     //-- 参照
     private AssetManager manager;
     private UI ui;
+    private BitmapFont font;
 
     public Achievement(float time) {
         this.time = time;
     }
 
-    public void initialize(AssetManager manager, UI ui) {
+    public void initialize(AssetManager manager, UI ui ,BitmapFont font) {
         this.manager = manager;
         this.ui = ui;
+        this.font = font;
         try {
             Class.forName(DRIVE_NAME);
             connection = DriverManager.getConnection(DB_URL);
@@ -129,7 +132,7 @@ public class Achievement {
                             break;
                     }
                     if(isGet) {
-                        ui.add(new UIPartsPopup("achievement", manager, 50, 50, 300, 100, rs2.getString("title") + "\n\n" + rs2.getString("detail"), 10));
+                        ui.add(new UIPartsPopup("achievement", manager, font, 50, 50, 300, 100, rs2.getString("title") + "\n\n" + rs2.getString("detail"), 10));
                         stUpdateAchievement.setTimestamp(1, ts);
                         stUpdateAchievement.setInt(2, id);
                         stUpdateAchievement.executeUpdate();

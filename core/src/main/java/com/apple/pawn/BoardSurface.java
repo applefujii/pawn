@@ -2,14 +2,11 @@ package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +18,7 @@ public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
     public static final int BACK_HEIGHT = 2700;
     public static final Array<Vector2> MAP_COORDINATE;
-    private static final String MAP_DATA_NAME[] = {
+    private static final String[] MAP_DATA_NAME = {
             "map.jsonc",
             "map2.jsonc",
             "map3.jsonc"
@@ -90,7 +87,7 @@ public class BoardSurface {
         }
     }
 
-    public void draw (SpriteBatch batch, ShapeRenderer renderer) {
+    public void draw (SpriteBatch batch) {
         batch.begin();
         batch.disableBlending();
 
@@ -113,13 +110,7 @@ public class BoardSurface {
         batch.end();
     }
 
-    public void dispose () {
-//        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-//        while(squareIterator.hasNext()) {
-//            Square square = squareIterator.next();
-//            square.dispose();
-//        }
-    }
+    public void dispose () { }
 
     public Square getSquare(int squareNo) {
         return aSquare.get(squareNo);

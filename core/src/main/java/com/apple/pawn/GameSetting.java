@@ -1,7 +1,5 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -13,8 +11,7 @@ public class GameSetting {
     private int[] aSquareNo;
     private int stageNo;
 
-    public GameSetting() {
-    }
+    public GameSetting() { }
 
     public void init(int playerNo) {
         this.playerNo = playerNo;

@@ -261,7 +261,7 @@ public class TitleScreen implements Screen {
 		if(rad >360) rad %= 360;
 		if(sequenceSubNo == 1) {
 			String load = "続きから";
-			if(fileIO.isExistsSavedata() == false) load = "/" + load;
+			if(fileIO.isExistsSaveData() == false) load = "/" + load;
 			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", load, "実績"));
 			sequenceSubNo++;
 		}

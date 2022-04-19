@@ -1,7 +1,6 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,7 +54,7 @@ public class Square {
         }
     }
 
-    public void draw (Batch batch) {
+    public void draw (SpriteBatch batch) {
         sprite.draw(batch);
     }
 

@@ -195,6 +195,24 @@ public class TitleScreen implements Screen {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.setColor(0.5f,0.1f,0.5f,1);
 		renderer.rect(screenOrigin.x, screenOrigin.y, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		renderer.setColor(0.6f,0.2f,0.6f,1);
+		int x=-1, y=-1, distance = 100;
+		boolean isOdd = true;
+		while(true) {
+			y++;
+			if(y*distance > Pawn.LOGICAL_HEIGHT) break;
+
+			while(true) {
+				x++;
+				if(x*distance > Pawn.LOGICAL_WIDTH) break;
+				if(isOdd  &&  x%2 == 0)  continue;
+				if(!isOdd  &&  x%2 == 1)  continue;
+				renderer.circle(x*distance+34, y*distance+16, distance/1.8f);
+			}
+
+			isOdd = !isOdd;
+			x = -1;
+		}
 		renderer.end();
 
 		//------ 描画

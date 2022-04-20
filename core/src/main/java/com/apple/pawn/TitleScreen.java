@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -69,7 +71,7 @@ public class TitleScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public TitleScreen(final Pawn game) {
+	public TitleScreen(@NonNull final Pawn game) {
 		this.game = game;
 		batch = game.batch;
 		font = game.font;

@@ -2,6 +2,8 @@ package com.apple.pawn;
 
 import static com.apple.pawn.PawnUtils.median;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -82,7 +84,7 @@ public class GameScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public GameScreen (final Pawn game) {
+	public GameScreen (@NonNull final Pawn game) {
 		this.game = game;
 		batch = game.batch;
 		font = game.font;
@@ -165,7 +167,7 @@ public class GameScreen implements Screen {
 		sequence = this::turnStandby;
 	}
 
-	public void initialize(final GameSetting setting) {
+	public void initialize(@NonNull final GameSetting setting) {
 		this.gameSetting = setting;
 		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
@@ -184,7 +186,7 @@ public class GameScreen implements Screen {
 		order = orderBuilder.toString();
 	}
 
-	public void load(final SaveData sd) {
+	public void load(@NonNull final SaveData sd) {
 		isLoad = true;
 		gameSetting = new GameSetting();
 		gameSetting.setStageNo(sd.mapNo);
@@ -239,7 +241,7 @@ public class GameScreen implements Screen {
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\nシフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\n左シフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
 		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
 			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[M]キーで詳細マップ\n[Space]キーで戻る");
 		} else {
@@ -613,11 +615,11 @@ public class GameScreen implements Screen {
 	 * Flag.LOOK_FREEが立っているときのカメラの操作
 	 */
 	private void freeCamera() {
-		float m = 6; //通常時の速さ(px/f)
+		float m = 8;	//通常時の速さ(px/f)
 		float x = 0;
 		float y = 0;
 		int fast = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) fast = 2;
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
 				Gdx.input.isKeyPressed(Input.Keys.A)) x -= m*fast;
 		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
@@ -647,6 +649,10 @@ public class GameScreen implements Screen {
 
 	public AssetManager getManager() {
 		return manager;
+	}
+
+	public Player getTurnPlayer() {
+		return turnPlayer;
 	}
 
 	public int getGoalNo() {

@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -39,7 +41,7 @@ public class Square {
         aPiece = new Array<>();
     }
 
-    public void initialize(AssetManager manager, int size, BitmapFont font) {
+    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
         sprite = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[type]);
         sprite.flip(false, true);
         sprite.setScale((float) SQUARE_WIDTH / sprite.getWidth(), (float) SQUARE_HEIGHT / sprite.getHeight());

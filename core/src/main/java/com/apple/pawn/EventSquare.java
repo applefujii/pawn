@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +14,7 @@ public class EventSquare extends Square {
     }
 
     @Override
-    public void initialize(AssetManager manager, int size, BitmapFont font) {
+    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
         super.initialize(manager, size, font);
         move = Math.min(move, size - count);
         document = move+"マス進む";

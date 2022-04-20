@@ -93,7 +93,7 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
                     }
                 });
 
-                JOptionPane pane = new JOptionPane(panel, JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, null,
+                JOptionPane pane = new JOptionPane(panel, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION, null, null,
                         null);
 
                 pane.setInitialValue(null);

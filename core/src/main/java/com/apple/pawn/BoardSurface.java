@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,7 +89,7 @@ public class BoardSurface {
         }
     }
 
-    public void draw (SpriteBatch batch) {
+    public void draw (@NonNull SpriteBatch batch) {
         batch.begin();
         batch.disableBlending();
 

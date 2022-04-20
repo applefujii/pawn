@@ -345,6 +345,7 @@ public class GameScreen implements Screen {
 					turnCount++;
 				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
+				//Gdx.app.debug("fps", "turnPlayer="+turnPlayer);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");

@@ -1,5 +1,6 @@
 package com.apple.pawn;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -25,6 +26,7 @@ public class PlayerManager {
 
     public void initialize(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
+        //Gdx.app.debug("fps", "gameScreen="+this.gameScreen);
     }
 
     public void load(Array<Player> aPlayer) {
@@ -89,6 +91,7 @@ public class PlayerManager {
     }
 
     public Player getPlayer(int i) {
+        //Gdx.app.debug("fps", "turnPlayer="+aPlayer.get(i).toString());
         return aPlayer.get(i);
     }
 

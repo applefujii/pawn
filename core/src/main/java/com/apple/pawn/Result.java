@@ -47,6 +47,7 @@ public class Result extends UIParts {
         this.aSquareNo = new int[6];
         this.playerNo = playerNo;
         this.aResultDetail = aResultDetail;
+        //Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
         //this.aSquareNo[0] = 0;
         //Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
         for(int i=0 ; i<aSquareNo.length ; i++) {

@@ -31,13 +31,13 @@ public class TaskSquare extends Square {
         BitmapFontCache fontCache = font.getCache();
         move = Math.min(move, size - count);
         back = Math.min(back, count);
-        document = doc + "\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
-        uiDoc = uiDoc + "\n" + document;
+        document = doc + "\n\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
+        uiDoc = uiDoc + "\n\n" + document;
         if(Objects.nonNull(doc)) {
             int charsNoCol = (SQUARE_HEIGHT - 32) / 18;
             drawDoc = fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
-            if (drawDoc.size > charsNoCol - 2) {
-                drawDoc.setSize(charsNoCol - 3);
+            if (drawDoc.size > charsNoCol - 3) {
+                drawDoc.setSize(charsNoCol - 4);
                 String peek = drawDoc.peek();
                 int i = peek.length() - 1;
                 while(i > 0) {
@@ -48,7 +48,7 @@ public class TaskSquare extends Square {
                 drawDoc.insert(charsNoCol - 3, peek.substring(0, i) + "...");
             }
         }
-        drawDoc.add("成功で"+move+"マス進む", "失敗で"+back+"マス戻る");
+        drawDoc.add("", "成功で"+move+"マス進む", "失敗で"+back+"マス戻る");
     }
 
     @Override

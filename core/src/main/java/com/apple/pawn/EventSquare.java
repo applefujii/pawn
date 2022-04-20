@@ -18,7 +18,7 @@ public class EventSquare extends Square {
         super.initialize(manager, size, font);
         move = Math.min(move, size - count);
         document = move+"マス進む";
-        uiDoc = uiDoc + "\n" + document;
+        uiDoc = uiDoc + "\n\n" + document;
     }
 
     @Override

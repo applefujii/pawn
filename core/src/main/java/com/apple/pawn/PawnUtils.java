@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.utils.Array;
 
@@ -16,6 +18,7 @@ public class PawnUtils {
      * @param fontCache BitmapFontCache 表示する際のBitmapFontのBitmapFontCache
      * @return Array<String> 改行に対応しつつ領域内に収まるように分割されたテキスト
      */
+    @NonNull
     public static Array<String> fontSplit(String text, int width, BitmapFontCache fontCache) {
         Array<String> fontSplits = new Array<>();
         String[] splits = Pattern.compile("\\n").split(text);
@@ -26,7 +29,7 @@ public class PawnUtils {
                 float fWidth = fontCache.setText(split.substring(i, j), 0, 0).width;
                 if(fWidth > width) {
                     fontSplits.add(split.substring(i, j-1));
-                    i = j;
+                    i = j - 1;
                 }
             }
             fontSplits.add(split.substring(i));

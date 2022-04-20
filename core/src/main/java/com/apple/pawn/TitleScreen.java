@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -169,6 +170,13 @@ public class TitleScreen implements Screen {
 			this.SPEED -= this.SPEED/100;
 			if(this.SPEED < 0.002f) this.SPEED = 0.002f;
 		}
+		if (Gdx.input.isKeyPressed(Input.Keys.F2))
+			particle.addParticle(new ParticleInjectionFlutterDrop(
+					new Vector2(Pawn.LOGICAL_WIDTH/2,Pawn.LOGICAL_HEIGHT),
+					(float) Math.toRadians(260),
+					(float) Math.toRadians(45),
+					30.0f
+					));
 
 		particle.update(game.getTimer());
 		manager.update();
@@ -195,6 +203,7 @@ public class TitleScreen implements Screen {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.setColor(0.5f,0.1f,0.5f,1);
 		renderer.rect(screenOrigin.x, screenOrigin.y, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+		//-- 背景の水玉模様
 		renderer.setColor(0.6f,0.2f,0.6f,1);
 		int x=-1, y=-1, distance = 100;
 		boolean isOdd = true;

@@ -70,6 +70,7 @@ public class GameScreen implements Screen {
 	private final BoardSurface board;				// 盤面
 	private final Dice dice;						// さいころ
 	private final UI ui;							// UI
+	private final ParticleManager particle;			// パーティクル
 	private final FileIO fileIO;					// セーブファイルの読み書き
 	private final SaveData saveData;				// セーブファイル
 	private final Result result;
@@ -121,6 +122,7 @@ public class GameScreen implements Screen {
 		board = new BoardSurface();
 		dice = new Dice(game);
 		ui = new UI();
+		particle = new ParticleManager();
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		result = new Result();
@@ -153,6 +155,7 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);
@@ -212,20 +215,23 @@ public class GameScreen implements Screen {
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
 		manager.update();
+		particle.update(game.getTimer());
 
 		//------ 入力
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-			game.setScreen(new TitleScreen(game));
-		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
-			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
-			fileIO.save();
-		}
-		if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
-			fileIO.load();
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.load(fileIO.getSaveData());
-			game.setScreen(gameScreen);
+		if(FlagManagement.is(Flag.DEBUG_CONTROL)) {
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+				game.setScreen(new TitleScreen(game));
+			}
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+				saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
+				fileIO.save();
+			}
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
+				fileIO.load();
+				GameScreen gameScreen = new GameScreen(game);
+				gameScreen.load(fileIO.getSaveData());
+				game.setScreen(gameScreen);
+			}
 		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -292,6 +298,7 @@ public class GameScreen implements Screen {
 		//------ メイン描画
 		board.draw(batch);
 		playerManager.draw(batch, renderer);
+		particle.draw(batch, renderer);
 		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
@@ -352,6 +359,7 @@ public class GameScreen implements Screen {
 		playerManager.dispose();
 		dice.dispose();
 		board.dispose();
+		particle.dispose();
 		result.dispose();
 		manager.unload("assets/map_atlas.txt");
 		manager.unload("assets/ui_atlas.txt");
@@ -528,9 +536,25 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
 				if(turnPlayer.isGoal()) {
-					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
+					Vector2 pPos = turnPlayer.getPiece().getPosition().cpy();
+					pPos.x += 40;
+					pPos.y += 80;
+					for(int i=0 ; i<30 ; i++)
+						particle.addParticle(new ParticleInjectionFlutterDrop(
+								pPos,
+								(float) Math.toRadians(240),
+								(float) Math.toRadians(30),
+								12.0f
+						));
+					for(int i=0 ; i<30 ; i++)
+						particle.addParticle(new ParticleInjectionFlutterDrop(
+								pPos,
+								(float) Math.toRadians(300),
+								(float) Math.toRadians(30),
+								12.0f
+						));
 					sequenceNo++;
 				}
 				timerRap = timer;

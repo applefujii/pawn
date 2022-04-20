@@ -64,6 +64,10 @@ public class ParticleManager {
         }
     }
 
+    public void addParticle(Particle par) {
+        aParticle.add(par);
+    }
+
     public void startParticle(int dps) {
         dpsFlutterDrop = dps;
         isFlutterDrop = true;

@@ -2,6 +2,8 @@ package com.apple.pawn;
 
 import static com.apple.pawn.PawnUtils.fontSplit;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
@@ -24,7 +26,7 @@ public class TaskSquare extends Square {
     }
 
     @Override
-    public void initialize(AssetManager manager, int size, BitmapFont font) {
+    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
         super.initialize(manager, size, font);
         BitmapFontCache fontCache = font.getCache();
         move = Math.min(move, size - count);

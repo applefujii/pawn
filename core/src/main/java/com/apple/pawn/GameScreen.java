@@ -2,6 +2,8 @@ package com.apple.pawn;
 
 import static com.apple.pawn.PawnUtils.median;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -81,7 +83,7 @@ public class GameScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public GameScreen (final Pawn game) {
+	public GameScreen (@NonNull final Pawn game) {
 		this.game = game;
 		batch = game.batch;
 		font = game.font;
@@ -162,7 +164,7 @@ public class GameScreen implements Screen {
 		sequence = this::turnStandby;
 	}
 
-	public void initialize(final GameSetting setting) {
+	public void initialize(@NonNull final GameSetting setting) {
 		this.gameSetting = setting;
 		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
@@ -181,7 +183,7 @@ public class GameScreen implements Screen {
 		order = orderBuilder.toString();
 	}
 
-	public void load(final SaveData sd) {
+	public void load(@NonNull final SaveData sd) {
 		isLoad = true;
 		gameSetting = new GameSetting();
 		gameSetting.setStageNo(sd.mapNo);

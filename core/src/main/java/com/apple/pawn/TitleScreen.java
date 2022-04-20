@@ -172,13 +172,6 @@ public class TitleScreen implements Screen {
 			this.SPEED -= this.SPEED/100;
 			if(this.SPEED < 0.002f) this.SPEED = 0.002f;
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F2))
-			particle.addParticle(new ParticleInjectionFlutterDrop(
-					new Vector2(Pawn.LOGICAL_WIDTH/2,Pawn.LOGICAL_HEIGHT),
-					(float) Math.toRadians(260),
-					(float) Math.toRadians(45),
-					30.0f
-					));
 
 		particle.update(game.getTimer());
 		manager.update();

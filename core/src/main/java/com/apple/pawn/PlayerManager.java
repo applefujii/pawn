@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * @author fujii
@@ -45,12 +46,15 @@ public class PlayerManager {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer) {
+        Player turnPlayer = null;
         batch.begin();
         Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
         while(playerIterator.hasNext()) {
             Player player = playerIterator.next();
-            player.draw(batch, renderer);
+            if(player == gameScreen.getTurnPlayer()) turnPlayer = player;
+            else player.draw(batch, renderer);
         }
+        if(Objects.nonNull(turnPlayer))turnPlayer.draw(batch, renderer);
         batch.end();
     }
 

@@ -625,6 +625,10 @@ public class GameScreen implements Screen {
 		return manager;
 	}
 
+	public Player getTurnPlayer() {
+		return turnPlayer;
+	}
+
 	public int getGoalNo() {
 		return goalNo;
 	}

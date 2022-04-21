@@ -24,8 +24,8 @@ public class UIPartsPopup extends UIParts{
 
     protected Sprite sprite;
 
-    public UIPartsPopup(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, String text, float time_show) {
-        super(name, x, y, width, height);
+    public UIPartsPopup(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, int group, String text, float time_show) {
+        super(name, x, y, width, height, group);
         this.time_show = time_show;
         stringRow = fontSplit(text, width - (px * 2), font.getCache());
         sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("popup");

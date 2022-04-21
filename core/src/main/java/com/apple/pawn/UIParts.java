@@ -12,13 +12,15 @@ abstract public class UIParts {
     protected int x, y;
     protected int width, height;
     protected int px = 10, py = 10;
+    protected int group;
 
-    public UIParts(String name, int x, int y, int width, int height) {
+    public UIParts(String name, int x, int y, int width, int height, int group) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.group = group;
     }
 
     abstract public int update();

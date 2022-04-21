@@ -134,6 +134,7 @@ public class GameScreen implements Screen {
 		manager.load("assets/dice.png", Texture.class);
 		manager.load("assets/background.png", Texture.class);
 		manager.load("assets/cursor.png", Texture.class);
+		manager.load("assets/black.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		dice.initialize(manager);
@@ -151,11 +152,13 @@ public class GameScreen implements Screen {
 		saveData.aPlayer = playerManager.getAPlayer();
 		game.achievement.initialize(manager, ui, font);
 		//-- 作成
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, font, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, font, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, 1, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
 		ui.add(new UIPartsOperatingMethod(UI.OPERATING_METHOD, "操作説明欄"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
+		FlagManagement.set(Flag.UI_GROUP1_VISIBLE);
+		FlagManagement.set(Flag.UI_GROUP2_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
@@ -235,6 +238,16 @@ public class GameScreen implements Screen {
 				game.setScreen(gameScreen);
 			}
 		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+			if(FlagManagement.is(Flag.PLAY)) {
+				FlagManagement.fold(Flag.PLAY);
+				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 16, 2, 0, true, "再開", "終了"));
+			}
+			else {
+				FlagManagement.set(Flag.PLAY);
+				ui.remove("pause");
+			}
+		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			//-- ワールド座標に変換
@@ -248,9 +261,10 @@ public class GameScreen implements Screen {
 			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("上下キーで選択\n[Space]キーで決定");
 		}
 
+		// UIの動作
+		if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
+		//-- ポーズしていない
 		if(FlagManagement.is(Flag.PLAY)) {
-			// UIの動作
-			if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
 			// シークエンスの動作
 			sequence.getAsInt();
 			//-- その他の動作
@@ -259,12 +273,16 @@ public class GameScreen implements Screen {
 			board.update(this);
 			if(FlagManagement.is(Flag.RESULT_SHOW)) result.update();
 		}
-
-		// Flag.PLAY == false
+		//-- ポーズ中
 		else {
-			//-- Spaceを押すと復帰
-			if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-				FlagManagement.set(Flag.PLAY);
+			int select = ui.getSelect();
+			if(select != -1 ) {
+				if (select == 0) {
+					FlagManagement.set(Flag.PLAY);
+					ui.remove("pause");
+				} else if (select == 1) {
+					Gdx.app.exit();
+				}
 			}
 		}
 	}
@@ -307,7 +325,25 @@ public class GameScreen implements Screen {
 		uiCamera.update();
 		batch.setProjectionMatrix(uiCamera.combined);
 		renderer.setProjectionMatrix(uiCamera.combined);
-		if(FlagManagement.is(Flag.UI_VISIBLE)) ui.draw(batch, renderer, font);
+		if(FlagManagement.is(Flag.LOOK_FREE)) {
+			batch.begin();
+			cursor.draw(batch);
+			batch.end();
+		}
+		if(FlagManagement.is(Flag.UI_VISIBLE)  &&  FlagManagement.is(Flag.UI_GROUP1_VISIBLE))
+			ui.draw(batch, renderer, font, 1);
+		//-- ポーズ中は暗くする
+		if(FlagManagement.is(Flag.PLAY) == false) {
+			Sprite black = new Sprite(manager.get("assets/black.png", Texture.class),0,0,32,32);
+			batch.begin();
+			black.setSize(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+			black.setPosition(0, 0);
+			black.setAlpha(0.6f);
+			black.draw(batch);
+			batch.end();
+		}
+		if(FlagManagement.is(Flag.UI_VISIBLE)  &&  FlagManagement.is(Flag.UI_GROUP2_VISIBLE))
+			ui.draw(batch, renderer, font, 2);
 		//-- デバッグ表示
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
@@ -318,11 +354,6 @@ public class GameScreen implements Screen {
 			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
 			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 18*4);
 			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
-			batch.end();
-		}
-		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			batch.begin();
-			cursor.draw(batch);
 			batch.end();
 		}
 	}
@@ -386,7 +417,7 @@ public class GameScreen implements Screen {
 				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
-			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
 			sequenceNo++;
 			return 0;
@@ -404,7 +435,7 @@ public class GameScreen implements Screen {
 
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
-			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
+			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
 			sequenceNo++;
 			return 0;
 		}
@@ -427,6 +458,7 @@ public class GameScreen implements Screen {
 		}
 		// マップ確認
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
+			Gdx.app.debug("info", ""+FlagManagement.is(Flag.INPUT_ENABLE));
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
@@ -483,7 +515,7 @@ public class GameScreen implements Screen {
 
 	private int PieceAdvance() {
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
-			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "移動"));
+			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
 			sequenceNo++;
 			return 0;
 		}
@@ -515,10 +547,10 @@ public class GameScreen implements Screen {
 			if(visitSquare.getType() == 4) {
 				move = visitSquare.getMove();
 				back = visitSquare.getBack();
-				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "成功", "失敗"));
+				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "成功", "失敗"));
 			} else if(visitSquare.getType() == 3) {
 				move = visitSquare.getMove();
-				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "移動"));
+				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
 			} else {
 				sequenceNo += 2;
 				return 0;
@@ -539,7 +571,7 @@ public class GameScreen implements Screen {
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
 				if(turnPlayer.isGoal()) {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
+					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, 1, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
 					Vector2 pPos = turnPlayer.getPiece().getPosition().cpy();
 					pPos.x += 40;
 					pPos.y += 80;
@@ -591,7 +623,7 @@ public class GameScreen implements Screen {
 				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
 			}
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());
-			ui.add(new UIPartsSelect("move_result", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, "リザルト画面へ"));
+			ui.add(new UIPartsSelect("move_result", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "リザルト画面へ"));
 			sequenceNo++;
 			return 0;
 		}

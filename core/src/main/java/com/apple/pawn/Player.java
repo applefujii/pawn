@@ -27,7 +27,7 @@ public class Player {
     @JsonProperty
     private Array<Integer> aResultDetail;
     @JsonProperty
-    private final int order;
+    private int order;
 
     //-- 参照
     @JsonIgnore
@@ -36,6 +36,9 @@ public class Player {
     private BoardSurface boardSurface;
     @JsonIgnore
     private PlayerManager playerManager;
+
+    public Player() {
+    }
 
     public Player(String name, int pieceColorNo) {
         this.name = name;
@@ -53,14 +56,14 @@ public class Player {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
         this.playerManager = playerManager;
-        piece.initialize(bs);
+        piece.initialize(bs, this.gameScreen.getManager());
     }
 
     public void load(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
         this.playerManager = playerManager;
-        piece.load(bs);
+        piece.load(bs, this.gameScreen.getManager());
     }
 
     public void update() {
@@ -98,7 +101,8 @@ public class Player {
     }
 
     public void addADiceNo(int diceNo) {
-        aDiceNo.add(diceNo);
+        if(aDiceNo.size > 10-1) aDiceNo.pop();
+        aDiceNo.insert(0, diceNo);
     }
 
     public boolean isGoal() {
@@ -127,6 +131,4 @@ public class Player {
     public int getOrder() {
         return order;
     }
-
-    public Array<Integer> getResultDetail(){return aResultDetail;}
 }

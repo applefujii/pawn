@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +18,7 @@ public class Piece {
     public static final int WIDTH = 80, HEIGHT = 120;
     private static final int LINE_MAX = 3;
     @JsonIgnore
-    private float MOVE_INTERVAL = 0.3f;
+    private float MOVE_INTERVAL = 0.35f;
 
     @JsonProperty
     private int colorNo;       // 色番号
@@ -28,6 +29,10 @@ public class Piece {
     @JsonProperty
     private Vector2 pos;
     @JsonProperty
+    private Vector2 camPos;
+    @JsonProperty
+    private Vector2 pastPos;
+    @JsonProperty
     private Vector2 moveToPos;
     @JsonProperty
     private float timer;
@@ -37,8 +42,6 @@ public class Piece {
     private boolean isMove;
 
     //-- リソース
-    @JsonIgnore
-    private TextureAtlas atlas;
     @JsonIgnore
     private Sprite sprite;
 
@@ -54,28 +57,28 @@ public class Piece {
         squareNo = 0;
         moveToSquareNo = 0;
         pos = new Vector2();
+        camPos = new Vector2();
         moveToPos = new Vector2();
         timer = 0;
         isTimer = false;
         isMove = false;
     }
 
-    public void initialize(BoardSurface bs) {
+    public void initialize(BoardSurface bs, AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
         pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
-        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        camPos = pos.cpy();
+        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
-    public void load(BoardSurface bs) {
+    public void load(BoardSurface bs, AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
-        atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        sprite = atlas.createSprite(COLOR[this.colorNo]);
+        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
@@ -90,17 +93,33 @@ public class Piece {
                     squareNo+=plus;
                     boardSurface.getSquare(squareNo).addPiece(this);
                 }
-                pos = boardSurface.getPos(squareNo);
-                pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-                pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
+                pastPos = pos.cpy();
+                moveToPos = boardSurface.getPos(squareNo);
+                // 駒同士が重ならないようにずらす
+                moveToPos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
+                moveToPos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
                 isTimer = true;
             }
             //-- タイマー
             else {
                 timer += Gdx.graphics.getDeltaTime();
-                if (timer >= MOVE_INTERVAL) {
+                //-- 時間が経っていない
+                if(timer < MOVE_INTERVAL) {
+                    //-- 動くアニメーション
+                    float progress = (timer/MOVE_INTERVAL)*1.2f;
+                    if(progress>1.0f) progress =1.0f;
+                    // 3次関数補間で動かす
+                    pos.x = pastPos.x + (moveToPos.x-pastPos.x)*(float)Math.pow(progress, 2)*(3-2*progress);
+                    pos.y = pastPos.y + (moveToPos.y-pastPos.y)*(float)Math.pow(progress, 2)*(3-2*progress);
+                    camPos = pos.cpy();
+                    // 上下動作
+                    pos.y += Math.sin(Math.toRadians(180+(180*progress)))*60;
+                }
+                //-- 時間が経ったら
+                else {
                     timer = 0;
                     isTimer = false;
+                    pos = moveToPos;
                     if (squareNo >= boardSurface.getSquareCount()-1) {
                         isMove = false;
                         FlagManagement.fold(Flag.PIECE_MOVE);
@@ -112,10 +131,12 @@ public class Piece {
                     }
                 }
             }
+        } else if(!FlagManagement.is(Flag.PIECE_MOVE)) {
+            pos = boardSurface.getPos(squareNo);
+            pos.x += WIDTH * ((boardSurface.getSquare(squareNo).aPiece.indexOf(this, true)) % LINE_MAX);
+            pos.y += HEIGHT * Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this, true) / LINE_MAX);
+            camPos = pos.cpy();
         }
-        pos = boardSurface.getPos(squareNo);
-        pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
-        pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
         return false;
     }
 
@@ -134,9 +155,7 @@ public class Piece {
 //        renderer.end();
     }
 
-    public void dispose () {
-        atlas.dispose();
-    }
+    public void dispose () { }
 
     public void move( int squareNo, boolean isAnimation ) {
         //-- アニメーションさせる
@@ -162,7 +181,11 @@ public class Piece {
     }
 
     public Vector2 getPosition() {
-        return boardSurface.getPos(squareNo);
+        return pos;
+    }
+
+    public Vector2 getCameraPosition() {
+        return camPos;
     }
 
     public Sprite getSprite() {

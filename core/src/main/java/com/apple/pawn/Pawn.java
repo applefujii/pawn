@@ -5,10 +5,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.RandomXS128;
@@ -27,10 +29,13 @@ public class Pawn extends Game {
 	public BitmapFont font;
 	public ShapeRenderer renderer;
 	public RandomXS128 random;
+	public AssetManager manager;
 
 	public OrthographicCamera uiCamera;	// UIカメラ
 	public FitViewport uiViewport;
 	public Stage uiStage;					// UIのカメラとビューポートの管理
+	public Achievement achievement;
+	private float timer;
 	private long totalFrame = 0;
 	private int frame = 0;
 	private Timer fpsTimer;
@@ -55,11 +60,14 @@ public class Pawn extends Game {
 		param.flip = true;					// 上下反転
 		font = fontGenerator.generateFont(param);
 		random = new RandomXS128(System.currentTimeMillis());
+		manager = new AssetManager();
+		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 		uiViewport = new FitViewport(LOGICAL_WIDTH,LOGICAL_HEIGHT,uiCamera);
 		uiStage = new Stage(uiViewport);
+		achievement = new Achievement(timer);
 
 		//-- FPSをデバッグ出力
 		TimerTask fpsTask = new TimerTask() {
@@ -68,11 +76,13 @@ public class Pawn extends Game {
 				frame = 0;
 			}
 		};
+		timer = 0;
 		fpsTimer = new Timer();
 		fpsTimer.scheduleAtFixedRate(fpsTask, 0, 1000);
 
 		GameSetting setting = new GameSetting();
 		setting.init(4);
+		setting.setStageNo(0);
 		GameScreen gameScreen = new GameScreen(this);
 		gameScreen.initialize(setting);
 		this.setScreen(gameScreen);
@@ -83,6 +93,7 @@ public class Pawn extends Game {
 	 */
 	@Override
 	public void render () {
+		timer += Gdx.graphics.getDeltaTime();
 		totalFrame++;
 		frame++;
 		// F4で終了
@@ -117,6 +128,12 @@ public class Pawn extends Game {
 		font.dispose();
 		renderer.dispose();
 		fpsTimer.cancel();
+		manager.dispose();
+		achievement.dispose();
+	}
+
+	public float getTimer() {
+		return timer;
 	}
 
 }

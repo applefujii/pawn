@@ -1,12 +1,21 @@
 package com.apple.pawn;
 
+import static com.apple.pawn.PawnUtils.median;
+
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -37,6 +46,8 @@ public class GameScreen implements Screen {
 	private final Stage stage;					// カメラとビューポートの管理
 	private Stage uiStage;					// UIのカメラとビューポートの管理
 
+	private final AssetManager manager;
+
 	private float timer;
 	private float timerRap;
 	private final Vector3 screenOrigin;			// 画面左上座標
@@ -52,6 +63,8 @@ public class GameScreen implements Screen {
 	private final float mapCameraWidth;
 	private int turnCount;
 	private String order;
+	private final Sprite cursor;
+	private boolean isLoad;					// 続きからのゲームか
 
 
 	//---- 他のクラス
@@ -60,6 +73,7 @@ public class GameScreen implements Screen {
 	private final BoardSurface board;				// 盤面
 	private final Dice dice;						// さいころ
 	private final UI ui;							// UI
+	private final ParticleManager particle;			// パーティクル
 	private final FileIO fileIO;					// セーブファイルの読み書き
 	private final SaveData saveData;				// セーブファイル
 
@@ -72,11 +86,12 @@ public class GameScreen implements Screen {
 	/**
 	 * コンストラクタ 初期化、読み込み
 	 */
-	public GameScreen (final Pawn game) {
+	public GameScreen (@NonNull final Pawn game) {
 		this.game = game;
 		batch = game.batch;
 		font = game.font;
 		renderer = game.renderer;
+		manager = game.manager;
 		timer = 0;
 		goalNo = 0;
 		sequenceNo = 1;
@@ -86,6 +101,7 @@ public class GameScreen implements Screen {
 		mapCameraHeight = (float) BoardSurface.MAP_HEIGHT / 2;
 		mapCameraWidth = (float) BoardSurface.MAP_WIDTH / 2;
 		turnCount = 1;
+		isLoad = false;
 
 		//---- カメラ関係の初期化
 		camera = new OrthographicCamera();
@@ -110,24 +126,39 @@ public class GameScreen implements Screen {
 		board = new BoardSurface();
 		dice = new Dice(game);
 		ui = new UI();
+		particle = new ParticleManager();
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		//-- 初期化
-		board.initialize();
+		manager.load("assets/map_atlas.txt", TextureAtlas.class);
+		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
+		manager.load("assets/dice.png", Texture.class);
+		manager.load("assets/back.png", Texture.class);
+		manager.load("assets/cursor.png", Texture.class);
+		manager.update();
+		manager.finishLoading();
+		dice.initialize(manager);
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
+		result.initialize(playerManager);
+		cursor = new Sprite(manager.get("assets/cursor.png", Texture.class));
+		cursor.flip(false, true);
+		cursor.setCenter(Pawn.LOGICAL_WIDTH >> 1, Pawn.LOGICAL_HEIGHT >> 1);
 		//-- 参照セット
 		playerManager.setBoardSurface(board);
 		ui.setDice(dice);
 		fileIO.setSaveData(saveData);
 		saveData.aPlayer = playerManager.getAPlayer();
+		game.achievement.initialize(manager, ui, font);
 		//-- 作成
-		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsExplanation(UI.SQUARE_EXPLANATION, manager, font, Pawn.LOGICAL_WIDTH-310, 100, 300, 360, "マスの説明。折り返しできるようにしないとはみ出る。改行するとバグるので修正が必要。\n(追記)改行文字で改行可能に。"));
+		ui.add(new UIPartsOperatingMethod(UI.OPERATING_METHOD, "操作説明欄"));
 		// フラグ初期化
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);
@@ -137,8 +168,9 @@ public class GameScreen implements Screen {
 		sequence = this::turnStandby;
 	}
 
-	public void initialize(final GameSetting setting) {
+	public void initialize(@NonNull final GameSetting setting) {
 		this.gameSetting = setting;
+		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
 		//Gdx.app.debug("fps", "name="+name);
 		int[] color = gameSetting.getAColorNo();
@@ -156,12 +188,17 @@ public class GameScreen implements Screen {
 		order = orderBuilder.toString();
 	}
 
-	public void load(final SaveData sd) {
+	public void load(@NonNull final SaveData sd) {
+		isLoad = true;
+		gameSetting = new GameSetting();
+		gameSetting.setStageNo(sd.mapNo);
+		board.initialize(manager,sd.mapNo,font);
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;
 		goalNo = sd.goalNo;
 //		sequenceNo = sd.sequenceNo;
 		turnPlayerNo = sd.turnPlayerNo-1;
+		turnCount = sd.turnCount;
 		saveData.aPlayer = playerManager.getAPlayer();
 
 		StringBuilder orderBuilder = new StringBuilder();
@@ -178,23 +215,27 @@ public class GameScreen implements Screen {
 	 * update 更新。メインループの描画以外。
 	 */
 	private void update() {
-		timer += Gdx.graphics.getDeltaTime();
+		timer = game.getTimer();
 		screenOrigin.set(0,0,0);
 		viewport.unproject(screenOrigin);
+		manager.update();
+		particle.update(game.getTimer());
 
 		//------ 入力
-		if (Gdx.input.isKeyPressed(Input.Keys.F1)) {
-			game.setScreen(new TitleScreen(game));
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F5)) {
-			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
-			fileIO.save();
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.F6)) {
-			fileIO.load();
-			GameScreen gameScreen = new GameScreen(game);
-			gameScreen.load(fileIO.getSaveData());
-			game.setScreen(gameScreen);
+		if(FlagManagement.is(Flag.DEBUG_CONTROL)) {
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+				game.setScreen(new TitleScreen(game));
+			}
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+				saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
+				fileIO.save();
+			}
+			if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
+				fileIO.load();
+				GameScreen gameScreen = new GameScreen(game);
+				gameScreen.load(fileIO.getSaveData());
+				game.setScreen(gameScreen);
+			}
 		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -202,18 +243,11 @@ public class GameScreen implements Screen {
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			if (Gdx.input.isKeyPressed(Input.Keys.W) && zoom > 1) {
-				zoom -= 0.1;
-				camera.zoom -= 0.1;
-			}
-			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-				zoom += 0.1;
-				camera.zoom += 0.1;
-			}
-			if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-				zoom = 1.0f;
-				setCameraPositionToTurnPlayer();
-			}
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\n左シフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
+		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[M]キーで詳細マップ\n[Space]キーで戻る");
+		} else {
+			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("上下キーで選択\n[Space]キーで決定");
 		}
 
 		if(FlagManagement.is(Flag.PLAY)) {
@@ -224,8 +258,7 @@ public class GameScreen implements Screen {
 			//-- その他の動作
 			playerManager.update();
 			dice.update();
-			board.update();
-
+			board.update(this);
 		}
 
 		// Flag.PLAY == false
@@ -246,19 +279,15 @@ public class GameScreen implements Screen {
 		update();
 
 		// カメラの更新
-		if(FlagManagement.is(Flag.LOOK_PIECE)) setCameraPositionToTurnPlayer();
+		if(FlagManagement.is(Flag.LOOK_PIECE)) {
+		    setCameraPositionToTurnPlayer();
+        }
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		renderer.setProjectionMatrix(camera.combined);
 		// 塗りつぶし
-		ScreenUtils.clear(0, 255, 0, 1);
-//		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		//-- 論理表示領域を黒で塗りつぶし
-//		renderer.begin(ShapeRenderer.ShapeType.Filled);
-//		renderer.setColor(0,0,0,1);
-//		renderer.rect(screenOrigin.x, screenOrigin.y,game.LOGICAL_WIDTH,game.LOGICAL_HEIGHT);
-//		renderer.end();
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		ScreenUtils.clear(0, 0, 0, 1);
 
 		//------ 描画
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -270,9 +299,10 @@ public class GameScreen implements Screen {
 		renderer.end();
 
 		//------ メイン描画
-		board.draw(batch, renderer);
+		board.draw(batch);
 		playerManager.draw(batch, renderer);
-
+		particle.draw(batch, renderer);
+		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -289,6 +319,11 @@ public class GameScreen implements Screen {
 			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
 			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 18*4);
 			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
+			batch.end();
+		}
+		if(FlagManagement.is(Flag.LOOK_FREE)) {
+			batch.begin();
+			cursor.draw(batch);
 			batch.end();
 		}
 	}
@@ -327,7 +362,13 @@ public class GameScreen implements Screen {
 		playerManager.dispose();
 		dice.dispose();
 		board.dispose();
-
+		particle.dispose();
+		result.dispose();
+		manager.unload("assets/map_atlas.txt");
+		manager.unload("assets/ui_atlas.txt");
+		manager.unload("assets/dice.png");
+		manager.unload("assets/back.png");
+		manager.unload("assets/cursor.png");
 	}
 
 	private int turnStandby() {
@@ -390,15 +431,15 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(turnCount+"ターン目");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
 					zoom = 1.0f;
 					FlagManagement.set(Flag.LOOK_PIECE);
 					sequenceNo = Sequence.ACTION_SELECT.no;
 				}
 				if(FlagManagement.is(Flag.LOOK_FREE)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("方向キーでカメラ移動\nシフト押しながらで高速移動\n[Q]キーで全体マップ\n[S]キーで拡大\n[W]キーで縮小\n[R]キーでカメラリセット");
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("カーソルを合わせるとマスの情報が確認できます");
 					freeCamera();
-					if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+					if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 						zoom = mapCameraZoom;
 						camera.zoom = mapCameraZoom;
 						camera.position.x = mapCameraWidth;
@@ -406,8 +447,8 @@ public class GameScreen implements Screen {
 						FlagManagement.set(Flag.LOOK_MAP);
 					}
 				} else if (FlagManagement.is(Flag.LOOK_MAP)) {
-					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("[Q]キーで詳細マップ");
-					if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("全体マップ");
+					if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
 						zoom = 1.0f;
 						setCameraPositionToTurnPlayer();
 						FlagManagement.set(Flag.LOOK_FREE);
@@ -417,7 +458,7 @@ public class GameScreen implements Screen {
 		}
 
 		if(sequenceNo == Sequence.ACTION_SELECT.no +3) {
-			saveData.setGameState(timer, goalNo, sequenceNo, turnPlayerNo);
+			saveData.setGameState(timer, gameSetting.getStageNo(), goalNo, sequenceNo, turnPlayerNo, turnCount);
 			fileIO.save();
 			sequenceNo = Sequence.ACTION_SELECT.no;
 		}
@@ -433,7 +474,6 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			    int diceNumber = dice.rollStop();
-			    ui.add(new UIPartsPopup("test", 600,50,300,100, diceNumber+"マス進むむむむむむむむむむむむむむむむむむ\nGO", 1));
 				turnPlayer.addADiceNo(diceNumber);
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
@@ -500,9 +540,26 @@ public class GameScreen implements Screen {
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
 				if(turnPlayer.isGoal()) {
-					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
-					//Gdx.app.debug("goal", "aResultDetail="+aResultDetail);
+					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
+					Vector2 pPos = turnPlayer.getPiece().getPosition().cpy();
+					pPos.x += 40;
+					pPos.y += 80;
+					for(int i=0 ; i<30 ; i++)
+						particle.addParticle(new ParticleInjectionFlutterDrop(
+								pPos,
+								(float) Math.toRadians(240),
+								(float) Math.toRadians(30),
+								12.0f
+						));
+					for(int i=0 ; i<30 ; i++)
+						particle.addParticle(new ParticleInjectionFlutterDrop(
+								pPos,
+								(float) Math.toRadians(300),
+								(float) Math.toRadians(30),
+								12.0f
+						));
+					sequenceNo++;
 				}
 				aSquareNo = gameSetting.getASquareNo();
 				playerNo = gameSetting.getPlayerNo();
@@ -523,9 +580,14 @@ public class GameScreen implements Screen {
 			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +3) {
-			if(timer-timerRap >= 0.5f) sequenceNo++;
+			if(timer-timerRap >= 0.5f) sequenceNo+=2;
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +4) {
+			if(timer-timerRap >= 3.0f) sequenceNo++;
+		}
+		if(sequenceNo == Sequence.TASK_DO.no +5) {
+			// ゲーム情報の更新
+			game.achievement.update(timer, turnPlayer);
 			sequenceNo = Sequence.TURN_STANDBY.no;
 			sequence = this::turnStandby;
 		}
@@ -535,6 +597,9 @@ public class GameScreen implements Screen {
 
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
+			if(isLoad) {
+				fileIO.delete();
+			}
 			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
 			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
 			while(playerIterator.hasNext()) {
@@ -562,22 +627,54 @@ public class GameScreen implements Screen {
 	}
 
 	private void setCameraPositionToTurnPlayer() {
-		Vector2 pv = turnPlayer.getPiece().getPosition();
-		camera.position.x = pv.x;
-		camera.position.y = pv.y;
+		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
+		camera.position.x = pv.x+ (Piece.WIDTH >> 1);
+		camera.position.y = pv.y+ (Piece.HEIGHT >> 1);
 		camera.zoom = zoom;
 	}
 
+	/**
+	 * Flag.LOOK_FREEが立っているときのカメラの操作
+	 */
 	private void freeCamera() {
-		int x = 0;
-		int y = 0;
+		float m = 8;	//通常時の速さ(px/f)
+		float x = 0;
+		float y = 0;
 		int fast = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) fast = 2;
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = -1;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.LEFT) && Gdx.input.isKeyPressed(Input.Keys.RIGHT)) x = 1;
-		if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = -1;
-		else if(!Gdx.input.isKeyPressed(Input.Keys.UP) && Gdx.input.isKeyPressed(Input.Keys.DOWN)) y = 1;
-		if(x != 0 || y != 0) camera.translate(6*x*fast, 6*y*fast);
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) fast = 2;
+		if(Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
+				Gdx.input.isKeyPressed(Input.Keys.A)) x -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+				Gdx.input.isKeyPressed(Input.Keys.D)) x += m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.UP) ||
+				Gdx.input.isKeyPressed(Input.Keys.W)) y -= m*fast;
+		if(Gdx.input.isKeyPressed(Input.Keys.DOWN) ||
+				Gdx.input.isKeyPressed(Input.Keys.S)) y += m*fast;
+		x = median(x, -camera.position.x, BoardSurface.MAP_WIDTH - camera.position.x);
+		y = median(y, -camera.position.y, BoardSurface.MAP_HEIGHT - camera.position.y);
+		if(x != 0 || y != 0) camera.translate(x, y);
+		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+			zoom -= 0.1;
+			if(zoom < 1) zoom = 1.0f;
+			camera.zoom = zoom;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+			zoom += 0.1;
+			if(zoom > 5) zoom = 5.0f;
+			camera.zoom = zoom;
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+			zoom = 1.0f;
+			setCameraPositionToTurnPlayer();
+		}
+	}
+
+	public AssetManager getManager() {
+		return manager;
+	}
+
+	public Player getTurnPlayer() {
+		return turnPlayer;
 	}
 
 	public int getGoalNo() {
@@ -590,5 +687,13 @@ public class GameScreen implements Screen {
 
 	public int getTurnCount() {
 		return turnCount;
+	}
+
+	public Vector3 getCameraPos() {
+		return camera.position;
+	}
+
+	public void setUIPartsExplanation(String text) {
+		((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(text);
 	}
 }

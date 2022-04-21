@@ -1,7 +1,6 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class GameSetting {
@@ -10,28 +9,38 @@ public class GameSetting {
     private String[] aName;
     private int[] aColorNo;
     private int[] aSquareNo;
+    private int stageNo;
 
-    public GameSetting() {
-    }
+    public GameSetting() { }
 
     public void init(int playerNo) {
         this.playerNo = playerNo;
         aName = new String[playerNo];
         aColorNo = new int[playerNo];
         aSquareNo = new int[playerNo];
-        for(int i : IntStream.range(0,playerNo).toArray()) {
-            aName[i] = (i+1)+"P";
+        for (int i : IntStream.range(0, playerNo).toArray()) {
+            aName[i] = (i + 1) + "P";
             aColorNo[i] = i;
             aSquareNo[i] = 0;
         }
+        stageNo = 0;
     }
 
     public void setAName(int no, String name) {
-        aName[no] = name;
+        if(Objects.nonNull(name)) {
+            String na = name.trim();
+            if(!na.isEmpty()) {
+                aName[no] = name;
+            }
+        }
     }
 
     public void setAColorNo(int no, int colorNo) {
         aColorNo[no] = colorNo;
+    }
+
+    public void setStageNo(int stageNo) {
+        this.stageNo = stageNo;
     }
 
     public int getPlayerNo() {
@@ -47,8 +56,7 @@ public class GameSetting {
         return aColorNo;
     }
 
-    public int[] getASquareNo() {
-        return aSquareNo;
+    public int getStageNo() {
+        return stageNo;
     }
-
 }

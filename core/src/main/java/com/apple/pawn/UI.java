@@ -15,6 +15,7 @@ import java.util.Iterator;
  */
 public class UI {
     public static final String SQUARE_EXPLANATION = "square_explanation";
+    public static final String OPERATING_METHOD = "operating_method";
 
     private int select = -1;
     private final Array<UIParts> uiParts;

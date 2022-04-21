@@ -1,40 +1,66 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import android.support.annotation.NonNull;
+
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 
 import java.util.Objects;
 
 public class Square {
-    public static Array<String> TYPE_STR;
+    public static final String[] TYPE_STR = {"start", "goal", "normal", "event", "task"};
+    public static final String[] TYPE_STR_JP = {"スタート", "ゴール", "通常マス", "イベントマス", "課題マス"};
+    public static final int SQUARE_WIDTH = 256, SQUARE_HEIGHT = 256;
 
-    protected final Vector2 pos;
+    protected final Vector2 coordinate;
+    protected final Vector2 position;
     protected final int type;
     protected final int count;
+
+    protected Sprite sprite;
     protected String document;
+    protected String uiDoc;
     protected int move;
     protected int back;
+    protected BitmapFont font;
 
     //-- 参照
     protected Array<Piece> aPiece;
 
-    static {
-        TYPE_STR = new Array<>();
-        TYPE_STR.add("start", "goal", "normal", "event");
-        TYPE_STR.add("task");
-    }
-
-    public Square(Vector2 pos, int type, int count) {
-        this.pos = pos;
+    public Square(Vector2 coo, int type, int count) {
+        coordinate = coo;
+        position = new Vector2(SQUARE_WIDTH*coordinate.x, SQUARE_HEIGHT*coordinate.y);
         this.type = type;
         this.count = count;
         aPiece = new Array<>();
     }
 
-    public void update() {}
+    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
+        sprite = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[type]);
+        sprite.flip(false, true);
+        sprite.setScale((float) SQUARE_WIDTH / sprite.getWidth(), (float) SQUARE_HEIGHT / sprite.getHeight());
+        sprite.setPosition(position.x, position.y);
+        this.font = font;
+        uiDoc = TYPE_STR_JP[type];
+    }
 
-    public void draw (Batch batch) { }
+    public void update(GameScreen gameScreen, Vector2 cameraPos) {
+        if(sprite.getBoundingRectangle().contains(cameraPos)) {
+            gameScreen.setUIPartsExplanation(uiDoc);
+        }
+    }
+
+    public void draw (SpriteBatch batch) {
+        sprite.draw(batch);
+    }
+
+    public void drawFont(SpriteBatch batch) { }
 
     public void dispose () { }
 
@@ -46,15 +72,15 @@ public class Square {
         aPiece.removeValue(piece, false);
     }
 
-    public Vector2 getAddress() {
-        return new Vector2(BoardSurface.TILE_WIDTH*pos.x, BoardSurface.TILE_HEIGHT*pos.y);
+    public Vector2 getPos() {
+        return position.cpy();
     }
 
     public boolean hasDocument() {
         return Objects.nonNull(document);
     }
 
-    public String getDocument() {
+    public @Null String getDocument() {
         return document;
     }
 

@@ -1,18 +1,12 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileIO {
@@ -27,7 +21,7 @@ public class FileIO {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            mapper.writeValue(new File("./save/savedata1.sav"), saveData);
+            mapper.writeValue(new File("./save/savedata1.sav"), saveData.cpy());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return false;
@@ -55,6 +49,16 @@ public class FileIO {
             return false;
         }
         return true;
+    }
+
+    public void delete() {
+        File file = new File("./save/savedata1.sav");
+        file.delete();
+    }
+
+    public boolean isExistsSaveData() {
+        File file = new File("./save/savedata1.sav");
+        return file.exists();
     }
 
     public SaveData getSaveData() {

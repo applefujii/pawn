@@ -1,9 +1,13 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,55 +18,84 @@ import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
-    public static final int TILE_WIDTH = 256, TILE_HEIGHT = 256;
-    public static final int SQUARE_COUNT = 65;
-    public static final Array<Vector2> MAP_ADDRESS;
+    public static final Array<Vector2> MAP_COORDINATE;
+    private static final String[] MAP_DATA_NAME = {
+            "map.jsonc",
+            "map2.jsonc",
+            "map3.jsonc"
+    };
 
+    private Sprite backSprite;
     private final Array<Square> aSquare;
-
-    private final Texture mapImg;
+    private final Vector2 cameraPos;
+    private int mapNo;
 
     static {
-        MAP_ADDRESS = new Array<>();
+        MAP_COORDINATE = new Array<>();
         int i;
         int j;
         for(j = 0; j < 16; j++) {
             for(i = 0; i < 16; i++) {
-                Vector2 pos = new Vector2(i, j);
-                MAP_ADDRESS.add(pos);
+                Vector2 coo = new Vector2(i, j);
+                MAP_COORDINATE.add(coo);
             }
         }
     }
 
     public BoardSurface() {
-        mapImg = new Texture(Gdx.files.local("map.png"));
         aSquare = new Array<>();
+        cameraPos = new Vector2();
     }
 
-    public void initialize() {
+    public void initialize(AssetManager manager, int mapNo, BitmapFont font) {
+
+        this.mapNo = mapNo;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode aSquareJson = objectMapper.readTree(Gdx.files.local("assets/a_square_json.jsonc").file());
+            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ MAP_DATA_NAME[mapNo]).file());
             int count = 0;
-            for(JsonNode squareJson : aSquareJson) {
-                Vector2 vec = new Vector2(squareJson.get("x").asInt(), squareJson.get("y").asInt());
-                int type = squareJson.get("type").asInt();
-                if(type == 4) aSquare.add(new TaskSquare(vec, type, count, squareJson.get("document").asText()));
-                else if(type == 3) aSquare.add(new EventSquare(vec, type, count, squareJson.get("document").asText()));
-                else aSquare.add(new Square(vec, type, count));
+            for(JsonNode mJ : mapJson) {
+                int add = mJ.path("address").asInt();
+                int type = mJ.path("type").asInt();
+                if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add).cpy(), type, count, mJ.path("document").asText(), mJ.path("move").asInt(), mJ.path("back").asInt()));
+                else if(type == 3) aSquare.add(new EventSquare(MAP_COORDINATE.get(add).cpy(), type, count, mJ.path("move").asInt()));
+                else aSquare.add(new Square(MAP_COORDINATE.get(add).cpy(), type, count));
                 count++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        backSprite = new Sprite(manager.get("assets/back.png", Texture.class));
+        backSprite.flip(false, true);
+        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+        while(squareIterator.hasNext()) {
+            Square square = squareIterator.next();
+            square.initialize(manager, aSquare.size - 1, font);
+        }
     }
 
-    public void update() { }
+    public void update(GameScreen gameScreen) {
+        if(FlagManagement.is(Flag.LOOK_FREE)) {
+            cameraPos.set(gameScreen.getCameraPos().x, gameScreen.getCameraPos().y);
+            Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
+            while (squareIterator.hasNext()) {
+                Square square = squareIterator.next();
+                 square.update(gameScreen, cameraPos);
+            }
+        }
+    }
 
-    public void draw (Batch batch, ShapeRenderer renderer) {
+    public void draw (@NonNull SpriteBatch batch) {
         batch.begin();
+        batch.disableBlending();
 
-        batch.draw(mapImg, 0, 0, MAP_WIDTH, MAP_HEIGHT, 0, 0, MAP_WIDTH, MAP_HEIGHT, false, true);
+        for(int j = 0; j < 47; j++) {
+            for(int i = 0; i < 47; i++) {
+                backSprite.setPosition(i * 256 - MAP_WIDTH, j * 256 - MAP_HEIGHT);
+                backSprite.draw(batch);
+            }
+        }
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
@@ -70,17 +103,18 @@ public class BoardSurface {
             square.draw(batch);
         }
 
+        batch.enableBlending();
+
+        squareIterator = new Array.ArrayIterator<>(aSquare);
+        while(squareIterator.hasNext()) {
+            Square square = squareIterator.next();
+            square.drawFont(batch);
+        }
+
         batch.end();
     }
 
-    public void dispose () {
-//        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-//        while(squareIterator.hasNext()) {
-//            Square square = squareIterator.next();
-//            square.dispose();
-//        }
-        mapImg.dispose();
-    }
+    public void dispose () { }
 
     public Square getSquare(int squareNo) {
         return aSquare.get(squareNo);
@@ -90,7 +124,11 @@ public class BoardSurface {
         Square s;
         if(squareNo <= aSquare.size-1) s = aSquare.get(squareNo);
         else s = aSquare.peek();
-        return s.getAddress();
+        return s.getPos();
+    }
+
+    public int getMapNo() {
+        return mapNo;
     }
 
     public int getSquareCount() {

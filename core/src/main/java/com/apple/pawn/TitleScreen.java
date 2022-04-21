@@ -9,7 +9,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,10 +16,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -141,7 +138,7 @@ public class TitleScreen implements Screen {
 		mainImage = new Sprite(manager.get("assets/title.png", Texture.class),0,0,1024,591);
 		mainImage.flip(false,true);
 		mainImage.setSize(614,354);
-		mainImage.setPosition(Pawn.LOGICAL_WIDTH/2-307,Pawn.LOGICAL_HEIGHT-354-130);
+		mainImage.setPosition((Pawn.LOGICAL_WIDTH >> 1)-307,Pawn.LOGICAL_HEIGHT-354-130);
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -165,12 +162,12 @@ public class TitleScreen implements Screen {
 		//-- 左右で回る駒のスピード変更
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
 				Gdx.input.isKeyPressed(Input.Keys.D)) {
-			this.SPEED += this.SPEED/100;
-			if(this.SPEED > 0.05f) this.SPEED = 0.05f;
+			SPEED += SPEED/100;
+			if(SPEED > 0.05f) SPEED = 0.05f;
 		} else if (Gdx.input.isKeyPressed(Input.Keys.LEFT) ||
 				Gdx.input.isKeyPressed(Input.Keys.A)) {
-			this.SPEED -= this.SPEED/100;
-			if(this.SPEED < 0.002f) this.SPEED = 0.002f;
+			SPEED -= SPEED/100;
+			if(SPEED < 0.002f) SPEED = 0.002f;
 		}
 
 		particle.update(game.getTimer());
@@ -353,6 +350,7 @@ public class TitleScreen implements Screen {
 			playerNo = ui.getCursor()+2;
 			int select = ui.getSelect();
 			if(select != -1 ) {
+				Gdx.app.debug("fps", "select="+select);
 				playerNo = select+2;
 				gameSetting.init(playerNo);
 				sequence = this::startSetting2Sequence;

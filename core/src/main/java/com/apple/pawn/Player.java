@@ -1,5 +1,8 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -82,11 +85,15 @@ public class Player {
         piece.dispose();
     }
 
-    public void addResultDetail(Square visitSquare) {
+    public void addResultDetail(@NonNull Square visitSquare) {
         int type = visitSquare.getType() - 2;
         if(type >= 0) {
             int count = aResultDetail.get(type);
+            Gdx.app.debug("aResultDetail", aResultDetail.toString());
+            Gdx.app.debug("type", Square.TYPE_STR_JP[type + 2]);
+            Gdx.app.debug("count(before)", String.valueOf(count));
             count++;
+            Gdx.app.debug("count(after)", String.valueOf(count));
             aResultDetail.insert(type, count);
         }
     }
@@ -112,9 +119,7 @@ public class Player {
         return name;
     }
 
-    public int getGoalNo() {
-        return goalNo;
-    }
+    public int getGoalNo() { return goalNo; }
 
     public int getGoalTurn() {
         return goalTurn;
@@ -124,7 +129,11 @@ public class Player {
         return order;
     }
 
-    public Array<Integer> getaDiceNo() {
+    public Array<Integer> getAResultDetail() {
+        return aResultDetail;
+    }
+
+    public Array<Integer> getADiceNo() {
         return aDiceNo;
     }
 }

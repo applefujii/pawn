@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -64,7 +66,7 @@ public class Piece {
         isMove = false;
     }
 
-    public void initialize(BoardSurface bs, AssetManager manager) {
+    public void initialize(@NonNull BoardSurface bs, @NonNull AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
         pos = bs.getPos(squareNo);
@@ -75,7 +77,7 @@ public class Piece {
         sprite.flip(false, true);
     }
 
-    public void load(BoardSurface bs, AssetManager manager) {
+    public void load(BoardSurface bs, @NonNull AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
         sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
@@ -144,15 +146,6 @@ public class Piece {
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
         sprite.draw(batch);
-
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(Color.BLACK);
-//        renderer.circle(pos.x, pos.y, 32);
-//        renderer.end();
-//        renderer.begin(ShapeRenderer.ShapeType.Filled);
-//        renderer.setColor(Color.RED);
-//        renderer.circle(pos.x, pos.y, 29);
-//        renderer.end();
     }
 
     public void dispose () { }

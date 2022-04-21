@@ -1,13 +1,17 @@
 package com.apple.pawn;
 
-import java.math.BigDecimal;
-import java.sql.*;
-import java.util.Iterator;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Iterator;
 
 public class Achievement {
 
@@ -119,15 +123,15 @@ public class Achievement {
                             if(updateTotalTurn >= 1000) isGet = true;
                             break;
                         case 14:
-                            ret = dicedSerialCheck(player.getaDiceNo());
+                            ret = dicedSerialCheck(player.getADiceNo());
                             if(ret[0] == 6  &&  ret[1] == 2) isGet = true;
                             break;
                         case 15:
-                            ret = dicedSerialCheck(player.getaDiceNo());
+                            ret = dicedSerialCheck(player.getADiceNo());
                             if(ret[0] == 6  &&  ret[1] == 3) isGet = true;
                             break;
                         case 16:
-                            ret = dicedSerialCheck(player.getaDiceNo());
+                            ret = dicedSerialCheck(player.getADiceNo());
                             if(ret[0] == 1  &&  ret[1] == 2) isGet = true;
                             break;
                     }

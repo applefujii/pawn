@@ -48,6 +48,7 @@ public class GameSetting {
     }
 
     public String[] getAName() {
+        //Gdx.app.debug("fps", "aName="+aName);
         return aName;
     }
 

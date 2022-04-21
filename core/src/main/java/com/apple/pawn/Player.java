@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.badlogic.gdx.Gdx;
 
 /**
  * @author fujii
@@ -70,7 +71,9 @@ public class Player {
             gameScreen.addGoalNo();
             goalNo = gameScreen.getGoalNo();
             goalTurn = gameScreen.getTurnCount();
+            //Gdx.app.debug("fps", "goalturn="+goalTurn);
             isGoal = true;
+            //Gdx.app.debug("goal", "aResultDetail="+aResultDetail);
         }
     }
 
@@ -86,8 +89,14 @@ public class Player {
         int type = visitSquare.getType() - 2;
         if(type >= 0) {
             int count = aResultDetail.get(type);
+            Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
+            Gdx.app.debug("fps", "type="+type);
+            Gdx.app.debug("fps", "count(before)="+count);
             count++;
+            Gdx.app.debug("fps", "count(after)="+count);
+            //Gdx.app.debug("before", "before="+aResultDetail);
             aResultDetail.insert(type, count);
+            //Gdx.app.debug("after", "after="+aResultDetail);
         }
     }
 
@@ -109,12 +118,11 @@ public class Player {
     }
 
     public String getName() {
+        //Gdx.app.debug("fps", "name="+name);
         return name;
     }
 
-    public int getGoalNo() {
-        return goalNo;
-    }
+    public int getGoalNo() { return goalNo; }
 
     public int getGoalTurn() {
         return goalTurn;
@@ -122,9 +130,5 @@ public class Player {
 
     public int getOrder() {
         return order;
-    }
-
-    public Array<Integer> getaDiceNo() {
-        return aDiceNo;
     }
 }

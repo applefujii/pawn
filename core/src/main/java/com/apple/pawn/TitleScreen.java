@@ -346,6 +346,7 @@ public class TitleScreen implements Screen {
 			playerNo = ui.getCursor()+2;
 			int select = ui.getSelect();
 			if(select != -1 ) {
+				Gdx.app.debug("fps", "select="+select);
 				playerNo = select+2;
 				gameSetting.init(playerNo);
 				sequence = this::startSetting2Sequence;

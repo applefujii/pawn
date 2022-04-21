@@ -32,10 +32,8 @@ public class BoardSurface {
 
     static {
         MAP_COORDINATE = new Array<>();
-        int i;
-        int j;
-        for(j = 0; j < 16; j++) {
-            for(i = 0; i < 16; i++) {
+        for(int j = 0; j < 16; j++) {
+            for(int i = 0; i < 16; i++) {
                 Vector2 coo = new Vector2(i, j);
                 MAP_COORDINATE.add(coo);
             }

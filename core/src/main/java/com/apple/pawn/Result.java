@@ -102,7 +102,6 @@ public class Result extends UIParts {
         //new TestWindow("テストウィンドウ",400,300);
 //        fontTitle.getData().setScale(1, 1);
 
-//
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.end();
 

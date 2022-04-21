@@ -502,11 +502,13 @@ public class GameScreen implements Screen {
 				if(turnPlayer.isGoal()) {
 					// ※ゴール演出へ
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
+					//Gdx.app.debug("goal", "aResultDetail="+aResultDetail);
 				}
 				aSquareNo = gameSetting.getASquareNo();
 				playerNo = gameSetting.getPlayerNo();
 				String[] name = gameSetting.getAName();
 				aResultDetail = turnPlayer.getResultDetail();
+				//Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
 
 				for(int i=0 ; i<name.length ; i++) {
 					if(turnPlayer.getName() == name[i]){

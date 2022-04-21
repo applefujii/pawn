@@ -1,12 +1,14 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.badlogic.gdx.Gdx;
 
 /**
  * @author fujii
@@ -71,9 +73,7 @@ public class Player {
             gameScreen.addGoalNo();
             goalNo = gameScreen.getGoalNo();
             goalTurn = gameScreen.getTurnCount();
-            //Gdx.app.debug("fps", "goalturn="+goalTurn);
             isGoal = true;
-            //Gdx.app.debug("goal", "aResultDetail="+aResultDetail);
         }
     }
 
@@ -85,18 +85,16 @@ public class Player {
         piece.dispose();
     }
 
-    public void addResultDetail(Square visitSquare) {
+    public void addResultDetail(@NonNull Square visitSquare) {
         int type = visitSquare.getType() - 2;
         if(type >= 0) {
             int count = aResultDetail.get(type);
-            Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
-            Gdx.app.debug("fps", "type="+type);
-            Gdx.app.debug("fps", "count(before)="+count);
+            Gdx.app.debug("aResultDetail", aResultDetail.toString());
+            Gdx.app.debug("type", Square.TYPE_STR_JP[type + 2]);
+            Gdx.app.debug("count(before)", String.valueOf(count));
             count++;
-            Gdx.app.debug("fps", "count(after)="+count);
-            //Gdx.app.debug("before", "before="+aResultDetail);
+            Gdx.app.debug("count(after)", String.valueOf(count));
             aResultDetail.insert(type, count);
-            //Gdx.app.debug("after", "after="+aResultDetail);
         }
     }
 
@@ -118,7 +116,6 @@ public class Player {
     }
 
     public String getName() {
-        //Gdx.app.debug("fps", "name="+name);
         return name;
     }
 
@@ -130,5 +127,13 @@ public class Player {
 
     public int getOrder() {
         return order;
+    }
+
+    public Array<Integer> getAResultDetail() {
+        return aResultDetail;
+    }
+
+    public Array<Integer> getADiceNo() {
+        return aDiceNo;
     }
 }

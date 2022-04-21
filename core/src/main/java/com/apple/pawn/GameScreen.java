@@ -564,7 +564,7 @@ public class GameScreen implements Screen {
 				aSquareNo = gameSetting.getASquareNo();
 				playerNo = gameSetting.getPlayerNo();
 				String[] name = gameSetting.getAName();
-				aResultDetail = turnPlayer.getResultDetail();
+				aResultDetail = turnPlayer.getAResultDetail();
 				//Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
 
 				for(int i=0 ; i<name.length ; i++) {

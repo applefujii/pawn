@@ -18,7 +18,6 @@ import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
-    public static final int BACK_HEIGHT = 2700;
     public static final Array<Vector2> MAP_COORDINATE;
     private static final String[] MAP_DATA_NAME = {
             "map.jsonc",
@@ -67,10 +66,8 @@ public class BoardSurface {
             e.printStackTrace();
         }
 
-        backSprite = new Sprite(manager.get("assets/background.png", Texture.class));
+        backSprite = new Sprite(manager.get("assets/back.png", Texture.class));
         backSprite.flip(false, true);
-        backSprite.setScale((float) (MAP_HEIGHT + Pawn.LOGICAL_HEIGHT) / BACK_HEIGHT);
-        backSprite.setCenter(MAP_WIDTH >> 1, MAP_HEIGHT >> 1);
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {
             Square square = squareIterator.next();
@@ -93,7 +90,12 @@ public class BoardSurface {
         batch.begin();
         batch.disableBlending();
 
-        backSprite.draw(batch);
+        for(int j = 0; j < 47; j++) {
+            for(int i = 0; i < 47; i++) {
+                backSprite.setPosition(i * 256 - MAP_WIDTH, j * 256 - MAP_HEIGHT);
+                backSprite.draw(batch);
+            }
+        }
 
         Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
         while(squareIterator.hasNext()) {

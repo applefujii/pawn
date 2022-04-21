@@ -132,7 +132,7 @@ public class GameScreen implements Screen {
 		manager.load("assets/map_atlas.txt", TextureAtlas.class);
 		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
 		manager.load("assets/dice.png", Texture.class);
-		manager.load("assets/background.png", Texture.class);
+		manager.load("assets/back.png", Texture.class);
 		manager.load("assets/cursor.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
@@ -366,7 +366,7 @@ public class GameScreen implements Screen {
 		manager.unload("assets/map_atlas.txt");
 		manager.unload("assets/ui_atlas.txt");
 		manager.unload("assets/dice.png");
-		manager.unload("assets/background.png");
+		manager.unload("assets/back.png");
 		manager.unload("assets/cursor.png");
 	}
 

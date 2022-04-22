@@ -251,8 +251,8 @@ public class TitleScreen implements Screen {
 
 	/**
 	 * resize リサイズイベント
-	 * @param width
-	 * @param height
+	 * @param width 変更後のウィンドウの横幅
+	 * @param height　変更後のウィンドウの縦幅
 	 */
 	@Override
 	public void resize(int width, int height) {

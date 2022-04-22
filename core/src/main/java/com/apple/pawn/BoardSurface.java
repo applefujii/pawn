@@ -28,7 +28,6 @@ public class BoardSurface {
     private Sprite backSprite;
     private final Array<Square> aSquare;
     private final Vector2 cameraPos;
-    private int mapNo;
 
     static {
         MAP_COORDINATE = new Array<>();
@@ -46,8 +45,6 @@ public class BoardSurface {
     }
 
     public void initialize(AssetManager manager, int mapNo, BitmapFont font) {
-
-        this.mapNo = mapNo;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ MAP_DATA_NAME[mapNo]).file());
@@ -123,10 +120,6 @@ public class BoardSurface {
         if(squareNo <= aSquare.size-1) s = aSquare.get(squareNo);
         else s = aSquare.peek();
         return s.getPos();
-    }
-
-    public int getMapNo() {
-        return mapNo;
     }
 
     public int getSquareCount() {

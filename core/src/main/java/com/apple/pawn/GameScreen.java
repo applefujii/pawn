@@ -294,7 +294,6 @@ public class GameScreen implements Screen {
 		board.draw(batch);
 		playerManager.draw(batch, renderer);
 		particle.draw(batch, renderer);
-		//if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();

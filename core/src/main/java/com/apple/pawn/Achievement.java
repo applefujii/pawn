@@ -42,9 +42,7 @@ public class Achievement {
         try {
             Class.forName(DRIVE_NAME);
             connection = DriverManager.getConnection(DB_URL);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -68,7 +66,7 @@ public class Achievement {
                 updateTotalTurn += 1;
                 stUpdatePlayData.setBigDecimal(1, updateTotalTime);
                 stUpdatePlayData.setInt(2, updateTotalTurn);
-                int st = stUpdatePlayData.executeUpdate();
+                stUpdatePlayData.executeUpdate();
 //                Gdx.app.debug("achievement", "Update" + st);
 //                Gdx.app.debug("achievement", "total_time=" + updateTotalTime);
 //                Gdx.app.debug("achievement", "total_turn=" + updateTotalTurn);
@@ -144,9 +142,7 @@ public class Achievement {
                 }
             }
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -180,7 +176,7 @@ public class Achievement {
 
     /**
      * 同じ目が何回連続で出たか返す
-     * @param aDicedNo
+     * @param aDicedNo 出た目の配列
      * @return [0]何の目が [1]何回
      */
     private int[] dicedSerialCheck(Array<Integer> aDicedNo) {

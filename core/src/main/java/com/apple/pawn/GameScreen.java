@@ -355,11 +355,6 @@ public class GameScreen implements Screen {
 			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
 			batch.end();
 		}
-		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			batch.begin();
-			cursor.draw(batch);
-			batch.end();
-		}
 	}
 
 	/**

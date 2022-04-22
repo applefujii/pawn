@@ -132,7 +132,6 @@ public class GameScreen implements Screen {
 		manager.load("assets/dice.png", Texture.class);
 		manager.load("assets/back.png", Texture.class);
 		manager.load("assets/cursor.png", Texture.class);
-//		manager.load("assets/black.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		dice.initialize(manager);
@@ -171,7 +170,6 @@ public class GameScreen implements Screen {
 		this.gameSetting = setting;
 		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
-		//Gdx.app.debug("fps", "name="+name);
 		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
 			playerManager.add(name[i], color[i]);
@@ -195,7 +193,6 @@ public class GameScreen implements Screen {
 		playerManager.load(sd.aPlayer);
 		timer = sd.timer;
 		goalNo = sd.goalNo;
-//		sequenceNo = sd.sequenceNo;
 		turnPlayerNo = sd.turnPlayerNo-1;
 		turnCount = sd.turnCount;
 		saveData.aPlayer = playerManager.getAPlayer();
@@ -322,13 +319,6 @@ public class GameScreen implements Screen {
 			ui.draw(batch, renderer, font, 1);
 		//-- ポーズ中は暗くする
 		if(FlagManagement.is(Flag.PLAY) == false) {
-//			Sprite black = new Sprite(manager.get("assets/black.png", Texture.class),0,0,32,32);
-//			batch.begin();
-//			black.setSize(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
-//			black.setPosition(0, 0);
-//			black.setAlpha(0.6f);
-//			black.draw(batch);
-//			batch.end();
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -388,13 +378,11 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		particle.dispose();
-		//result.dispose();
 		manager.unload("assets/map_atlas.txt");
 		manager.unload("assets/ui_atlas.txt");
 		manager.unload("assets/dice.png");
 		manager.unload("assets/back.png");
 		manager.unload("assets/cursor.png");
-//		manager.unload("assets/black.png");
 	}
 
 	private int turnStandby() {
@@ -412,7 +400,6 @@ public class GameScreen implements Screen {
 					turnCount++;
 				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
-				//Gdx.app.debug("fps", "turnPlayer="+turnPlayer);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
@@ -628,7 +615,6 @@ public class GameScreen implements Screen {
 			FlagManagement.set(Flag.RESULT_SHOW);
 			int select = ui.getSelect();
 			if(select != -1 ) {
-				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
 				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,2,game);
 				result.initialize(playerManager);
 				ui.add(result);

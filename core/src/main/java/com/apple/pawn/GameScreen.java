@@ -80,9 +80,7 @@ public class GameScreen implements Screen {
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
-	int[] aSquareNo;
-	private int playerNo;
-	private Array<Integer> aResultDetail;
+
 
 	/**
 	 * コンストラクタ 初期化、読み込み
@@ -173,7 +171,6 @@ public class GameScreen implements Screen {
 		this.gameSetting = setting;
 		board.initialize(manager, setting.getStageNo(), font);
 		String[] name = gameSetting.getAName();
-		//Gdx.app.debug("fps", "name="+name);
 		int[] color = gameSetting.getAColorNo();
 		for(int i=0 ; i<name.length ; i++) {
 			playerManager.add(name[i], color[i]);
@@ -303,7 +300,6 @@ public class GameScreen implements Screen {
 		board.draw(batch);
 		playerManager.draw(batch, renderer);
 		particle.draw(batch, renderer);
-		//if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -364,7 +360,6 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		particle.dispose();
-		//result.dispose();
 		manager.unload("assets/map_atlas.txt");
 		manager.unload("assets/ui_atlas.txt");
 		manager.unload("assets/dice.png");
@@ -387,7 +382,6 @@ public class GameScreen implements Screen {
 					turnCount++;
 				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
-				//Gdx.app.debug("fps", "turnPlayer="+turnPlayer);
 			} while (turnPlayer.isGoal());
 			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
@@ -562,20 +556,6 @@ public class GameScreen implements Screen {
 						));
 					sequenceNo++;
 				}
-				//aSquareNo = gameSetting.getASquareNo();
-				playerNo = gameSetting.getPlayerNo();
-				String[] name = gameSetting.getAName();
-				aResultDetail = turnPlayer.getAResultDetail();
-				//Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
-
-				for(int i=0 ; i<name.length ; i++) {
-					if(turnPlayer.getName() == name[i]){
-						aSquareNo[i] = turnCount;
-					}
-					//Gdx.app.debug("fps", name[i]+":"+aSquareNo[i]);
-				}
-				//Gdx.app.debug("fps", turnPlayer.getName()+"が"+turnCount+"ターンでゴールした！");
-				//Gdx.app.debug("fps", "Aname="+gameSetting.getAName());
 				timerRap = timer;
 				sequenceNo++;
 			}
@@ -616,7 +596,6 @@ public class GameScreen implements Screen {
 			FlagManagement.set(Flag.RESULT_SHOW);
 			int select = ui.getSelect();
 			if(select != -1 ) {
-				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
 				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game);
 				result.initialize(playerManager);
 				ui.add(result);

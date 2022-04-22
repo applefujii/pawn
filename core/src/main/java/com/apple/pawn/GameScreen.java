@@ -649,7 +649,7 @@ public class GameScreen implements Screen {
 			int select = ui.getSelect();
 			if(select != -1 ) {
 				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
-				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game);
+				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,2,game);
 				result.initialize(playerManager);
 				ui.add(result);
 			}

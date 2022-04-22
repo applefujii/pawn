@@ -24,8 +24,8 @@ public class Result extends UIParts {
     //int playerNo;
     Player player;
 
-    public Result(String name, int x, int y, int width, int height,final Pawn game) {
-        super(name,x,y,width,height);
+    public Result(String name, int x, int y, int width, int height, int group,final Pawn game) {
+        super(name,x,y,width,height,group);
         font = game.font;
         this.aSquareNo = new int[6];
         //this.playerNo = playerNo;

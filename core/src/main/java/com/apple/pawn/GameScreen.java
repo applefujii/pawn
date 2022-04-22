@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -133,14 +132,13 @@ public class GameScreen implements Screen {
 		manager.load("assets/dice.png", Texture.class);
 		manager.load("assets/back.png", Texture.class);
 		manager.load("assets/cursor.png", Texture.class);
-		manager.load("assets/black.png", Texture.class);
+//		manager.load("assets/black.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		dice.initialize(manager);
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
-		//result.initialize(playerManager);
 		cursor = new Sprite(manager.get("assets/cursor.png", Texture.class));
 		cursor.flip(false, true);
 		cursor.setCenter(Pawn.LOGICAL_WIDTH >> 1, Pawn.LOGICAL_HEIGHT >> 1);
@@ -305,15 +303,6 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		//------ 描画
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.setColor(Color.WHITE);
-		for( int i=0 ; i<20 ; i++ ) {
-			renderer.box(i*100, 0, 0, 1, 2000, 0);
-			renderer.box(0, i*100, 0, 2000, 1, 0);
-		}
-		renderer.end();
-
 		//------ メイン描画
 		board.draw(batch);
 		playerManager.draw(batch, renderer);
@@ -333,13 +322,20 @@ public class GameScreen implements Screen {
 			ui.draw(batch, renderer, font, 1);
 		//-- ポーズ中は暗くする
 		if(FlagManagement.is(Flag.PLAY) == false) {
-			Sprite black = new Sprite(manager.get("assets/black.png", Texture.class),0,0,32,32);
-			batch.begin();
-			black.setSize(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
-			black.setPosition(0, 0);
-			black.setAlpha(0.6f);
-			black.draw(batch);
-			batch.end();
+//			Sprite black = new Sprite(manager.get("assets/black.png", Texture.class),0,0,32,32);
+//			batch.begin();
+//			black.setSize(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+//			black.setPosition(0, 0);
+//			black.setAlpha(0.6f);
+//			black.draw(batch);
+//			batch.end();
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			renderer.begin(ShapeRenderer.ShapeType.Filled);
+			renderer.setColor(0, 0, 0, 0.6f);
+			renderer.rect(0, 0, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+			renderer.end();
+			Gdx.gl.glDisable(GL20.GL_BLEND);
 		}
 		if(FlagManagement.is(Flag.UI_VISIBLE)  &&  FlagManagement.is(Flag.UI_GROUP2_VISIBLE))
 			ui.draw(batch, renderer, font, 2);
@@ -398,6 +394,7 @@ public class GameScreen implements Screen {
 		manager.unload("assets/dice.png");
 		manager.unload("assets/back.png");
 		manager.unload("assets/cursor.png");
+//		manager.unload("assets/black.png");
 	}
 
 	private int turnStandby() {

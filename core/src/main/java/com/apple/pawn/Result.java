@@ -1,67 +1,46 @@
 package com.apple.pawn;
-//import javax.swing.JFrame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import java.util.Iterator;
-
-//追加
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-//import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import javax.swing.JFrame;
-import java.util.function.IntSupplier;
+import com.badlogic.gdx.utils.Array;
 
+import java.util.Iterator;
 
 
 public class Result extends UIParts {
 
     private final BitmapFont font;
-    private final Sprite spPiece[];
+    //private final Sprite spPiece[];
     private PlayerManager playerManager;
 //    private Player player;
     private GameScreen gamescreen;
+    private GameSetting gameSetting;
     private int goalTurn;
     int[] aSquareNo;
-    int playerNo;
-    private Array<Integer> aResultDetail;
+    //int playerNo;
+    Player player;
 
-    public Result(String name, int x, int y, int width, int height,final Pawn game,int[] aSquareNo,int playerNo,Array<Integer> aResultDetail) {
+    public Result(String name, int x, int y, int width, int height,final Pawn game) {
         super(name,x,y,width,height);
         font = game.font;
         this.aSquareNo = new int[6];
-        this.playerNo = playerNo;
-        this.aResultDetail = aResultDetail;
+        //this.playerNo = playerNo;
         //Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
         //this.aSquareNo[0] = 0;
         //Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
-        for(int i=0 ; i<aSquareNo.length ; i++) {
-            this.aSquareNo[i] = aSquareNo[i];
-        }
         //playerManager = new PlayerManager();
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("piece_atlas.txt"));
-        spPiece = new Sprite[6];
-        for(int i=0; i<6; i++){
-            spPiece[i] = atlas.createSprite(Piece.COLOR[i]);
-            spPiece[i].flip(false, true);
-            //spPiece[i].setSize(80,120);
-            spPiece[i].setSize(60,90);
-        }
+//        spPiece = new Sprite[6];
+//        for(int i=0; i<6; i++){
+//            spPiece[i] = atlas.createSprite(Piece.COLOR[i]);
+//            spPiece[i].flip(false, true);
+//            //spPiece[i].setSize(80,120);
+//            spPiece[i].setSize(60,90);
+//        }
         playerManager = new PlayerManager();
     }
 
@@ -144,15 +123,14 @@ public class Result extends UIParts {
         font.draw(batch, "ターン数", 320, 60);
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
         int j=70,k=110;
-        for(int i=0; i<playerNo; i++){
+        for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
-            spPiece[i].setPosition(80, j);
-            spPiece[i].draw(batch);
+            playerManager.getPieces();
             //font.draw(batch, player.getName(), 200, turn);
             font.draw(batch, i+1+"P", 200, k);
-            font.draw(batch, aSquareNo[i]+"ターン", 320, k);
+            font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
 
-            font.draw(batch, "aRD="+aResultDetail.get(i), 440, k);
+            font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
             //font.draw(batch, aResultDetail+"sample", 440, k);
 
 //            Iterator<Integer> iterator = aResultDetail.iterator();

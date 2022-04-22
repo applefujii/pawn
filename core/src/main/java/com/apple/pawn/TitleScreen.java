@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -39,11 +38,8 @@ public class TitleScreen implements Screen {
 	private final OrthographicCamera uiCamera;	// UIカメラ
 	private final FitViewport viewport;
 	private final FitViewport uiViewport;
-	private Stage stage;					// カメラとビューポートの管理
-	private final Stage uiStage;					// UIのカメラとビューポートの管理
 
 	private final Vector3 screenOrigin;
-	private final Vector3 touchPos;
 	private int sequenceNo;					// シークエンス番号
 	private int sequenceSubNo;				// サブシークエンス番号
 	private int dialogNo;					// 何人目の入力中か
@@ -80,17 +76,12 @@ public class TitleScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
 		viewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,camera);
-		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,camera);
-		stage = new Stage(viewport);
-		uiStage = new Stage(uiViewport);
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
-		FitViewport uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,uiCamera);
-		stage = new Stage(uiViewport);
+		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH,Pawn.LOGICAL_HEIGHT,uiCamera);
 
 		screenOrigin = new Vector3();
-		touchPos = new Vector3();
 
 		ui = new UI();
 		ui.initialize(game);

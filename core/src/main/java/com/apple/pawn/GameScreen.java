@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -42,8 +41,6 @@ public class GameScreen implements Screen {
 	private final OrthographicCamera uiCamera;	// UIカメラ
 	private final FitViewport viewport;
 	private final FitViewport uiViewport;
-	private final Stage stage;					// カメラとビューポートの管理
-	private Stage uiStage;					// UIのカメラとビューポートの管理
 
 	private final AssetManager manager;
 
@@ -75,7 +72,6 @@ public class GameScreen implements Screen {
 	private final ParticleManager particle;			// パーティクル
 	private final FileIO fileIO;					// セーブファイルの読み書き
 	private final SaveData saveData;				// セーブファイル
-	//private Result result;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -104,16 +100,10 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
 		viewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,camera);
-		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,camera);
-		stage = new Stage(viewport);
-		uiStage = new Stage(uiViewport);
-		Gdx.input.setInputProcessor(stage);
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
-		FitViewport uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,uiCamera);
-		uiStage = new Stage(uiViewport);
-		Gdx.input.setInputProcessor(uiStage);
+		uiViewport = new FitViewport(Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT,uiCamera);
 
 		//---- その他の初期化
 		//-- new

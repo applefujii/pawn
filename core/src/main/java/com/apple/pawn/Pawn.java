@@ -3,7 +3,6 @@ package com.apple.pawn;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -33,11 +32,8 @@ public class Pawn extends Game {
 
 	public OrthographicCamera uiCamera;	// UIカメラ
 	public FitViewport uiViewport;
-	public Stage uiStage;					// UIのカメラとビューポートの管理
 	public Achievement achievement;
 	private float timer;
-	private long totalFrame = 0;
-	private int frame = 0;
 	private Timer fpsTimer;
 	private Screen nextScreen;
 
@@ -66,14 +62,12 @@ public class Pawn extends Game {
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 		uiViewport = new FitViewport(LOGICAL_WIDTH,LOGICAL_HEIGHT,uiCamera);
-		uiStage = new Stage(uiViewport);
 		achievement = new Achievement(timer);
 
 		//-- FPSをデバッグ出力
 		TimerTask fpsTask = new TimerTask() {
 			public void run() {
 //				Gdx.app.debug("fps", "fps="+frame);
-				frame = 0;
 			}
 		};
 		timer = 0;
@@ -94,8 +88,6 @@ public class Pawn extends Game {
 	@Override
 	public void render () {
 		timer += Gdx.graphics.getDeltaTime();
-		totalFrame++;
-		frame++;
 		// F4で終了
 //		if(Gdx.input.isKeyPressed(Input.Keys.F4)) Gdx.app.exit();
 

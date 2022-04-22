@@ -76,6 +76,7 @@ public class GameScreen implements Screen {
 	private final ParticleManager particle;			// パーティクル
 	private final FileIO fileIO;					// セーブファイルの読み書き
 	private final SaveData saveData;				// セーブファイル
+	//private Result result;
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
@@ -141,7 +142,7 @@ public class GameScreen implements Screen {
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
-		result.initialize(playerManager);
+		//result.initialize(playerManager);
 		cursor = new Sprite(manager.get("assets/cursor.png", Texture.class));
 		cursor.flip(false, true);
 		cursor.setCenter(Pawn.LOGICAL_WIDTH >> 1, Pawn.LOGICAL_HEIGHT >> 1);
@@ -302,7 +303,7 @@ public class GameScreen implements Screen {
 		board.draw(batch);
 		playerManager.draw(batch, renderer);
 		particle.draw(batch, renderer);
-		if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
+		//if(FlagManagement.is(Flag.RESULT_SHOW)) result.draw(batch, renderer);
 
 		//------ ui描画
 		uiCamera.update();
@@ -363,7 +364,7 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		particle.dispose();
-		result.dispose();
+		//result.dispose();
 		manager.unload("assets/map_atlas.txt");
 		manager.unload("assets/ui_atlas.txt");
 		manager.unload("assets/dice.png");
@@ -561,7 +562,7 @@ public class GameScreen implements Screen {
 						));
 					sequenceNo++;
 				}
-				aSquareNo = gameSetting.getASquareNo();
+				//aSquareNo = gameSetting.getASquareNo();
 				playerNo = gameSetting.getPlayerNo();
 				String[] name = gameSetting.getAName();
 				aResultDetail = turnPlayer.getAResultDetail();
@@ -616,7 +617,7 @@ public class GameScreen implements Screen {
 			int select = ui.getSelect();
 			if(select != -1 ) {
 				//Gdx.app.debug("fps", "aSquareNo[0]="+aSquareNo[0]);
-				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game,aSquareNo,playerNo,aResultDetail);
+				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,game);
 				result.initialize(playerManager);
 				ui.add(result);
 			}

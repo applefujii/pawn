@@ -248,7 +248,7 @@ public class TitleScreen implements Screen {
 			fontTitle.draw(batch, "すごろくゲーム", (Pawn.LOGICAL_WIDTH >> 1) - 329, (Pawn.LOGICAL_HEIGHT >> 1) - 210);
 			batch.end();
 		}
-		ui.draw(batch, renderer, font);
+		ui.draw(batch, renderer, font, 1);
 		font.getData().setScale(1, 1);
 		batch.begin();
 		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 18*0);
@@ -300,7 +300,7 @@ public class TitleScreen implements Screen {
 		if(sequenceSubNo == 1) {
 			String load = "続きから";
 			if(fileIO.isExistsSaveData() == false) load = "/" + load;
-			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始", load, "実績"));
+			ui.add(new UIPartsSelect("title_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 0, true, "開始", load, "実績", "終了"));
 			sequenceSubNo++;
 		}
 		if(sequenceSubNo == 2) {
@@ -323,6 +323,10 @@ public class TitleScreen implements Screen {
 				sequenceNo = 4;
 				sequenceSubNo = 1;
 			}
+			// 終了
+			if (select == 3) {
+				Gdx.app.exit();
+			}
 		}
 		return 0;
 	}
@@ -331,7 +335,7 @@ public class TitleScreen implements Screen {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
 		if(sequenceSubNo == 1) {
-			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 2, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
+			ui.add(new UIPartsSelectIndex("setting_menu", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 2, true, "プレイ人数", "2人", "3人", "4人", "5人", "6人"));
 			sequenceSubNo++;
 		}
 		// 人数
@@ -387,7 +391,7 @@ public class TitleScreen implements Screen {
 			}
 		}
 		if (sequenceSubNo == 2) {
-			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "ステージ選択", "ステージ1","ステージ2","ステージ3"));
+			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 0, true, "ステージ選択", "ステージ1","ステージ2","ステージ3"));
 			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 3) {
@@ -401,7 +405,7 @@ public class TitleScreen implements Screen {
 			}
 			if(select != -1 ) {
 				gameSetting.setStageNo(select);
-				ui.add(new UIPartsSelect("start_confirm", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 0, true, "開始！", "設定をやり直す"));
+				ui.add(new UIPartsSelect("start_confirm", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 0, true, "開始！", "設定をやり直す"));
 				sequenceSubNo++;
 			}
 		}
@@ -443,7 +447,7 @@ public class TitleScreen implements Screen {
 
 	private int achievementViewSequence() {
 		if (sequenceSubNo == 1) {
-			ui.add( new UIPartsAchievementView("achievement",50,30,1180,660 ));
+			ui.add( new UIPartsAchievementView("achievement",50,30,1180,660, 1 ));
 			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 2) {

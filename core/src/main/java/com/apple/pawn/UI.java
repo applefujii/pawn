@@ -57,18 +57,20 @@ public class UI {
         return 0;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font, int group) {
         Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
         while(uiPartsIterator.hasNext()){
             UIParts ui = uiPartsIterator.next();
+            if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
         Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
         while(uiPartsSelectIterator.hasNext()){
             UIPartsSelect ui = uiPartsSelectIterator.next();
+            if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
-        if(dice != null) dice.draw(batch, renderer);
+        if(dice != null  &&  group == 1) dice.draw(batch, renderer);
     }
 
     public void dispose () {

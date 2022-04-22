@@ -97,7 +97,7 @@ public class Pawn extends Game {
 		totalFrame++;
 		frame++;
 		// F4で終了
-		if(Gdx.input.isKeyPressed(Input.Keys.F4)) Gdx.app.exit();
+//		if(Gdx.input.isKeyPressed(Input.Keys.F4)) Gdx.app.exit();
 
 		super.render();
 

@@ -34,8 +34,8 @@ public class UIPartsAchievementView extends UIParts{
     private int count;
     private String[][] result;
 
-    public UIPartsAchievementView(String name, int x, int y, int width, int height) {
-        super(name,x,y,width,height);
+    public UIPartsAchievementView(String name, int x, int y, int width, int height, int group) {
+        super(name,x,y,width,height, group);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(true, width, height);

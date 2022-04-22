@@ -10,7 +10,7 @@ public class UIPartsOperatingMethod extends UIParts{
     private String[] documents;
 
     public UIPartsOperatingMethod(String name, String document) {
-        super(name, 0, 0, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
+        super(name, 0, 0, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT, 1);
         documents = Pattern.compile("\\n").split(document);
     }
 

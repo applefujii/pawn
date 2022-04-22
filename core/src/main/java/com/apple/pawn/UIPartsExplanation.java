@@ -23,8 +23,8 @@ public class UIPartsExplanation extends UIParts {
 
     protected Sprite sprite;
 
-    public UIPartsExplanation(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, String expl) {
-        super(name, x, y, width, height);
+    public UIPartsExplanation(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, int group, String expl) {
+        super(name, x, y, width, height, group);
         stringRow = new Array<>();
         explanation = "";
         fontCache = font.getCache();

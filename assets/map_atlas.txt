@@ -1,5 +1,5 @@
 map_atlas.png
-size: 1280, 256
+size: 1024, 512
 format: RGBA8888
 filter: Linear,Nearest
 repeat: none
@@ -33,7 +33,7 @@ start
   index: -1
 task
   rotate: false
-  xy: 1024, 0
+  xy: 0, 256
   size: 256, 256
   orig: 256, 256
   offset: 0, 0

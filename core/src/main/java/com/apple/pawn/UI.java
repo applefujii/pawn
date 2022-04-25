@@ -70,7 +70,7 @@ public class UI {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
-        if(dice != null  &&  group == 1) dice.draw(batch, renderer);
+        if(dice != null  &&  group == 1) dice.draw(batch);
     }
 
     public void dispose () {

@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Result extends UIParts {
 
     private final BitmapFont font;
-    //private final Sprite spPiece[];
+    Piece[] spPiece;
     private PlayerManager playerManager;
 //    private Player player;
     private GameScreen gamescreen;
@@ -24,10 +24,11 @@ public class Result extends UIParts {
     //int playerNo;
     Player player;
 
-    public Result(String name, int x, int y, int width, int height, int group,final Pawn game) {
+    public Result(String name, int x, int y, int width, int height, int group,final Pawn game,GameSetting gameSetting) {
         super(name,x,y,width,height,group);
         font = game.font;
         this.aSquareNo = new int[6];
+        this.gameSetting = gameSetting;
         //this.playerNo = playerNo;
         //Gdx.app.debug("fps", "aResultDetail="+aResultDetail);
         //this.aSquareNo[0] = 0;
@@ -125,7 +126,7 @@ public class Result extends UIParts {
         int j=70,k=110;
         for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
-            playerManager.getPieces();
+            spPiece = playerManager.getPieces();
             //font.draw(batch, player.getName(), 200, turn);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);

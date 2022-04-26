@@ -282,6 +282,8 @@ public class GameScreen implements Screen {
 					turnPlayer.getPiece().move(visitSquare.getNo(), false);
 					turnPlayer.removeResultDetail(visitSquare);
 					FlagManagement.set(Flag.PLAY);
+					FlagManagement.set(Flag.LOOK_PIECE);
+					zoom = 1.0f;
 					ui.removeAllSelect();
 					sequenceNo = Sequence.TASK_DO.no;
 					sequence = this::taskDo;

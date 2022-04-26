@@ -63,10 +63,8 @@ public class BoardSurface {
 
         backSprite = new Sprite(manager.get("assets/back.png", Texture.class));
         backSprite.flip(false, true);
-        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.initialize(manager, aSquare.size - 1, font);
+        for(int i = 0; i < aSquare.size; i++) {
+            aSquare.get(i).initialize(manager, aSquare.size - 1, i, font);
         }
     }
 

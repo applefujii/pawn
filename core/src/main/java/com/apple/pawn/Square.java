@@ -29,6 +29,7 @@ public class Square {
     protected int move;
     protected int back;
     protected BitmapFont font;
+    protected int no;
 
     //-- 参照
     protected Array<Piece> aPiece;
@@ -41,7 +42,8 @@ public class Square {
         aPiece = new Array<>();
     }
 
-    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
+    public void initialize(@NonNull AssetManager manager, int size, int no, BitmapFont font) {
+        this.no = no;
         sprite = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[type]);
         sprite.flip(false, true);
         sprite.setScale((float) SQUARE_WIDTH / sprite.getWidth(), (float) SQUARE_HEIGHT / sprite.getHeight());
@@ -70,6 +72,10 @@ public class Square {
 
     public void removePiece(Piece piece) {
         aPiece.removeValue(piece, false);
+    }
+
+    public int getNo() {
+        return no;
     }
 
     public Vector2 getPos() {

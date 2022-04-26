@@ -75,6 +75,8 @@ public class GameScreen implements Screen {
 
 	//---- 参照
 	private Player turnPlayer;				// 現在のターンのプレイヤーを指す
+	private Player lastDoPlayer;			// 最後に行動したプレイヤー
+	private Square visitSquare;				// 最後に止まったマスの情報
 
 	/**
 	 * コンストラクタ 初期化、読み込み
@@ -226,7 +228,9 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 			if(FlagManagement.is(Flag.PLAY)) {
 				FlagManagement.fold(Flag.PLAY);
-				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 16, 2, 0, true, "再開", "終了"));
+				String rollback = "前の選択肢に戻る";
+				if(visitSquare == null || lastDoPlayer == null) rollback = "/" + rollback;
+				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 16, 2, 0, true, "再開", rollback, "終了"));
 			}
 			else {
 				FlagManagement.set(Flag.PLAY);
@@ -265,6 +269,23 @@ public class GameScreen implements Screen {
 					FlagManagement.set(Flag.PLAY);
 					ui.remove("pause");
 				} else if (select == 1) {
+					if(turnPlayer != lastDoPlayer) {
+						turnPlayerNo--;
+						if(turnPlayerNo < 0) {
+							turnPlayerNo = playerManager.getSize() - 1;
+							turnCount--;
+						}
+					}
+					turnPlayer = lastDoPlayer;
+					lastDoPlayer = null;
+					dice.rollStop(false);
+					turnPlayer.getPiece().move(visitSquare.getNo(), false);
+					turnPlayer.removeResultDetail(visitSquare);
+					FlagManagement.set(Flag.PLAY);
+					ui.removeAllSelect();
+					sequenceNo = Sequence.TASK_DO.no;
+					sequence = this::taskDo;
+				} else if(select == 2) {
 					Gdx.app.exit();
 				}
 			}
@@ -476,7 +497,9 @@ public class GameScreen implements Screen {
 		}
 		if(sequenceNo == Sequence.DICE_ROLL.no +1) {
 			if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			    int diceNumber = dice.rollStop();
+				lastDoPlayer = null;
+				visitSquare = null;
+			    int diceNumber = dice.rollStop(true);
 				turnPlayer.addADiceNo(diceNumber);
 				sequenceNo = Sequence.PIECE_ADVANCE.no;
 				sequence = this::PieceAdvance;
@@ -511,10 +534,9 @@ public class GameScreen implements Screen {
 	}
 
 	private int taskDo() {
-		// ターンプレイヤーが居るマス
-		Square visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
-
 		if(sequenceNo == Sequence.TASK_DO.no) {
+			// ターンプレイヤーが居るマス
+			visitSquare = board.getSquare(turnPlayer.getPiece().getSquareNo());
 			turnPlayer.addResultDetail(visitSquare);
 			if(visitSquare.hasDocument()) ((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(visitSquare.getDocument());
 			if(visitSquare.getType() == 4) {
@@ -526,6 +548,7 @@ public class GameScreen implements Screen {
 				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
 			} else {
 				sequenceNo += 2;
+				visitSquare = null;
 				return 0;
 			}
 			sequenceNo++;
@@ -536,13 +559,15 @@ public class GameScreen implements Screen {
             int select = ui.getSelect();
 			if(select != -1 ) {
 				if (select == 0) turnPlayer.getPiece().move(move, true);
-				if (select == 1)turnPlayer.getPiece().move(-back, true);
+				if (select == 1) turnPlayer.getPiece().move(-back, true);
 				sequenceNo++;
 			}
 		}
 		if(sequenceNo == Sequence.TASK_DO.no +2) {
+			lastDoPlayer = turnPlayer;
 			if(!FlagManagement.is(Flag.PIECE_MOVE)) {
 				if(turnPlayer.isGoal()) {
+					lastDoPlayer = null;
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation("ゴール！");
 					ui.add(new UIPartsPopup("test", manager, font, Pawn.LOGICAL_WIDTH/2-150,100,300,100, 1, turnPlayer.getName()+"がゴール！\n"+goalNo+"位", 2));
 					Vector2 pPos = turnPlayer.getPiece().getPosition().cpy();

@@ -14,8 +14,8 @@ public class EventSquare extends Square {
     }
 
     @Override
-    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
-        super.initialize(manager, size, font);
+    public void initialize(@NonNull AssetManager manager, int size, int no, BitmapFont font) {
+        super.initialize(manager, size, no, font);
         move = Math.min(move, size - count);
         document = move+"マス進む";
         uiDoc = uiDoc + "\n\n" + document;

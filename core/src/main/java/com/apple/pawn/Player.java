@@ -94,7 +94,16 @@ public class Player {
             Gdx.app.debug("count(before)", String.valueOf(count));
             count++;
             Gdx.app.debug("count(after)", String.valueOf(count));
-            aResultDetail.insert(type, count);
+            aResultDetail.set(type, count);
+        }
+    }
+
+    public void removeResultDetail(@NonNull Square visitSquare) {
+        int type = visitSquare.getType() - 2;
+        if(type >= 0) {
+            int count = aResultDetail.get(type);
+            count--;
+            aResultDetail.set(type, count);
         }
     }
 

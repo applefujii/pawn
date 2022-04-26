@@ -1,8 +1,7 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -26,8 +25,8 @@ public class UI {
     private Dice dice;
 
     public UI() {
-        uiParts = new Array<UIParts>();
-        uiPartsSelect = new Array<UIPartsSelect>();
+        uiParts = new Array<>();
+        uiPartsSelect = new Array<>();
     }
 
     public void initialize(Pawn game) {
@@ -86,7 +85,7 @@ public class UI {
         }
     }
 
-    public void add(UIParts parts) {
+    public void add(@NonNull UIParts parts) {
         if(parts.getClass().getName().matches(".*Select.*") == true) uiPartsSelect.add((UIPartsSelect)parts);
         else uiParts.add(parts);
     }
@@ -104,13 +103,17 @@ public class UI {
         Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
         while(uiPartsSelectIterator.hasNext()) {
             UIPartsSelect ui = uiPartsSelectIterator.next();
-            if(ui.getName() == name) {
+            if(ui.getName().equals(name)) {
                 ui.dispose();
                 uiPartsSelectIterator.remove();
                 return true;
             }
         }
         return false;
+    }
+
+    public void removeAllSelect() {
+        uiPartsSelect.clear();
     }
 
     public int getSelect() {

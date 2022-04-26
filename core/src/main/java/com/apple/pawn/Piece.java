@@ -19,8 +19,7 @@ public class Piece {
     public static final String[] COLOR = {"red", "yellow", "green", "light_blue", "blue", "purple"};
     public static final int WIDTH = 80, HEIGHT = 120;
     private static final int LINE_MAX = 3;
-    @JsonIgnore
-    private float MOVE_INTERVAL = 0.35f;
+    private static final float MOVE_INTERVAL = 0.35f;
 
     @JsonProperty
     private int colorNo;       // 色番号
@@ -162,10 +161,10 @@ public class Piece {
         }
         //-- アニメーションさせない
         else {
-            boardSurface.getSquare(squareNo).removePiece(this);
+            boardSurface.getSquare(this.squareNo).removePiece(this);
             this.squareNo = squareNo;
             this.moveToSquareNo = squareNo;
-            boardSurface.getSquare(squareNo).addPiece(this);
+            boardSurface.getSquare(this.squareNo).addPiece(this);
         }
     }
 

@@ -75,7 +75,7 @@ public class Pawn extends Game {
 
 		GameSetting setting = new GameSetting();
 		setting.init(4);
-		setting.setStageNo(0);
+		setting.setStageNo(2);
 		GameScreen gameScreen = new GameScreen(this);
 		gameScreen.initialize(setting);
 		this.setScreen(gameScreen);

@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Result extends UIParts {
 
     private final BitmapFont font;
-    Piece[] spPiece;
+    //private Piece[] Piece;
     private PlayerManager playerManager;
 //    private Player player;
     private GameScreen gamescreen;
@@ -55,7 +55,6 @@ public class Result extends UIParts {
 
 
        this.playerManager = playerManager;
-//
 //        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 //        param.size = 20;
 //        param.incremental = true;			// 自動的に文字を追加
@@ -126,8 +125,9 @@ public class Result extends UIParts {
         int j=70,k=110;
         for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
-            spPiece = playerManager.getPieces();
+            Piece Piece = player.getPiece();
             //font.draw(batch, player.getName(), 200, turn);
+            //Piece.draw(batch);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
 

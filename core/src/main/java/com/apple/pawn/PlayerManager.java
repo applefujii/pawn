@@ -110,7 +110,7 @@ public class PlayerManager {
             Player player = playerIterator.next();
             p.add(player.getPiece());
         }
-        return p.toArray();
+        return p.toArray(Piece.class);
     }
 
     public Array<Player> getGoalPlayer() {

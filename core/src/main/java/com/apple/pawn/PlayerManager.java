@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -32,27 +31,17 @@ public class PlayerManager {
 
     public void load(Array<Player> aPlayer) {
         this.aPlayer = aPlayer;
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(this.aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
-            player.load(gameScreen, boardSurface, this);
-        }
+        for(Player player : this.aPlayer) player.load(gameScreen, boardSurface, this);
     }
 
     public void update() {
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
-            player.update();
-        }
+        for(Player player : aPlayer) player.update();
     }
 
     public void draw (@NonNull Batch batch) {
         Player turnPlayer = null;
         batch.begin();
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
+        for(Player player : aPlayer) {
             if(player == gameScreen.getTurnPlayer()) turnPlayer = player;
             else player.draw(batch);
         }
@@ -61,11 +50,7 @@ public class PlayerManager {
     }
 
     public void dispose () {
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
-            player.dispose();
-        }
+        for(Player player : aPlayer) player.dispose();
     }
 
     public int add(String name, int pieceColorNo) {
@@ -78,10 +63,11 @@ public class PlayerManager {
 
     public boolean isAllGoal() {
         boolean ret = true;
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
-            if(!player.isGoal()) ret = false;
+        for(Player player : aPlayer) {
+            if(!player.isGoal()) {
+                ret = false;
+                break;
+            }
         }
         return ret;
     }
@@ -105,19 +91,13 @@ public class PlayerManager {
 
     public Piece[] getPieces() {
         Array<Piece> p = new Array<>();
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
-            p.add(player.getPiece());
-        }
+        for(Player player : aPlayer) p.add(player.getPiece());
         return p.toArray();
     }
 
     public Array<Player> getGoalPlayer() {
         Array<Player> goalPlayer = new Array<>();
-        Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
-        while(playerIterator.hasNext()) {
-            Player player = playerIterator.next();
+        for(Player player : aPlayer) {
             if(player.isGoal()) goalPlayer.add(player);
         }
 

@@ -168,7 +168,7 @@ public class GameScreen implements Screen {
 		}
 
 		StringBuilder orderBuilder = new StringBuilder();
-		Iterator<Player> aPlayerIterator = new Array.ArrayIterator<>(playerManager.getAPlayer());
+		Iterator<Player> aPlayerIterator = playerManager.getAPlayer().iterator();
 		while(aPlayerIterator.hasNext()) {
 			Player player = aPlayerIterator.next();
 			orderBuilder.append(player.getName());
@@ -190,7 +190,7 @@ public class GameScreen implements Screen {
 		saveData.aPlayer = playerManager.getAPlayer();
 
 		StringBuilder orderBuilder = new StringBuilder();
-		Iterator<Player> aPlayerIterator = new Array.ArrayIterator<>(playerManager.getAPlayer());
+		Iterator<Player> aPlayerIterator = playerManager.getAPlayer().iterator();
 		while(aPlayerIterator.hasNext()) {
 			Player player = aPlayerIterator.next();
 			orderBuilder.append(player.getName());
@@ -617,9 +617,7 @@ public class GameScreen implements Screen {
 				fileIO.delete();
 			}
 			StringBuilder txt = new StringBuilder("全員ゴールしたよ");
-			Iterator<Player> playerIterator = new Array.ArrayIterator<>(playerManager.getGoalPlayer());
-			while(playerIterator.hasNext()) {
-				Player player = playerIterator.next();
+			for(Player player : playerManager.getGoalPlayer()) {
 				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
 			}
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());

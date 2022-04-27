@@ -7,7 +7,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -141,7 +140,7 @@ public class Piece {
         return false;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer) {
+    public void draw (Batch batch) {
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
         sprite.draw(batch);

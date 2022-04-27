@@ -315,7 +315,7 @@ public class GameScreen implements Screen {
 
 		//------ メイン描画
 		board.draw(batch);
-		playerManager.draw(batch, renderer);
+		playerManager.draw(batch);
 		particle.draw(batch, renderer);
 
 		//------ ui描画

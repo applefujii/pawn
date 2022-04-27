@@ -1,7 +1,8 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
@@ -46,16 +47,16 @@ public class PlayerManager {
         }
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer) {
+    public void draw (@NonNull Batch batch) {
         Player turnPlayer = null;
         batch.begin();
         Iterator<Player> playerIterator = new Array.ArrayIterator<>(aPlayer);
         while(playerIterator.hasNext()) {
             Player player = playerIterator.next();
             if(player == gameScreen.getTurnPlayer()) turnPlayer = player;
-            else player.draw(batch, renderer);
+            else player.draw(batch);
         }
-        if(Objects.nonNull(turnPlayer))turnPlayer.draw(batch, renderer);
+        if(Objects.nonNull(turnPlayer))turnPlayer.draw(batch);
         batch.end();
     }
 

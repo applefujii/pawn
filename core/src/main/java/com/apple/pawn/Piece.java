@@ -165,6 +165,10 @@ public class Piece {
             this.squareNo = squareNo;
             this.moveToSquareNo = squareNo;
             boardSurface.getSquare(this.squareNo).addPiece(this);
+            isMove = false;
+            isTimer = false;
+            timer = 0;
+            FlagManagement.fold(Flag.PIECE_MOVE);
         }
     }
 

@@ -92,7 +92,7 @@ public class PlayerManager {
     public Piece[] getPieces() {
         Array<Piece> p = new Array<>();
         for(Player player : aPlayer) p.add(player.getPiece());
-        return p.toArray();
+        return p.toArray(Piece.class);
     }
 
     public Array<Player> getGoalPlayer() {

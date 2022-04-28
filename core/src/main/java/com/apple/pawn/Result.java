@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,6 +21,7 @@ public class Result extends UIParts {
     private GameScreen gamescreen;
     private GameSetting gameSetting;
     private int goalTurn;
+    private Sprite sp;
     int[] aSquareNo;
     //int playerNo;
     Player player;
@@ -42,6 +44,8 @@ public class Result extends UIParts {
 //            //spPiece[i].setSize(80,120);
 //            spPiece[i].setSize(60,90);
 //        }
+
+        sp = new Sprite();
         playerManager = new PlayerManager();
     }
 
@@ -125,12 +129,13 @@ public class Result extends UIParts {
         int j=70,k=110;
         for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
-            Piece Piece = player.getPiece();
+            Piece piece = player.getPiece();
+            //sp = piece;
             //font.draw(batch, player.getName(), 200, turn);
-            //Piece.draw(batch);
+            //sp.setCenter(100,100);
+            piece.draw(batch);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
-
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
             //font.draw(batch, aResultDetail+"sample", 440, k);
 

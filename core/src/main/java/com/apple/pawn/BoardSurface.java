@@ -19,7 +19,7 @@ import java.util.Iterator;
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
     public static final Array<Vector2> MAP_COORDINATE;
-    private static final String[] MAP_DATA_NAME = {
+    public static final String[] MAP_DATA_NAME = {
             "map.jsonc",
             "map2.jsonc",
             "map3.jsonc"
@@ -49,7 +49,7 @@ public class BoardSurface {
         try {
             JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ MAP_DATA_NAME[mapNo]).file());
             int count = 0;
-            for(JsonNode mJ : mapJson) {
+            for(JsonNode mJ : mapJson.get("square")) {
                 int add = mJ.path("address").asInt();
                 int type = mJ.path("type").asInt();
                 if(type == 4) aSquare.add(new TaskSquare(MAP_COORDINATE.get(add).cpy(), type, count, mJ.path("document").asText(), mJ.path("move").asInt(), mJ.path("back").asInt()));

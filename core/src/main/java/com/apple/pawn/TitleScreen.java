@@ -19,7 +19,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.function.IntSupplier;
 
 
@@ -52,6 +55,7 @@ public class TitleScreen implements Screen {
 
 	private final AssetManager manager;
 
+	private String[] aStageName= {"1","2","3"};
 	private int playerNo;
 	private double rad;
 
@@ -130,6 +134,18 @@ public class TitleScreen implements Screen {
 		mainImage.flip(false,true);
 		mainImage.setSize(614,354);
 		mainImage.setPosition((Pawn.LOGICAL_WIDTH >> 1)-307,Pawn.LOGICAL_HEIGHT-354-130);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[0]).file());
+			aStageName[0] = mapJson.get("name").asText();
+			mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[1]).file());
+			aStageName[1] = mapJson.get("name").asText();
+			mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[2]).file());
+			aStageName[2] = mapJson.get("name").asText();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -341,7 +357,6 @@ public class TitleScreen implements Screen {
 			playerNo = ui.getCursor()+2;
 			int select = ui.getSelect();
 			if(select != -1 ) {
-				Gdx.app.debug("fps", "select="+select);
 				playerNo = select+2;
 				gameSetting.init(playerNo);
 				sequence = this::startSetting2Sequence;
@@ -382,7 +397,7 @@ public class TitleScreen implements Screen {
 			}
 		}
 		if (sequenceSubNo == 2) {
-			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 0, true, "ステージ選択", "ステージ1","ステージ2","ステージ3"));
+			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 16, 1, 0, true, "ステージ選択", aStageName));
 			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 3) {

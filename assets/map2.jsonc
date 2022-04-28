@@ -1,4 +1,6 @@
-[
+{
+"name" : "うずまき",
+"square" : [
 	{
 		"address":210,
 		"type":0
@@ -9,7 +11,10 @@
 	},
 	{
 		"address":178,
-		"type":2
+		"type":4,
+		"document":"みそ汁の具で一番好きなのは何ですか？",
+		"move":1,
+		"back":2
 	},
 	{
 		"address":162,
@@ -17,7 +22,9 @@
 	},
 	{
 		"address":146,
-		"type":2
+		"type":3,
+		"document":"2マス進む",
+		"move":2
 	},
 	{
 		"address":130,
@@ -29,7 +36,10 @@
 	},
 	{
 		"address":98,
-		"type":2
+		"type":4,
+		"document":"自己紹介を1分間してください。",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":82,
@@ -37,7 +47,9 @@
 	},
 	{
 		"address":66,
-		"type":2
+		"type":3,
+		"document":"1マス進む",
+		"move":1
 	},
 	{
 		"address":50,
@@ -49,7 +61,10 @@
 	},
 	{
 		"address":35,
-		"type":2
+		"type":4,
+		"document":"楽しかった出来事を1つ話してください。",
+		"move":3,
+		"back":2
 	},
 	{
 		"address":36,
@@ -57,7 +72,10 @@
 	},
 	{
 		"address":37,
-		"type":2
+		"type":4,
+		"document":"100万円自由に使えるなら何に使いますか？",
+		"move":2,
+		"back":1
 	},
 	{
 		"address":38,
@@ -69,11 +87,16 @@
 	},
 	{
 		"address":40,
-		"type":2
+		"type":3,
+		"document":"5マス進む",
+		"move":5
 	},
 	{
 		"address":41,
-		"type":2
+		"type":4,
+		"document":"社長の大切にしている花瓶を割ってしまいました。あなたならどうしますか？",
+		"move":2,
+		"back":3
 	},
 	{
 		"address":42,
@@ -85,7 +108,10 @@
 	},
 	{
 		"address":44,
-		"type":2
+		"type":4,
+		"document":"気になっているニュースはありますか？ あなたの意見も聞かせてください。",
+		"move":3,
+		"back":3
 	},
 	{
 		"address":60,
@@ -93,7 +119,9 @@
 	},
 	{
 		"address":76,
-		"type":2
+		"type":3,
+		"document":"3マス進む",
+		"move":3
 	},
 	{
 		"address":92,
@@ -101,7 +129,9 @@
 	},
 	{
 		"address":108,
-		"type":2
+		"type":3,
+		"document":"2マス戻る",
+		"move":-2
 	},
 	{
 		"address":124,
@@ -117,15 +147,23 @@
 	},
 	{
 		"address":172,
-		"type":2
+		"type":4,
+		"document":"あなたの趣味について話してください。",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":188,
-		"type":2
+		"type":4,
+		"document":"幽霊と少し先の未来、どちらかが見えるようになるならどっちを選ぶ？",
+		"move":2,
+		"back":1
 	},
 	{
 		"address":204,
-		"type":2
+		"type":3,
+		"document":"5マス戻る",
+		"move":-5
 	},
 	{
 		"address":220,
@@ -137,7 +175,10 @@
 	},
 	{
 		"address":218,
-		"type":2
+		"type":4,
+		"document":"腹が立った出来事を1つ話してください。",
+		"move":3,
+		"back":1
 	},
 	{
 		"address":217,
@@ -149,7 +190,10 @@
 	},
 	{
 		"address":215,
-		"type":2
+		"type":4,
+		"document":"確実に100万円もらえるか、1/2の確率で10億円もらえるなら、あなたはどっちにする？",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":214,
@@ -157,7 +201,9 @@
 	},
 	{
 		"address":213,
-		"type":2
+		"type":3,
+		"document":"4マス進む",
+		"move":4
 	},
 	{
 		"address":212,
@@ -169,7 +215,10 @@
 	},
 	{
 		"address":180,
-		"type":2
+		"type":4,
+		"document":"昨日の夕食は何でしたか？",
+		"move":1,
+		"back":4
 	},
 	{
 		"address":164,
@@ -189,7 +238,10 @@
 	},
 	{
 		"address":100,
-		"type":2
+		"type":4,
+		"document":"",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":84,
@@ -201,15 +253,22 @@
 	},
 	{
 		"address":69,
-		"type":2
+		"type":4,
+		"document":"今一番欲しいものは何ですか？",
+		"move":1,
+		"back":1
 	},
 	{
 		"address":70,
-		"type":2
+		"type":3,
+		"document":"3マス戻る",
+		"move":-3
 	},
 	{
 		"address":71,
-		"type":2
+		"type":3,
+		"document":"2マス進む",
+		"move":2
 	},
 	{
 		"address":72,
@@ -221,7 +280,10 @@
 	},
 	{
 		"address":74,
-		"type":2
+		"type":4,
+		"document":"偉い人から休日にゴルフに誘われました。しかしその日はデートの予定が入っています。あなたならどうしますか？",
+		"move":2,
+		"back":1
 	},
 	{
 		"address":90,
@@ -233,7 +295,10 @@
 	},
 	{
 		"address":122,
-		"type":2
+		"type":4,
+		"document":"最近泣いた出来事はありますか？",
+		"move":2,
+		"back":1
 	},
 	{
 		"address":138,
@@ -245,7 +310,10 @@
 	},
 	{
 		"address":170,
-		"type":2
+		"type":4,
+		"document":"学校の勉強でどの教科が好きですか？ また、嫌いな教科は何ですか？",
+		"move":3,
+		"back":2
 	},
 	{
 		"address":186,
@@ -257,7 +325,10 @@
 	},
 	{
 		"address":184,
-		"type":2
+		"type":4,
+		"document":"世界滅亡まであと3時間！ あなたは何をしますか？",
+		"move":5,
+		"back":5
 	},
 	{
 		"address":183,
@@ -265,7 +336,10 @@
 	},
 	{
 		"address":182,
-		"type":2
+		"type":4,
+		"document":"給料低いけど定時にあがれる仕事か、給料高いけど毎日12時間労働の仕事、どちらの仕事を選ぶ？",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":166,
@@ -277,15 +351,23 @@
 	},
 	{
 		"address":134,
-		"type":2
+		"type":4,
+		"document":"おでんの具で一番好きなのは何ですか？",
+		"move":1,
+		"back":3
 	},
 	{
 		"address":118,
-		"type":2
+		"type":3,
+		"document":"5マス進む",
+		"move":5
 	},
 	{
 		"address":102,
-		"type":2
+		"type":4,
+		"document":"好きな季節とその理由を教えてください。",
+		"move":3,
+		"back":2
 	},
 	{
 		"address":103,
@@ -293,18 +375,27 @@
 	},
 	{
 		"address":104,
-		"type":2
+		"type":3,
+		"document":"5マス戻る",
+		"move":5
 	},
 	{
 		"address":120,
-		"type":2
+		"type":4,
+		"document":"好きな食べ物を2つ教えてください。",
+		"move":2,
+		"back":2
 	},
 	{
 		"address":136,
-		"type":2
+		"type":4,
+		"document":"「仕事と私(彼氏・彼女)どっちが大事なの？」どのように回答しますか？",
+		"move":0,
+		"back":6
 	},
 	{
 		"address":152,
 		"type":1
 	}
 ]
+}

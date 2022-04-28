@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 
 import java.util.Iterator;
 
@@ -34,9 +35,7 @@ public class UI {
     }
 
     public int update() {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()) {
-            UIParts ui = uiPartsIterator.next();
+        for(UIParts ui : uiParts) {
             if(ui.update() == -1) {
                 remove(ui.getName());
             }
@@ -57,15 +56,11 @@ public class UI {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font, int group) {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()){
-            UIParts ui = uiPartsIterator.next();
+        for(UIParts ui : uiParts) {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()){
-            UIPartsSelect ui = uiPartsSelectIterator.next();
+        for(UIPartsSelect ui : uiPartsSelect) {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
@@ -73,16 +68,8 @@ public class UI {
     }
 
     public void dispose () {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()){
-            UIParts ui = uiPartsIterator.next();
-            ui.dispose();
-        }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()){
-            UIPartsSelect ui = uiPartsSelectIterator.next();
-            ui.dispose();
-        }
+        for(UIParts ui : uiParts) ui.dispose();
+        for(UIPartsSelect ui : uiPartsSelect) ui.dispose();
     }
 
     public void add(@NonNull UIParts parts) {
@@ -128,17 +115,13 @@ public class UI {
         return ret;
     }
 
-    public UIParts getUIParts(String name) {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()) {
-            UIParts ui = uiPartsIterator.next();
+    public @Null UIParts getUIParts(String name) {
+        for(UIParts ui : uiParts) {
             if(ui.getName().equals(name)) {
                 return ui;
             }
         }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()) {
-            UIPartsSelect ui = uiPartsSelectIterator.next();
+        for(UIPartsSelect ui : uiPartsSelect) {
             if(ui.getName().equals(name)) {
                 return ui;
             }

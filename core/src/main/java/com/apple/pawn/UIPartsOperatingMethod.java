@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -20,7 +22,7 @@ public class UIPartsOperatingMethod extends UIParts{
     }
 
     @Override
-    public void draw(Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw(@NonNull Batch batch, ShapeRenderer renderer, BitmapFont font) {
         batch.begin();
         for(int i = 0; i < documents.length; i++) {
             font.draw(batch, documents[i], px, Pawn.LOGICAL_HEIGHT - py - (18 * (documents.length - i)));

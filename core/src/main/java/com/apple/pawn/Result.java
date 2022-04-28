@@ -21,7 +21,6 @@ public class Result extends UIParts {
     private GameScreen gamescreen;
     private GameSetting gameSetting;
     private int goalTurn;
-    private Sprite sp;
     int[] aSquareNo;
     //int playerNo;
     Player player;
@@ -45,7 +44,7 @@ public class Result extends UIParts {
 //            spPiece[i].setSize(60,90);
 //        }
 
-        sp = new Sprite();
+        //sprite = new Sprite();
         playerManager = new PlayerManager();
     }
 
@@ -130,10 +129,11 @@ public class Result extends UIParts {
         for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
             Piece piece = player.getPiece();
-            //sp = piece;
-            //font.draw(batch, player.getName(), 200, turn);
-            //sp.setCenter(100,100);
-            piece.draw(batch);
+            Sprite sprite = new Sprite(piece.getSprite());
+            sprite.setSize(60, 90);
+            sprite.setPosition(80,k-20);
+            //sprite.setCenter(100,100);
+            sprite.draw(batch);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);

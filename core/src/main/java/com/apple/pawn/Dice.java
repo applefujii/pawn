@@ -75,10 +75,10 @@ public class Dice {
         if(isRoll == false) isRoll = true;
     }
 
-    public int rollStop() {
+    public int rollStop(boolean add) {
         if(isRoll == true) {
             isRoll = false;
-            aNo.add(no);
+            if(add) aNo.add(no);
             return no;
         }
         return -1;

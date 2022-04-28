@@ -1,12 +1,10 @@
 package com.apple.pawn;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class FileIO {
@@ -22,9 +20,6 @@ public class FileIO {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             mapper.writeValue(new File("./save/savedata1.sav"), saveData.cpy());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -38,13 +33,7 @@ public class FileIO {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         try {
             saveData = mapper.readValue(new File("./save/savedata1.sav"), SaveData.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
+        } catch(IOException e){
             e.printStackTrace();
             return false;
         }

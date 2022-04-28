@@ -1,19 +1,21 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class UIPartsSelectIndex extends UIPartsSelect{
 
-    private String index;
+    private final String index;
 
     public UIPartsSelectIndex(String name, int x, int y, int width, int height, int group, int cursor, boolean isObstruction, String index, String... choices) {
         super(name, x, y, width, height, group, cursor, isObstruction, choices);
         this.index = index;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, @NonNull BitmapFont font) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0.8f,0.8f,0.8f,1);
         renderer.box(x,y,0,width,height*(choices.size+1),0);

@@ -1,18 +1,14 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,11 +21,11 @@ import java.text.SimpleDateFormat;
 public class UIPartsAchievementView extends UIParts{
 
     private static final int UNIT_HEIGHT = 60;
-    private static final int POS_X[] = {40,300,840,960};
+    private static final int[] POS_X = {40,300,840,960};
     private static final String DB_URL = "jdbc:sqlite:save\\achievement.sqlite3";
     private static final String DRIVE_NAME = "org.sqlite.JDBC";
 
-    private OrthographicCamera camera;		// カメラ
+    private final OrthographicCamera camera;		// カメラ
 
     private int count;
     private String[][] result;
@@ -64,13 +60,11 @@ public class UIPartsAchievementView extends UIParts{
                     result[i][3] = "";
                 } else {
                     result[i][2] = "取得済み";
-                    result[i][3] = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Timestamp(Long.valueOf(rs.getString("timestamp"))));
+                    result[i][3] = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Timestamp(Long.parseLong(rs.getString("timestamp"))));
                 }
                 i++;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -103,7 +97,7 @@ public class UIPartsAchievementView extends UIParts{
         return 0;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font){
+    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, BitmapFont font){
         //-- 描画範囲を変える
         GL20 gl = Gdx.graphics.getGL20();
         gl.glViewport(x, y, width, height);
@@ -137,8 +131,6 @@ public class UIPartsAchievementView extends UIParts{
         gl.glViewport(0, 0, Pawn.LOGICAL_WIDTH, Pawn.LOGICAL_HEIGHT);
     }
 
-    public void dispose (){
-
-    }
+    public void dispose (){ }
 
 }

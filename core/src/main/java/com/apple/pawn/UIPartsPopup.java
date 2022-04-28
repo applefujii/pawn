@@ -2,6 +2,8 @@ package com.apple.pawn;
 
 import static com.apple.pawn.PawnUtils.fontSplit;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -16,15 +18,15 @@ public class UIPartsPopup extends UIParts{
 
     private final Array<String> stringRow;
     private final int strHeight = 18;
-    private float time_show;
-    private float time_fadein = 0.5f, time_fadeout = 0.5f;
+    private final float time_show;
+    private final float time_fadein = 0.5f, time_fadeout = 0.5f;
     private float timer = 0;
     private float alpha = 0;
     private int state = 0;      // 0:fadein 1:show 2:fadeout 3:end
 
     protected Sprite sprite;
 
-    public UIPartsPopup(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, int group, String text, float time_show) {
+    public UIPartsPopup(String name, @NonNull AssetManager manager, @NonNull BitmapFont font, int x, int y, int width, int height, int group, String text, float time_show) {
         super(name, x, y, width, height, group);
         this.time_show = time_show;
         stringRow = fontSplit(text, width - (px * 2), font.getCache());
@@ -65,7 +67,7 @@ public class UIPartsPopup extends UIParts{
     }
 
     @Override
-    public void draw(Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw(@NonNull Batch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(0.8f,0.8f,0.8f,alpha);
 //        renderer.box(x,y,0,width,height,0);

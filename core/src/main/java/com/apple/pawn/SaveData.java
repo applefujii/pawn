@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -28,7 +30,7 @@ public class SaveData {
     public SaveData() {
     }
 
-    public SaveData(SaveData sd) {
+    public SaveData(@NonNull SaveData sd) {
         timer = sd.timer;
         mapNo = sd.mapNo;
         goalNo = sd.goalNo;

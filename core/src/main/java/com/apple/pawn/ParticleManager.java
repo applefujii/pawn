@@ -1,6 +1,5 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -9,13 +8,13 @@ import java.util.Iterator;
 
 public class ParticleManager {
 
-    private Array<Particle> aParticle;
+    private final Array<Particle> aParticle;
     private float dpsFlutterDrop;
     private boolean isFlutterDrop;
     private float preTimer = 0, preFlutterDropTimer = 0, surplus = 0;
 
     ParticleManager() {
-        aParticle = new Array<Particle>();
+        aParticle = new Array<>();
     }
 
     public void update(float timer) {
@@ -32,19 +31,14 @@ public class ParticleManager {
     }
 
     public void draw(Batch batch, ShapeRenderer renderer) {
-        Iterator<Particle> ite = aParticle.iterator();
-        while(ite.hasNext()) {
-            Particle p = ite.next();
-            p.draw(batch,renderer);
+        for(Particle p : aParticle) {
+            p.draw(batch, renderer);
         }
     }
 
     public void dispose() {
-        Iterator<Particle> ite = aParticle.iterator();
-        while(ite.hasNext()) {
-            Particle p = ite.next();
+        for(Particle p : aParticle) {
             p.dispose();
-            ite.remove();
         }
     }
 

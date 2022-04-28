@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
@@ -11,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Iterator;
 
 public class Achievement {
 
@@ -179,11 +180,9 @@ public class Achievement {
      * @param aDicedNo 出た目の配列
      * @return [0]何の目が [1]何回
      */
-    private int[] dicedSerialCheck(Array<Integer> aDicedNo) {
-        Iterator<Integer> ite = new Array.ArrayIterator<>(aDicedNo);
+    private int[] dicedSerialCheck(@NonNull Array<Integer> aDicedNo) {
         int count = 1, dd = -1;
-        while(ite.hasNext()) {
-            int d = ite.next();
+        for(Integer d : aDicedNo) {
             if(dd == -1) dd = d;
             else if(dd == d) count++;
             else break;

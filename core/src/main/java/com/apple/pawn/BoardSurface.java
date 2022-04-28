@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
@@ -63,21 +62,13 @@ public class BoardSurface {
 
         backSprite = new Sprite(manager.get("assets/back.png", Texture.class));
         backSprite.flip(false, true);
-        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.initialize(manager, aSquare.size - 1, font);
-        }
+        for(int i = 0; i < aSquare.size; i++) aSquare.get(i).initialize(manager, aSquare.size - 1, i, font);
     }
 
     public void update(GameScreen gameScreen) {
         if(FlagManagement.is(Flag.LOOK_FREE)) {
             cameraPos.set(gameScreen.getCameraPos().x, gameScreen.getCameraPos().y);
-            Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-            while (squareIterator.hasNext()) {
-                Square square = squareIterator.next();
-                 square.update(gameScreen, cameraPos);
-            }
+            for(Square square : aSquare) square.update(gameScreen, cameraPos);
         }
     }
 
@@ -92,19 +83,11 @@ public class BoardSurface {
             }
         }
 
-        Iterator<Square> squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.draw(batch);
-        }
+        for(Square square : aSquare) square.draw(batch);
 
         batch.enableBlending();
 
-        squareIterator = new Array.ArrayIterator<>(aSquare);
-        while(squareIterator.hasNext()) {
-            Square square = squareIterator.next();
-            square.drawFont(batch);
-        }
+        for(Square square : aSquare) square.drawFont(batch);
 
         batch.end();
     }

@@ -112,24 +112,11 @@ public class TitleScreen implements Screen {
 		manager.update();
 		manager.finishLoading();
 		spPiece = new Sprite[6];
-		spPiece[0] = atlas.createSprite(Piece.COLOR[0]);
-		spPiece[0].flip(false, true);
-		spPiece[0].setSize(80,120);
-		spPiece[1] = atlas.createSprite(Piece.COLOR[1]);
-		spPiece[1].flip(false, true);
-		spPiece[1].setSize(80,120);
-		spPiece[2] = atlas.createSprite(Piece.COLOR[2]);
-		spPiece[2].flip(false, true);
-		spPiece[2].setSize(80,120);
-		spPiece[3] = atlas.createSprite(Piece.COLOR[3]);
-		spPiece[3].flip(false, true);
-		spPiece[3].setSize(80,120);
-		spPiece[4] = atlas.createSprite(Piece.COLOR[4]);
-		spPiece[4].flip(false, true);
-		spPiece[4].setSize(80,120);
-		spPiece[5] = atlas.createSprite(Piece.COLOR[5]);
-		spPiece[5].flip(false, true);
-		spPiece[5].setSize(80,120);
+		for(int i = 0; i < 6; i++) {
+			spPiece[i] = atlas.createSprite(Piece.COLOR[i]);
+			spPiece[i].flip(false, true);
+			spPiece[i].setSize(80, 120);
+		}
 		mainImage = new Sprite(manager.get("assets/title.png", Texture.class),0,0,1024,591);
 		mainImage.flip(false,true);
 		mainImage.setSize(614,354);

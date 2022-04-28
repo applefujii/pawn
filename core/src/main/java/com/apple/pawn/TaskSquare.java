@@ -26,8 +26,8 @@ public class TaskSquare extends Square {
     }
 
     @Override
-    public void initialize(@NonNull AssetManager manager, int size, BitmapFont font) {
-        super.initialize(manager, size, font);
+    public void initialize(@NonNull AssetManager manager, int size, int no, BitmapFont font) {
+        super.initialize(manager, size, no, font);
         BitmapFontCache fontCache = font.getCache();
         move = Math.min(move, size - count);
         back = Math.min(back, count);

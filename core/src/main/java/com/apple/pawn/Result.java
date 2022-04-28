@@ -1,6 +1,7 @@
 package com.apple.pawn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 public class Result extends UIParts {
 
     private final BitmapFont font;
-    Piece[] spPiece;
+    //private Piece[] Piece;
     private PlayerManager playerManager;
 //    private Player player;
     private GameScreen gamescreen;
@@ -42,6 +43,8 @@ public class Result extends UIParts {
 //            //spPiece[i].setSize(80,120);
 //            spPiece[i].setSize(60,90);
 //        }
+
+        //sprite = new Sprite();
         playerManager = new PlayerManager();
     }
 
@@ -55,7 +58,6 @@ public class Result extends UIParts {
 
 
        this.playerManager = playerManager;
-//
 //        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 //        param.size = 20;
 //        param.incremental = true;			// 自動的に文字を追加
@@ -126,11 +128,14 @@ public class Result extends UIParts {
         int j=70,k=110;
         for(int i=0; i<gameSetting.getPlayerNo(); i++){
             Player player = playerIterator.next();
-            spPiece = playerManager.getPieces();
-            //font.draw(batch, player.getName(), 200, turn);
+            Piece piece = player.getPiece();
+            Sprite sprite = new Sprite(piece.getSprite());
+            sprite.setSize(60, 90);
+            sprite.setPosition(80,k-20);
+            //sprite.setCenter(100,100);
+            sprite.draw(batch);
             font.draw(batch, i+1+"P", 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
-
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
             //font.draw(batch, aResultDetail+"sample", 440, k);
 

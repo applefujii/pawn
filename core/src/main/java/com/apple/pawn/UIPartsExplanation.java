@@ -2,6 +2,8 @@ package com.apple.pawn;
 
 import static com.apple.pawn.PawnUtils.fontSplit;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,7 +25,7 @@ public class UIPartsExplanation extends UIParts {
 
     protected Sprite sprite;
 
-    public UIPartsExplanation(String name, AssetManager manager, BitmapFont font, int x, int y, int width, int height, int group, String expl) {
+    public UIPartsExplanation(String name, @NonNull AssetManager manager, @NonNull BitmapFont font, int x, int y, int width, int height, int group, String expl) {
         super(name, x, y, width, height, group);
         stringRow = new Array<>();
         explanation = "";
@@ -41,7 +43,7 @@ public class UIPartsExplanation extends UIParts {
         return 0;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw (@NonNull Batch batch, ShapeRenderer renderer, BitmapFont font) {
         batch.begin();
         sprite.draw(batch);
         for(int i = 0; i < stringRow.size; i++) {

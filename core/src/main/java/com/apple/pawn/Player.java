@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -77,8 +76,8 @@ public class Player {
         }
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer) {
-        piece.draw(batch, renderer);
+    public void draw (Batch batch) {
+        piece.draw(batch);
     }
 
     public void dispose () {
@@ -94,7 +93,16 @@ public class Player {
             Gdx.app.debug("count(before)", String.valueOf(count));
             count++;
             Gdx.app.debug("count(after)", String.valueOf(count));
-            aResultDetail.insert(type, count);
+            aResultDetail.set(type, count);
+        }
+    }
+
+    public void removeResultDetail(@NonNull Square visitSquare) {
+        int type = visitSquare.getType() - 2;
+        if(type >= 0) {
+            int count = aResultDetail.get(type);
+            count--;
+            aResultDetail.set(type, count);
         }
     }
 

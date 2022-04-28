@@ -1,6 +1,5 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -9,10 +8,10 @@ import com.badlogic.gdx.utils.Array;
 // ※実装するか迷い中
 public class UIPartsUnion {
 
-    private Array<UIParts> uiParts;
+    private final Array<UIParts> uiParts;
 
     public UIPartsUnion() {
-        uiParts = new Array<UIParts>();
+        uiParts = new Array<>();
     }
 
     public int update() {

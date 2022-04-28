@@ -1,12 +1,12 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 
 import java.util.Iterator;
 
@@ -26,8 +26,8 @@ public class UI {
     private Dice dice;
 
     public UI() {
-        uiParts = new Array<UIParts>();
-        uiPartsSelect = new Array<UIPartsSelect>();
+        uiParts = new Array<>();
+        uiPartsSelect = new Array<>();
     }
 
     public void initialize(Pawn game) {
@@ -35,9 +35,7 @@ public class UI {
     }
 
     public int update() {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()) {
-            UIParts ui = uiPartsIterator.next();
+        for(UIParts ui : uiParts) {
             if(ui.update() == -1) {
                 remove(ui.getName());
             }
@@ -58,15 +56,11 @@ public class UI {
     }
 
     public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font, int group) {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()){
-            UIParts ui = uiPartsIterator.next();
+        for(UIParts ui : uiParts) {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()){
-            UIPartsSelect ui = uiPartsSelectIterator.next();
+        for(UIPartsSelect ui : uiPartsSelect) {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);
         }
@@ -74,19 +68,11 @@ public class UI {
     }
 
     public void dispose () {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()){
-            UIParts ui = uiPartsIterator.next();
-            ui.dispose();
-        }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()){
-            UIPartsSelect ui = uiPartsSelectIterator.next();
-            ui.dispose();
-        }
+        for(UIParts ui : uiParts) ui.dispose();
+        for(UIPartsSelect ui : uiPartsSelect) ui.dispose();
     }
 
-    public void add(UIParts parts) {
+    public void add(@NonNull UIParts parts) {
         if(parts.getClass().getName().matches(".*Select.*") == true) uiPartsSelect.add((UIPartsSelect)parts);
         else uiParts.add(parts);
     }
@@ -104,13 +90,17 @@ public class UI {
         Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
         while(uiPartsSelectIterator.hasNext()) {
             UIPartsSelect ui = uiPartsSelectIterator.next();
-            if(ui.getName() == name) {
+            if(ui.getName().equals(name)) {
                 ui.dispose();
                 uiPartsSelectIterator.remove();
                 return true;
             }
         }
         return false;
+    }
+
+    public void removeAllSelect() {
+        uiPartsSelect.clear();
     }
 
     public int getSelect() {
@@ -125,17 +115,13 @@ public class UI {
         return ret;
     }
 
-    public UIParts getUIParts(String name) {
-        Iterator<UIParts> uiPartsIterator = new Array.ArrayIterator<>(uiParts);
-        while(uiPartsIterator.hasNext()) {
-            UIParts ui = uiPartsIterator.next();
+    public @Null UIParts getUIParts(String name) {
+        for(UIParts ui : uiParts) {
             if(ui.getName().equals(name)) {
                 return ui;
             }
         }
-        Iterator<UIPartsSelect> uiPartsSelectIterator = new Array.ArrayIterator<>(uiPartsSelect);
-        while(uiPartsSelectIterator.hasNext()) {
-            UIPartsSelect ui = uiPartsSelectIterator.next();
+        for(UIPartsSelect ui : uiPartsSelect) {
             if(ui.getName().equals(name)) {
                 return ui;
             }

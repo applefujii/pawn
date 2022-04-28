@@ -1,5 +1,7 @@
 package com.apple.pawn;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -16,9 +18,9 @@ public class UIPartsSelect extends UIParts {
     protected Array<String> choices;
     protected boolean[] enable;
     protected int cursor = 0;
-    private boolean isObstruction;
+    private final boolean isObstruction;
 
-    public UIPartsSelect(String name, int x, int y, int width, int height, int group, int cursor, boolean isObstruction, String... choices) {
+    public UIPartsSelect(String name, int x, int y, int width, int height, int group, int cursor, boolean isObstruction, @NonNull String... choices) {
         super(name, x, y, width, height, group);
         this.cursor = cursor;
         this.isObstruction = isObstruction;
@@ -37,8 +39,7 @@ public class UIPartsSelect extends UIParts {
         }
         if(enable[this.cursor] == false) {
             this.cursor = 0;
-            while(true) {
-                if(enable[this.cursor] == true) break;
+            while (enable[this.cursor] != true) {
                 this.cursor++;
             }
         }
@@ -56,7 +57,7 @@ public class UIPartsSelect extends UIParts {
         return -2;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, BitmapFont font) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0.8f,0.8f,0.8f,1);
         renderer.box(x,y,0,width,height*choices.size,0);

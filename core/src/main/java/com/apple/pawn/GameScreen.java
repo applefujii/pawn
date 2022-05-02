@@ -628,8 +628,7 @@ public class GameScreen implements Screen {
 			FlagManagement.set(Flag.RESULT_SHOW);
 			int select = ui.getSelect();
 			if(select != -1 ) {
-				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,2,game,gameSetting);
-				result.initialize(playerManager);
+				Result result = new Result("result",50,50,Pawn.LOGICAL_WIDTH-100,Pawn.LOGICAL_HEIGHT-100,2, playerManager);
 				ui.add(result);
 			}
 			timerRap = timer;

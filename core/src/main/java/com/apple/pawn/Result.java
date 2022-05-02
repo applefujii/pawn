@@ -9,13 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Result extends UIParts {
-
     private final PlayerManager playerManager;
-    int[] aSquareNo;
 
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager) {
         super(name,x,y,width,height,group);
-        this.aSquareNo = new int[6];
         this.playerManager = playerManager;
     }
 

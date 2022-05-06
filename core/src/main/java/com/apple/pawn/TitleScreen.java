@@ -55,7 +55,7 @@ public class TitleScreen implements Screen {
 
 	private final AssetManager manager;
 
-	private String[] aStageName= {"1","2","3"};
+	private final String[] aStageName= {"1","2","3"};
 	private int playerNo;
 	private double rad;
 

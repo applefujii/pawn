@@ -41,10 +41,13 @@ public class Result extends UIParts {
         font.draw(batch, "ターン数", 320, 60);
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
 
+
         int k = 110;
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
+            sprite.setScale((float)0.8, (float)0.8);
             sprite.setSize(60, 90);
+            //sprite.setScale((float)0.8, (float)0.8);
             sprite.setPosition(80,k-20);
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, k);

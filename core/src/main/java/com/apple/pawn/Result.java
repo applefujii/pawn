@@ -2,6 +2,7 @@ package com.apple.pawn;
 
 import android.support.annotation.NonNull;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,10 +11,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Result extends UIParts {
     private final PlayerManager playerManager;
+    //private final GameSetting gamesetting;
 
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
+        //Gdx.app.debug("fps", "width="+width);
+        //Gdx.app.debug("fps", "height="+height);
     }
 
 
@@ -40,20 +44,24 @@ public class Result extends UIParts {
         font.draw(batch, "名前", 200, 60);
         font.draw(batch, "ターン数", 320, 60);
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
-
+        //Gdx.app.debug("fps", "getGoalPlayer="+playerManager.getGoalPlayer());
 
         int k = 110;
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
-            sprite.setScale((float)0.8, (float)0.8);
-            sprite.setSize(60, 90);
             //sprite.setScale((float)0.8, (float)0.8);
+            //sprite.setScale(height/プレイ人数);
+            //sprite.setSize(60, 90);
+            //sprite.setScale((float)0.8, (float)0.8);
+
             sprite.setPosition(80,k-20);
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
             k += 100;
+            //Gdx.app.debug("fps", "getGoalPlayer="+playerManager.getGoalPlayer());
+            Gdx.app.debug("fps", "player="+player);
         }
 
         batch.end();

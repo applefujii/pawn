@@ -7,6 +7,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * ファイルの読み書き
+ * Jacksonを使用。
+ * @author fujii
+ */
 public class FileIO {
 
     private SaveData saveData;

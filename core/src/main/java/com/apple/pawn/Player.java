@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * プレイヤークラス
  * @author fujii
  */
 public class Player {
@@ -38,9 +39,15 @@ public class Player {
     @JsonIgnore
     private PlayerManager playerManager;
 
+    // jacksonで読み込むときにデフォルトコンストラクタが必要
     public Player() {
     }
 
+    /**
+     * コンストラクタ
+     * @param name プレイヤー名
+     * @param pieceColorNo 駒の色ナンバー
+     */
     public Player(String name, int pieceColorNo) {
         this.name = name;
         piece = new Piece(pieceColorNo);
@@ -53,6 +60,12 @@ public class Player {
         order = MathUtils.random(0, 255);
     }
 
+    /**
+     * 初期化
+     * @param gameScreen
+     * @param bs 盤面
+     * @param playerManager アセットの読み込みに使用
+     */
     public void initialize(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
@@ -60,6 +73,12 @@ public class Player {
         piece.initialize(bs, this.gameScreen.getManager());
     }
 
+    /**
+     * ロード時の初期化
+     * @param gameScreen
+     * @param bs 盤面
+     * @param playerManager アセットの読み込みに使用
+     */
     public void load(GameScreen gameScreen, BoardSurface bs, PlayerManager playerManager) {
         this.gameScreen = gameScreen;
         this.boardSurface = bs;
@@ -67,6 +86,9 @@ public class Player {
         piece.load(bs, this.gameScreen.getManager());
     }
 
+    /**
+     * 動作
+     */
     public void update() {
         if(piece.update()) {
             gameScreen.addGoalNo();
@@ -76,6 +98,10 @@ public class Player {
         }
     }
 
+    /**
+     * 描画
+     * @param batch
+     */
     public void draw (Batch batch) {
         piece.draw(batch);
     }
@@ -106,10 +132,17 @@ public class Player {
         }
     }
 
+    /**
+     * サイコロの目の履歴に追加
+     * @param diceNo サイコロの目
+     */
     public void addADiceNo(int diceNo) {
         if(aDiceNo.size > 10-1) aDiceNo.pop();
         aDiceNo.insert(0, diceNo);
     }
+
+
+    //----------------- getter ----------------------------------------------------------
 
     public boolean isGoal() {
         return isGoal;

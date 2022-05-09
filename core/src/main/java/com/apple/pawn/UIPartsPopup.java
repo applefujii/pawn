@@ -14,6 +14,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * ポップアップUI
+ * @author fujii
+ */
 public class UIPartsPopup extends UIParts{
 
     private final Array<String> stringRow;

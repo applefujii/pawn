@@ -71,18 +71,29 @@ public class Dice {
         img.dispose();
     }
 
+    /**
+     * 回転開始
+     */
     public void rollStart() {
         if(isRoll == false) isRoll = true;
     }
 
-    public int rollStop(boolean add) {
+    /**
+     * 回転停止
+     * @param isAddHistory 履歴に残すか
+     * @return -1:回転していなかった 他:出た目
+     */
+    public int rollStop(boolean isAddHistory) {
         if(isRoll == true) {
             isRoll = false;
-            if(add) aNo.add(no);
+            if(isAddHistory) aNo.add(no);
             return no;
         }
         return -1;
     }
+
+
+    //----------------- getter ----------------------------------------------------------
 
     public int getNo() {
         return no;

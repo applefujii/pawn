@@ -6,6 +6,10 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.Iterator;
 
+/**
+ * パーティクル管理クラス
+ * @author fujii
+ */
 public class ParticleManager {
 
     private final Array<Particle> aParticle;
@@ -17,6 +21,10 @@ public class ParticleManager {
         aParticle = new Array<>();
     }
 
+    /**
+     * 動かす
+     * @param timer 現在のゲームタイマー
+     */
     public void update(float timer) {
         generateParticleFlutterDrop(timer);
 
@@ -30,6 +38,11 @@ public class ParticleManager {
         preTimer = timer;
     }
 
+    /**
+     * 描画
+     * @param batch
+     * @param renderer
+     */
     public void draw(Batch batch, ShapeRenderer renderer) {
         for(Particle p : aParticle) {
             p.draw(batch, renderer);
@@ -42,6 +55,10 @@ public class ParticleManager {
         }
     }
 
+    /**
+     * パーティクルを生み出す
+     * @param timer 現在のゲームタイマー
+     */
     private void generateParticleFlutterDrop(float timer) {
         if(isFlutterDrop) {
 //            if(timer >= preFlutterDropTimer+(1/dpsFlutterDrop)) {
@@ -62,15 +79,26 @@ public class ParticleManager {
         aParticle.add(par);
     }
 
+    /**
+     * パーティクル生産を開始
+     * @param dps 1秒間に何個生み出すか
+     */
     public void startParticle(int dps) {
         dpsFlutterDrop = dps;
         isFlutterDrop = true;
     }
 
+    /**
+     * パーティクル生産を止める
+     */
     public void stopParticle() {
         isFlutterDrop = false;
     }
 
+    /**
+     * パーティクルをnフレーム分動かす
+     * @param n 動かすフレーム数
+     */
     public void skipFrame(int n) {
         float dpf = dpsFlutterDrop/60;
         float m = 0;

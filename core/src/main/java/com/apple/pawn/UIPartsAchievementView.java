@@ -18,6 +18,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
+/**
+ * 実績表示UI
+ * @author fujii
+ */
 public class UIPartsAchievementView extends UIParts{
 
     private static final int UNIT_HEIGHT = 60;

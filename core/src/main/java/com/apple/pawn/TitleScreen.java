@@ -25,7 +25,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.function.IntSupplier;
 
-
+/**
+ * タイトル画面の親
+ * @author fujii
+ */
 public class TitleScreen implements Screen {
 	private final static int DISTANCE = 260;
 	private static float SPEED = 0.01f;
@@ -288,6 +291,11 @@ public class TitleScreen implements Screen {
 		particle.dispose();
 	}
 
+
+
+	//////////////////////// sequences ////////////////////////////////////////////////////////////////
+
+	// 初めから、続きから、実績確認の選択
 	private int homeSequence() {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
@@ -325,6 +333,7 @@ public class TitleScreen implements Screen {
 		return 0;
 	}
 
+	// 人数選択
 	private int startSettingSequence() {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
@@ -355,6 +364,7 @@ public class TitleScreen implements Screen {
 		return 0;
 	}
 
+	// 名前入力、ステージ選択
 	private int startSetting2Sequence() {
 		rad += SPEED;
 		if(rad >360) rad %= 360;
@@ -428,6 +438,7 @@ public class TitleScreen implements Screen {
 		return 0;
 	}
 
+	// ロード
 	private int loadSequence() {
 		if (sequenceSubNo == 1) {
 			fileIO.load();
@@ -438,6 +449,7 @@ public class TitleScreen implements Screen {
 		return 0;
 	}
 
+	// 実績閲覧
 	private int achievementViewSequence() {
 		if (sequenceSubNo == 1) {
 			ui.add( new UIPartsAchievementView("achievement",50,30,1180,660, 1 ));

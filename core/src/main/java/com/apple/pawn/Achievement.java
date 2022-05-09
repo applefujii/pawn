@@ -14,6 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * 実績
+ * sqlite3を使用。
+ * @author fujii
+ */
 public class Achievement {
 
     private static final String DB_URL = "jdbc:sqlite:save\\achievement.sqlite3";
@@ -48,6 +53,11 @@ public class Achievement {
         }
     }
 
+    /**
+     * 実績を達成したか確認する
+     * @param time ゲームタイマー
+     * @param player 現在のプレイヤー
+     */
     public void update(float time, Player player) {
         float diff = time - this.time;
         this.time = time;

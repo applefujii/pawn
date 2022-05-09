@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * セーブデータ
  * @author fujii
  */
 public class SaveData {

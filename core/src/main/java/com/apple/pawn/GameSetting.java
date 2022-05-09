@@ -26,22 +26,8 @@ public class GameSetting {
         stageNo = 0;
     }
 
-    public void setAName(int no, String name) {
-        if(Objects.nonNull(name)) {
-            String na = name.trim();
-            if(!na.isEmpty()) {
-                aName[no] = name;
-            }
-        }
-    }
 
-    public void setAColorNo(int no, int colorNo) {
-        aColorNo[no] = colorNo;
-    }
-
-    public void setStageNo(int stageNo) {
-        this.stageNo = stageNo;
-    }
+    //----------------- getter ----------------------------------------------------------
 
     public int getPlayerNo() {
         return playerNo;
@@ -58,5 +44,25 @@ public class GameSetting {
 
     public int getStageNo() {
         return stageNo;
+    }
+
+
+    //----------------- setter ----------------------------------------------------------
+
+    public void setAName(int no, String name) {
+        if(Objects.nonNull(name)) {
+            String na = name.trim();
+            if(!na.isEmpty()) {
+                aName[no] = name;
+            }
+        }
+    }
+
+    public void setAColorNo(int no, int colorNo) {
+        aColorNo[no] = colorNo;
+    }
+
+    public void setStageNo(int stageNo) {
+        this.stageNo = stageNo;
     }
 }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * 駒クラス
  * @author fujii
  */
 public class Piece {
@@ -49,9 +50,14 @@ public class Piece {
     @JsonIgnore
     private BoardSurface boardSurface;
 
+    // jacksonで読み込むときにデフォルトコンストラクタが必要
     public Piece() {
     }
 
+    /**
+     * コンストラクタ
+     * @param pieceColorNo 駒の色ナンバー
+     */
     public Piece(int pieceColorNo) {
         this.colorNo = pieceColorNo;
         squareNo = 0;
@@ -64,6 +70,11 @@ public class Piece {
         isMove = false;
     }
 
+    /**
+     * 初期化
+     * @param bs 盤面
+     * @param manager アセットの読み込みに使用
+     */
     public void initialize(@NonNull BoardSurface bs, @NonNull AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
@@ -75,13 +86,22 @@ public class Piece {
         sprite.flip(false, true);
     }
 
-    public void load(BoardSurface bs, @NonNull AssetManager manager) {
+    /**
+     * ロード時の初期化
+     * @param bs 盤面の参照
+     * @param manager アセットの読み込みに使用
+     */
+    public void load(@NonNull BoardSurface bs, @NonNull AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
         sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
+    /**
+     * 動作
+     * @return true:ゴールした false:それ以外
+     */
     public boolean update() {
         if(isMove) {
             //-- 進める
@@ -140,6 +160,10 @@ public class Piece {
         return false;
     }
 
+    /**
+     * 描画
+     * @param batch
+     */
     public void draw (Batch batch) {
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
@@ -148,6 +172,11 @@ public class Piece {
 
     public void dispose () { }
 
+    /**
+     * 駒の移動
+     * @param squareNo 動かすマス数
+     * @param isAnimation アニメーションさせるか
+     */
     public void move( int squareNo, boolean isAnimation ) {
         //-- アニメーションさせる
         if(isAnimation) {
@@ -170,6 +199,9 @@ public class Piece {
             FlagManagement.fold(Flag.PIECE_MOVE);
         }
     }
+
+
+    //----------------- getter ----------------------------------------------------------
 
     public int getSquareNo() {
         return squareNo;

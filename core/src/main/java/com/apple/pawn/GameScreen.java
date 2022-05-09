@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.function.IntSupplier;
 
 /**
+ * ゲーム画面の親
  * @author fujii
  */
 public class GameScreen implements Screen {
@@ -396,6 +397,10 @@ public class GameScreen implements Screen {
 		manager.unload("assets/cursor.png");
 	}
 
+
+	//////////////////////// sequences ////////////////////////////////////////////////////////////////
+
+	// ゲーム終了条件が満たされているか確認、プレイヤーの手番の確認
 	private int turnStandby() {
 		if(sequenceNo == Sequence.TURN_STANDBY.no) {
 			// 全員ゴールしたらリザルトへ
@@ -428,6 +433,7 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	// どのアクションをするか選ぶ、マップ確認、セーブ
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
 			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
@@ -491,6 +497,7 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	// サイコロを回す、止める
 	private int diceRoll() {
 		if(sequenceNo == Sequence.DICE_ROLL.no) {
 			dice.rollStart();
@@ -510,6 +517,7 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	// 駒を進める
 	private int PieceAdvance() {
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
 			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
@@ -534,6 +542,7 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	// 課題
 	private int taskDo() {
 		if(sequenceNo == Sequence.TASK_DO.no) {
 			// ターンプレイヤーが居るマス
@@ -610,6 +619,7 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
+	// 結果の表示
 	private int result() {
 		if(sequenceNo == Sequence.RESULT.no) {
 			if(isLoad) {
@@ -637,12 +647,8 @@ public class GameScreen implements Screen {
 		return 0;
 	}
 
-	private void setCameraPositionToTurnPlayer() {
-		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
-		camera.position.x = pv.x+ (Piece.WIDTH >> 1);
-		camera.position.y = pv.y+ (Piece.HEIGHT >> 1);
-		camera.zoom = zoom;
-	}
+
+	//////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Flag.LOOK_FREEが立っているときのカメラの操作
@@ -680,6 +686,16 @@ public class GameScreen implements Screen {
 		}
 	}
 
+	private void setCameraPositionToTurnPlayer() {
+		Vector2 pv = turnPlayer.getPiece().getCameraPosition();
+		camera.position.x = pv.x+ (Piece.WIDTH >> 1);
+		camera.position.y = pv.y+ (Piece.HEIGHT >> 1);
+		camera.zoom = zoom;
+	}
+
+
+	//----------------- getter ----------------------------------------------------------
+
 	public AssetManager getManager() {
 		return manager;
 	}
@@ -703,6 +719,9 @@ public class GameScreen implements Screen {
 	public Vector3 getCameraPos() {
 		return camera.position;
 	}
+
+
+	//----------------- setter ----------------------------------------------------------
 
 	public void setUIPartsExplanation(String text) {
 		((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(text);

@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 /**
+ * 説明表示UI
  * @author fujii
  */
 public class UIPartsExplanation extends UIParts {

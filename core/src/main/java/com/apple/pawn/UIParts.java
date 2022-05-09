@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * UIのパーツの継承元
+ * @author fujii
+ */
 abstract public class UIParts {
     protected String name;
     protected int x, y;

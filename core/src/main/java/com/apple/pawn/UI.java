@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Null;
 import java.util.Iterator;
 
 /**
+ * UI管理クラス
  * @author fujii
  */
 public class UI {

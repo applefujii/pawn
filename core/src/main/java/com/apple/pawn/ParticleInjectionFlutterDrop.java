@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * 打ち上げられた後舞い降りるパーティクル
+ * @author fujii
+ */
 public class ParticleInjectionFlutterDrop implements Particle{
 
     private Vector2 pos, wh, defaultWh, speed, addSpeed, maxSpeed;

@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+/**
+ * 選択肢のあるUI(タイトル付き)
+ * @author fujii
+ */
 public class UIPartsSelectIndex extends UIPartsSelect{
 
     private final String index;

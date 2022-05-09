@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 /**
+ * 選択肢のあるUI
  * @author fujii
  */
 public class UIPartsSelect extends UIParts {

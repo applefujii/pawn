@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 /**
+ * プレイヤーを管理するクラス
  * @author fujii
  */
 public class PlayerManager {
@@ -20,23 +21,41 @@ public class PlayerManager {
     private GameScreen gameScreen;
     private BoardSurface boardSurface;
 
+    /**
+     * コンストラクタ
+     */
     public PlayerManager() {
         aPlayer = new Array<>();
     }
 
+    /**
+     * 初期化
+     * @param gameScreen
+     */
     public void initialize(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 
+    /**
+     * ロード時の初期化
+     * @param aPlayer
+     */
     public void load(Array<Player> aPlayer) {
         this.aPlayer = aPlayer;
         for(Player player : this.aPlayer) player.load(gameScreen, boardSurface, this);
     }
 
+    /**
+     * 動作
+     */
     public void update() {
         for(Player player : aPlayer) player.update();
     }
 
+    /**
+     * 描画
+     * @param batch
+     */
     public void draw (@NonNull Batch batch) {
         Player turnPlayer = null;
         batch.begin();
@@ -52,6 +71,12 @@ public class PlayerManager {
         for(Player player : aPlayer) player.dispose();
     }
 
+    /**
+     * プレイヤー追加
+     * @param name プレイヤー名
+     * @param pieceColorNo 駒の色ナンバー
+     * @return プレイヤー数
+     */
     public int add(String name, int pieceColorNo) {
         Player p = new Player(name, pieceColorNo);
         p.initialize(gameScreen, boardSurface, this);
@@ -59,6 +84,9 @@ public class PlayerManager {
         aPlayer.sort(Comparator.comparingInt(Player::getOrder));
         return aPlayer.size;
     }
+
+
+    //----------------- getter ----------------------------------------------------------
 
     public boolean isAllGoal() {
         boolean ret = true;
@@ -83,10 +111,6 @@ public class PlayerManager {
         return aPlayer.get(i);
     }
 
-    public void setBoardSurface(BoardSurface boardSurface) {
-        this.boardSurface = boardSurface;
-    }
-
     public Piece[] getPieces() {
         Array<Piece> p = new Array<>();
         for(Player player : aPlayer) p.add(player.getPiece());
@@ -102,4 +126,12 @@ public class PlayerManager {
         goalPlayer.sort(Comparator.comparingInt(Player::getGoalNo));
         return goalPlayer;
     }
+
+
+    //----------------- setter ----------------------------------------------------------
+
+    public void setBoardSurface(BoardSurface boardSurface) {
+        this.boardSurface = boardSurface;
+    }
+
 }

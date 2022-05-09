@@ -9,18 +9,20 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ParticleFlutterDrop implements Particle{
 
-    private Vector2 pos, wh, speed, addSpeed, maxSpeed;
-    private float life, normalSwitchRate, slowSwitchRate, horizonSwitchRate;
+    private Vector2 pos, wh, defaultWh, speed, addSpeed, maxSpeed;
+    private float life, defaultLife, normalSwitchRate, slowSwitchRate, horizonSwitchRate;
     private boolean isDownSlow, isRight;
     private Color color;
 
     ParticleFlutterDrop() {
         pos = new Vector2(MathUtils.random(-100f,(float)Pawn.LOGICAL_WIDTH)+100,0);
-        wh = new Vector2(MathUtils.random(1,4),MathUtils.random(1,4));
+        wh = new Vector2(MathUtils.random(1,8),MathUtils.random(1,8));
+        defaultWh = wh.cpy();
         speed = new Vector2(MathUtils.random(-0.005f,0.005f),MathUtils.random(1.0f,4.0f));
         addSpeed = new Vector2(MathUtils.random(-0.02f,0.002f),MathUtils.random(0.0f,0.02f));
         maxSpeed = new Vector2(3.0f,4.0f);
         life = MathUtils.random(260,420);
+        defaultLife = life;
         horizonSwitchRate = 1.0f/30;
         normalSwitchRate = 1.0f/20;
         slowSwitchRate = 1.0f/60;
@@ -66,12 +68,14 @@ public class ParticleFlutterDrop implements Particle{
         pos.add(speed);
         life--;
         //-- lifeに応じて大きさ変更
-        if(life < 240) if(wh.x > 3) wh.x = 3;
-        if(life < 210) if(wh.y > 3) wh.y = 3;
-        if(life < 180) if(wh.x > 2) wh.x = 2;
-        if(life < 150) if(wh.y > 2) wh.y = 2;
-        if(life < 90) if(wh.x > 1) wh.x = 1;
-        if(life < 70) if(wh.y > 1) wh.y = 1;
+        int distance = (int)(defaultLife/defaultWh.x);
+        for(int i=(int)defaultWh.x ; i>=1 ; i--) {
+            if (life < distance*i) if (wh.x > i) wh.x = i;
+        }
+        distance = (int)(defaultLife/defaultWh.y);
+        for(int i=(int)defaultWh.y ; i>=1 ; i--) {
+            if (life < distance*i) if (wh.y > i) wh.y = i;
+        }
         if(life <= 0) return true;
         return false;
     }

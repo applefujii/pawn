@@ -50,18 +50,17 @@ public class Result extends UIParts {
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
             //sprite.setScale((float)0.8, (float)0.8);
-            //sprite.setScale(height/プレイ人数);
+            sprite.setScale(1);
             //sprite.setSize(60, 90);
-            //sprite.setScale((float)0.8, (float)0.8);
 
             sprite.setPosition(80,k-20);
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
-            k += 100;
+            k += height/4-10;
             //Gdx.app.debug("fps", "getGoalPlayer="+playerManager.getGoalPlayer());
-            Gdx.app.debug("fps", "player="+player);
+            //Gdx.app.debug("fps", "player="+player);
         }
 
         batch.end();

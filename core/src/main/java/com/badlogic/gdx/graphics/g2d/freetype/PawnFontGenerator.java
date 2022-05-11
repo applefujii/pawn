@@ -1,5 +1,7 @@
 package com.badlogic.gdx.graphics.g2d.freetype;
 
+import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -17,7 +19,7 @@ public class PawnFontGenerator extends FreeTypeFontGenerator {
         super(fontFile);
     }
 
-    private int getLoadingFlags (FreeTypeFontParameter parameter) {
+    private int getLoadingFlags (@NonNull FreeTypeFontParameter parameter) {
         int loadingFlags = FreeType.FT_LOAD_DEFAULT;
         switch (parameter.hinting) {
             case None:
@@ -69,9 +71,10 @@ public class PawnFontGenerator extends FreeTypeFontGenerator {
 
     @Override
     protected @Null
-    BitmapFont.Glyph createGlyph (char c, FreeTypeBitmapFontData data, FreeTypeFontParameter parameter, FreeType.Stroker stroker,
+    BitmapFont.Glyph createGlyph (char c, @NonNull FreeTypeBitmapFontData data, @NonNull FreeTypeFontParameter parameter, FreeType.Stroker stroker,
                                   float baseLine, PixmapPacker packer) {
 
+        data.setLineHeight(parameter.size + (parameter.borderWidth * 2));
         boolean missing = face.getCharIndex(c) == 0 && c != 0;
         if (missing) return null;
 

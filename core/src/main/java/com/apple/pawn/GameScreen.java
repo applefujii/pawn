@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -344,7 +345,7 @@ public class GameScreen implements Screen {
 		//-- デバッグ表示
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
-			font.getData().setScale(1, 1);
+			font.getData().setScale(1);
 			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 20*0);
 			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 20*1);
 			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 20*2);

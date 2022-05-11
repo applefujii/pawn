@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Array;
 public class UIPartsPopup extends UIParts{
 
     private final Array<String> stringRow;
-    private final int strHeight = 18;
+    private final int strHeight = 20;
     private final float time_show;
     private final float time_fadein = 0.5f, time_fadeout = 0.5f;
     private float timer = 0;
@@ -86,7 +86,7 @@ public class UIPartsPopup extends UIParts{
         color.a = alpha;
         font.setColor(color);
         for(int i = 0; i < stringRow.size; i++) {
-            font.draw(batch,stringRow.get(i),x+px,y+(height>>1)-(strHeight*stringRow.size>>1)+2+strHeight*i);
+            font.draw(batch,stringRow.get(i),x+px,y+(height>>1)-(strHeight*stringRow.size>>1)+strHeight*i);
         }
         color.a = 1.0f;
         font.setColor(color);

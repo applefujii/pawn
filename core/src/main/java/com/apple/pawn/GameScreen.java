@@ -230,7 +230,7 @@ public class GameScreen implements Screen {
 				FlagManagement.fold(Flag.PLAY);
 				String rollback = "前の選択肢に戻る";
 				if(visitSquare == null || lastDoPlayer == null) rollback = "/" + rollback;
-				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 16, 2, 0, true, "再開", rollback, "終了"));
+				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 20, 2, 0, true, "再開", rollback, "終了"));
 			}
 			else {
 				FlagManagement.set(Flag.PLAY);
@@ -345,12 +345,12 @@ public class GameScreen implements Screen {
 		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
 			batch.begin();
 			font.getData().setScale(1, 1);
-			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 18*0);
-			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 18*1);
-			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 18*2);
-			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 18*3);
-			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 18*4);
-			font.draw(batch, "goal_no: " +goalNo , 0, 18*5);
+			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 20*0);
+			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 20*1);
+			font.draw(batch, "Sequence_no: " + sequenceNo, 0, 20*2);
+			font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 20*3);
+			font.draw(batch, "turn_player_no: " +turnPlayerNo , 0, 20*4);
+			font.draw(batch, "goal_no: " +goalNo , 0, 20*5);
 			batch.end();
 		}
 	}
@@ -417,7 +417,7 @@ public class GameScreen implements Screen {
 				}
 				turnPlayer = playerManager.getPlayer(turnPlayerNo);
 			} while (turnPlayer.isGoal());
-			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, turnPlayer.getName()+"の番です"));
+			ui.add(new UIPartsSelect("confirm_ready", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, turnPlayer.getName()+"の番です"));
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");
 			sequenceNo++;
 			return 0;
@@ -436,7 +436,7 @@ public class GameScreen implements Screen {
 	// どのアクションをするか選ぶ、マップ確認、セーブ
 	private int actionSelect() {
 		if(sequenceNo == Sequence.ACTION_SELECT.no) {
-			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
+			ui.add(new UIPartsSelect("action_select", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "サイコロを振る", "マップ確認", "セーブ"));
 			sequenceNo++;
 			return 0;
 		}
@@ -520,7 +520,7 @@ public class GameScreen implements Screen {
 	// 駒を進める
 	private int PieceAdvance() {
 		if(sequenceNo == Sequence.PIECE_ADVANCE.no) {
-			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
+			ui.add(new UIPartsSelect("move_piece", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "移動"));
 			sequenceNo++;
 			return 0;
 		}
@@ -552,10 +552,10 @@ public class GameScreen implements Screen {
 			if(visitSquare.getType() == 4) {
 				move = visitSquare.getMove();
 				back = visitSquare.getBack();
-				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "成功", "失敗"));
+				ui.add(new UIPartsSelect("task_result_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "成功", "失敗"));
 			} else if(visitSquare.getType() == 3) {
 				move = visitSquare.getMove();
-				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "移動"));
+				ui.add(new UIPartsSelect("move_check", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "移動"));
 			} else {
 				sequenceNo += 2;
 				visitSquare = null;
@@ -630,7 +630,7 @@ public class GameScreen implements Screen {
 				txt.append("\n").append(player.getGoalNo()).append("位:").append(player.getName());
 			}
 			((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(txt.toString());
-			ui.add(new UIPartsSelect("move_result", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 16, 1, 0, true, "リザルト画面へ"));
+			ui.add(new UIPartsSelect("move_result", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "リザルト画面へ"));
 			sequenceNo++;
 			return 0;
 		}

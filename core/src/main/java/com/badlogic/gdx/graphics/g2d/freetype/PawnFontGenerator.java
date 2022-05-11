@@ -47,26 +47,8 @@ public class PawnFontGenerator extends FreeTypeFontGenerator {
         return loadingFlags;
     }
 
-    private boolean loadChar (int c) {
-        return loadChar(c, FreeType.FT_LOAD_DEFAULT | FreeType.FT_LOAD_FORCE_AUTOHINT);
-    }
-
     private boolean loadChar (int c, int flags) {
         return face.loadChar(c, flags);
-    }
-
-    private boolean checkForBitmapFont () {
-        int faceFlags = face.getFaceFlags();
-        if (((faceFlags & FreeType.FT_FACE_FLAG_FIXED_SIZES) == FreeType.FT_FACE_FLAG_FIXED_SIZES)
-                && ((faceFlags & FreeType.FT_FACE_FLAG_HORIZONTAL) == FreeType.FT_FACE_FLAG_HORIZONTAL)) {
-            if (loadChar(32)) {
-                FreeType.GlyphSlot slot = face.getGlyph();
-                if (slot.getFormat() == 1651078259) {
-                    bitmapped = true;
-                }
-            }
-        }
-        return bitmapped;
     }
 
     @Override

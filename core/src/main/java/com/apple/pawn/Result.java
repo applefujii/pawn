@@ -29,7 +29,6 @@ public class Result extends UIParts {
         span = (float) (height - INDEX_HEIGHT) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         this.manager = manager;
-        //
     }
 
     /**
@@ -66,14 +65,14 @@ public class Result extends UIParts {
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, y);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, y);
-            //font.draw(batch, "aRD="+player.getAResultDetail(), 440, j);
             for(int i=2; i<5; i++){
                 sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[i]);
                 sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
-                sp.setPosition(x, y);
+                sp.setPosition(x, y-15);
                 sp.draw(batch);
                 x += SQUARE_WIDTH;
             }
+            font.draw(batch, "aRD="+player.getAResultDetail(), 440+SQUARE_WIDTH/2, y);
             x = 440;
             y += span;
         }

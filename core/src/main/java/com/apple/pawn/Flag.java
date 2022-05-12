@@ -4,8 +4,9 @@ public enum Flag {
     //---- フラグの定義
     PLAY(0, -1, false, "実行中(ポーズされていない)"),
     UI_VISIBLE(1, -1, false, "UIの表示"),
-    UI_GROUP1_VISIBLE(1, -1, false, "UI 1群の表示"),
-    UI_GROUP2_VISIBLE(1, -1, false, "UI 2群の表示"),
+    UI_GROUP1_VISIBLE(2, -1, false, "UI 1群の表示"),
+    UI_GROUP2_VISIBLE(3, -1, false, "UI 2群の表示"),
+    PLAYER_NAME_VISIBLE(4, -1, false, "プレイヤー名の表示"),
     PRINT_DEBUG_INFO(10, -1, false, "デバッグ表示を表示させるか"),
     DEBUG_CONTROL(11, -1, false, "デバッグ機能を使うか"),
     UI_INPUT_ENABLE(20, -1, true, "UIを操作可能か"),

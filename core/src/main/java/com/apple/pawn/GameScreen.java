@@ -148,6 +148,7 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.UI_VISIBLE);
 		FlagManagement.set(Flag.UI_GROUP1_VISIBLE);
 		FlagManagement.set(Flag.UI_GROUP2_VISIBLE);
+		FlagManagement.set(Flag.PLAYER_NAME_VISIBLE);
 		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
@@ -238,17 +239,20 @@ public class GameScreen implements Screen {
 				ui.remove("pause");
 			}
 		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+			FlagManagement.toggle(Flag.PLAYER_NAME_VISIBLE);
+		}
 		if (Gdx.input.isTouched()) {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			//-- ワールド座標に変換
 			viewport.unproject(touchPos);
 		}
 		if(FlagManagement.is(Flag.LOOK_FREE)) {
-			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("方向キーでカメラ移動\n左シフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Tab]キーで名前の表示・非表示\n\n\n方向キーでカメラ移動\n左シフト押しながらで高速移動\n[M]キーで全体マップ\n[E]キーで拡大\n[Q]キーで縮小\n[R]キーでカメラリセット\n[Space]キーで戻る");
 		} else if(FlagManagement.is(Flag.LOOK_MAP)) {
-			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[M]キーで詳細マップ\n[Space]キーで戻る");
+			((UIPartsOperatingMethod)ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Tab]キーで名前の表示・非表示\n\n\n[M]キーで詳細マップ\n[Space]キーで戻る");
 		} else {
-			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("上下キーで選択\n[Space]キーで決定");
+			((UIPartsOperatingMethod) ui.getUIParts(UI.OPERATING_METHOD)).setDocument("[Tab]キーで名前の表示・非表示\n\n\n上下キーで選択\n[Space]キーで決定");
 		}
 
 		// UIの動作
@@ -316,7 +320,7 @@ public class GameScreen implements Screen {
 
 		//------ メイン描画
 		board.draw(batch);
-		playerManager.draw(batch);
+		playerManager.draw(batch,renderer,font);
 		particle.draw(batch, renderer);
 
 		//------ ui描画

@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -102,8 +104,8 @@ public class Player {
      * 描画
      * @param batch
      */
-    public void draw (Batch batch) {
-        piece.draw(batch);
+    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font) {
+        piece.draw(batch,renderer,font,name);
     }
 
     public void dispose () {

@@ -4,9 +4,12 @@ import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -164,10 +167,29 @@ public class Piece {
      * 描画
      * @param batch
      */
-    public void draw (Batch batch) {
+    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font, String name) {
         sprite.setSize(WIDTH, HEIGHT);
         sprite.setPosition(pos.x, pos.y);
         sprite.draw(batch);
+
+        if(FlagManagement.is(Flag.PLAYER_NAME_VISIBLE)) {
+            batch.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(0.2f, 0.2f, 0.2f, 0.4f);
+            renderer.box(pos.x + 5, pos.y + HEIGHT - 48, 0, WIDTH - 10, 20, 0);
+            renderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            int nameWid = 0, len = name.length();
+            if (len > 4) len = 4;
+            for (int i = 0; i < len; i++) {
+                if (name.charAt(i) <= 0x127) nameWid += 9;
+                else nameWid += 18;
+            }
+            batch.begin();
+            font.draw(batch, name.substring(0, len), pos.x + WIDTH / 2 - nameWid / 2, pos.y + HEIGHT - 48);
+        }
     }
 
     public void dispose () { }

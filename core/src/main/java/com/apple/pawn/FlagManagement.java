@@ -54,6 +54,26 @@ public class FlagManagement {
     }
 
     /**
+     * フラグをトグル
+     * @param flag
+     */
+    public static void toggle(Flag flag) {
+        if(is(flag) == false) flags.add(flag);
+        else flags.remove(flag);
+    }
+
+    /**
+     * フラグをトグル
+     * @param flag
+     */
+    public static void toggle(Flag... flag) {
+        for(Flag f : flag) {
+            if(is(f) == false) flags.add(f);
+            else flags.remove(f);
+        }
+    }
+
+    /**
      * フラグの状態を取得
      * @param flag 確認するフラグ
      * @return boolean フラグの状態

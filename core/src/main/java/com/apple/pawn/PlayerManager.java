@@ -3,6 +3,8 @@ package com.apple.pawn;
 import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Comparator;
@@ -56,14 +58,14 @@ public class PlayerManager {
      * 描画
      * @param batch
      */
-    public void draw (@NonNull Batch batch) {
+    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, @NonNull BitmapFont font) {
         Player turnPlayer = null;
         batch.begin();
         for(Player player : aPlayer) {
             if(player == gameScreen.getTurnPlayer()) turnPlayer = player;
-            else player.draw(batch);
+            else player.draw(batch,renderer,font);
         }
-        if(Objects.nonNull(turnPlayer))turnPlayer.draw(batch);
+        if(Objects.nonNull(turnPlayer))turnPlayer.draw(batch,renderer,font);
         batch.end();
     }
 

@@ -61,7 +61,7 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
                     }
                     @Override
                     public void focusLost(FocusEvent fe){
-                        kanjiEnd(textField.getText());
+//                        kanjiEnd(textField.getText());
                     }
                 });
                 textPanel.add(textField);
@@ -126,8 +126,10 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
 
                 if ((selectedValue instanceof Integer)
                         && (Integer) selectedValue == JOptionPane.OK_OPTION) {
+                    kanjiEnd(textField.getText());
                     listener.input(textField.getText());
                 } else {
+                    kanjiEnd(textField.getText());
                     listener.canceled();
                 }
 
@@ -144,7 +146,7 @@ public class PawnLwjgl3Input extends DefaultLwjgl3Input {
         }
 
         String osName = System.getProperty("os.name").toLowerCase();
-        Gdx.app.debug("info", osName);
+//        Gdx.app.debug("info", osName);
 
         try {
             Robot rb = new Robot();

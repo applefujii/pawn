@@ -3,24 +3,33 @@ package com.apple.pawn;
 import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 110;
+    public static final String[] TYPE_STR = {"start", "goal", "normal", "event", "task"};
+    public static final String[] TYPE_STR_JP = {"スタート", "ゴール", "通常マス", "イベントマス", "課題マス"};
+    public static final int SQUARE_WIDTH = 256, SQUARE_HEIGHT = 256;
 
     private final PlayerManager playerManager;
     private final float span;
     private final float spriteWidth;
+    AssetManager manager;
+    protected Sprite sp;
 
-    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager) {
+    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager,final Pawn game) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
         span = (float) (height - INDEX_HEIGHT) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
+        this.manager = game.manager;
+        //
     }
 
     /**
@@ -47,16 +56,26 @@ public class Result extends UIParts {
         font.draw(batch, "ターン数", 320, 60);
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
 
-        float k = INDEX_HEIGHT;
+
+        float x = 440;
+        float y = INDEX_HEIGHT;
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
             sprite.setSize(spriteWidth, span);
-            sprite.setCenter(80 + (spriteWidth / 2), k + (span / 2));
+            sprite.setCenter(80 + (spriteWidth / 2), y + (span / 2));
             sprite.draw(batch);
-            font.draw(batch, player.getName(), 200, k);
-            font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
-            font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
-            k += span;
+            font.draw(batch, player.getName(), 200, y);
+            font.draw(batch, player.getGoalTurn()+"ターン", 320, y);
+            //font.draw(batch, "aRD="+player.getAResultDetail(), 440, j);
+            for(int i=2; i<5; i++){
+                sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[i]);
+                sp.setSize(50, 50);
+                sp.setPosition(x, y);
+                sp.draw(batch);
+                x += 50;
+            }
+            x = 440;
+            y += span;
         }
 
         batch.end();

@@ -386,7 +386,8 @@ public class TitleScreen implements Screen {
 					public void canceled() {
 //						Gdx.app.debug("info", "canceled");
 						FlagManagement.fold(Flag.DIALOG_SHOW);
-						sequenceSubNo = 5;
+						dialogNo--;
+						if(dialogNo < 1) sequenceSubNo = 5;
 					}
 				}, dialogNo + "Pの名前", null, "名前を入力してください");
 			} else {
@@ -401,9 +402,9 @@ public class TitleScreen implements Screen {
 			int select = ui.getSelect();
 			if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 				ui.remove("stage_select");
-				sequence = this::startSettingSequence;
-				sequenceNo = 2;
+				sequenceNo = 3;
 				sequenceSubNo = 1;
+				dialogNo = playerNo;
 				return 0;
 			}
 			if(select != -1 ) {

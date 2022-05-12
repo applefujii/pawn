@@ -34,7 +34,7 @@ public class TaskSquare extends Square {
         document = doc + "\n\n成功で" + move + "マス進む\n失敗で" + back + "マス戻る";
         uiDoc = uiDoc + "\n\n" + document;
         if(Objects.nonNull(doc)) {
-            int charsNoCol = (SQUARE_HEIGHT - 32) / 18;
+            int charsNoCol = (SQUARE_HEIGHT - 32) / 20;
             drawDoc = fontSplit(doc, SQUARE_WIDTH - 32, fontCache);
             if (drawDoc.size > charsNoCol - 3) {
                 drawDoc.setSize(charsNoCol - 4);
@@ -55,7 +55,7 @@ public class TaskSquare extends Square {
     public void drawFont(SpriteBatch batch) {
         if(!FlagManagement.is(Flag.LOOK_MAP)) {
             for (int i = 0; i < drawDoc.size; i++) {
-                font.draw(batch, drawDoc.get(i), position.x + 16, position.y + 16 + (18 * i));
+                font.draw(batch, drawDoc.get(i), position.x + 16, position.y + 16 + (20 * i));
             }
         }
     }

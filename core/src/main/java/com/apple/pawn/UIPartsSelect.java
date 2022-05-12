@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array;
 public class UIPartsSelect extends UIParts {
     protected Array<String> choices;
     protected boolean[] enable;
-    protected int cursor = 0;
+    protected int cursor;
     private final boolean isObstruction;
 
     public UIPartsSelect(String name, int x, int y, int width, int height, int group, int cursor, boolean isObstruction, @NonNull String... choices) {
@@ -26,7 +26,7 @@ public class UIPartsSelect extends UIParts {
         this.cursor = cursor;
         this.isObstruction = isObstruction;
         enable = new boolean[choices.length];
-        this.choices = new Array<String>();
+        this.choices = new Array<>();
         int i = 0;
         for(String cho : choices) {
             if(cho.startsWith("/")) {

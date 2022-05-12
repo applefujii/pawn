@@ -25,7 +25,7 @@ public class UIPartsOperatingMethod extends UIParts{
     public void draw(@NonNull Batch batch, ShapeRenderer renderer, BitmapFont font) {
         batch.begin();
         for(int i = 0; i < documents.length; i++) {
-            font.draw(batch, documents[i], px, Pawn.LOGICAL_HEIGHT - py - (18 * (documents.length - i)));
+            font.draw(batch, documents[i], px, Pawn.LOGICAL_HEIGHT - py - (20 * (documents.length - i)));
         }
         batch.end();
     }

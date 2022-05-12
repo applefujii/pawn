@@ -10,16 +10,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Result extends UIParts {
+    private static final int INDEX_HEIGHT = 110;
+
     private final PlayerManager playerManager;
-    //private final GameSetting gamesetting;
+    private final float span;
+    private final float spriteWidth;
 
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
-        //Gdx.app.debug("fps", "width="+width);
-        //Gdx.app.debug("fps", "height="+height);
+        span = (float) (height - INDEX_HEIGHT) / 6;
+        spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
     }
-
 
     /**
      * update メインループの描画以外
@@ -40,30 +42,21 @@ public class Result extends UIParts {
         renderer.end();
 
         batch.begin();
-        font.getData().setScale(1, 1);
+        font.getData().setScale(1);
         font.draw(batch, "名前", 200, 60);
         font.draw(batch, "ターン数", 320, 60);
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
-        //Gdx.app.debug("fps", "getGoalPlayer="+playerManager.getGoalPlayer());
 
-        int k = 110;
+        float k = INDEX_HEIGHT;
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
-            //sprite.setScale((float)0.8, (float)0.8);
-
-            sprite.setScale(4/playerManager.getGoalPlayer().size);
-            //sprite.setScale((float)0.8);
-            //sprite.setSize(60, 90);
-            sprite.setPosition(80,k-20);
-
-            //sprite.setPosition(80,k-50);
+            sprite.setSize(spriteWidth, span);
+            sprite.setCenter(80 + (spriteWidth / 2), k + (span / 2));
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, k);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, k);
             font.draw(batch, "aRD="+player.getAResultDetail(), 440, k);
-            k += height/playerManager.getGoalPlayer().size-10;
-            //Gdx.app.debug("fps", "getGoalPlayer="+playerManager.getGoalPlayer());
-            //Gdx.app.debug("fps", "player="+player);
+            k += span;
         }
 
         batch.end();

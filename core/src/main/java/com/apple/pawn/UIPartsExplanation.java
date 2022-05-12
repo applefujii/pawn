@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -21,7 +22,7 @@ public class UIPartsExplanation extends UIParts {
 
     private Array<String> stringRow;
     private String explanation;
-    private final int strHeight = 18;
+
     private final BitmapFontCache fontCache;
 
     protected Sprite sprite;
@@ -40,19 +41,22 @@ public class UIPartsExplanation extends UIParts {
 
     public void initialize(Pawn game) { }
 
+    @Override
     public int update() {
         return 0;
     }
 
-    public void draw (@NonNull Batch batch, ShapeRenderer renderer, BitmapFont font) {
+    @Override
+    public void draw (@NonNull Batch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
         batch.begin();
         sprite.draw(batch);
         for(int i = 0; i < stringRow.size; i++) {
-            font.draw(batch,stringRow.get(i),x+px,y+py+2+strHeight*i);
+            font.draw(batch,stringRow.get(i),x+px,y+py+(20*i));
         }
         batch.end();
     }
 
+    @Override
     public void dispose () { }
 
     public void setExplanation(String expl) {

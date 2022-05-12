@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.PawnFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.Collections;
@@ -48,7 +49,7 @@ public class Pawn extends Game {
 
 		batch = new SpriteBatch();
 		renderer = new ShapeRenderer();
-		fontGenerator = new FreeTypeFontGenerator(Gdx.files.local("font/mplus-1m-medium.ttf"));
+		fontGenerator = new PawnFontGenerator(Gdx.files.local("font/mplus-1m-medium.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		param.size = 16;
 		param.incremental = true;			// 自動的に文字を追加

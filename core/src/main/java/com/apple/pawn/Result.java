@@ -15,7 +15,7 @@ public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 110;
     public static final String[] TYPE_STR = {"start", "goal", "normal", "event", "task"};
     public static final String[] TYPE_STR_JP = {"スタート", "ゴール", "通常マス", "イベントマス", "課題マス"};
-    public static final int SQUARE_WIDTH = 256, SQUARE_HEIGHT = 256;
+    public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
 
     private final PlayerManager playerManager;
     private final float span;
@@ -23,12 +23,12 @@ public class Result extends UIParts {
     AssetManager manager;
     protected Sprite sp;
 
-    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager,final Pawn game) {
+    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager,AssetManager manager) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
         span = (float) (height - INDEX_HEIGHT) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
-        this.manager = game.manager;
+        this.manager = manager;
         //
     }
 
@@ -69,10 +69,10 @@ public class Result extends UIParts {
             //font.draw(batch, "aRD="+player.getAResultDetail(), 440, j);
             for(int i=2; i<5; i++){
                 sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[i]);
-                sp.setSize(50, 50);
+                sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
                 sp.setPosition(x, y);
                 sp.draw(batch);
-                x += 50;
+                x += SQUARE_WIDTH;
             }
             x = 440;
             y += span;

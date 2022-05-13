@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 
 public class Result extends UIParts {
-    private static final int INDEX_HEIGHT = 110;
+    private static final int INDEX_HEIGHT = 130;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final String[] TYPE_STR_JP = {"通常マス", "イベントマス", "課題マス"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
@@ -53,8 +53,10 @@ public class Result extends UIParts {
         font.getData().setScale(1);
         font.draw(batch, "名前", 200, 60);
         font.draw(batch, "ターン数", 320, 60);
-        font.draw(batch, "どのマスに何回止まったか", 440, 60);
-
+        font.draw(batch, "止まった回数", 520, 60);
+        font.draw(batch, "ノーマル", 440, 100);
+        font.draw(batch, "イベント", 540, 100);
+        font.draw(batch, "課題", 640, 100);
 
         float y = INDEX_HEIGHT;
         for(Player player : playerManager.getGoalPlayer()){
@@ -72,7 +74,7 @@ public class Result extends UIParts {
                 sp.setPosition(SQUARE_X, y);
                 sp.draw(batch);
                 font.draw(batch, player.getAResultDetail().get(i)+"", SQUARE_X+SQUARE_WIDTH/2-5, y+SQUARE_HEIGHT/2-10);
-                SQUARE_X += SQUARE_WIDTH;
+                SQUARE_X += 100;
                 i += 1;
             }
             y += span;

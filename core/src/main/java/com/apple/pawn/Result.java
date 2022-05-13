@@ -66,13 +66,12 @@ public class Result extends UIParts {
             font.draw(batch, player.getGoalTurn()+"ターン", 320, y);
             int i=0;
             int SQUARE_X = 440;
-            float SQUARE_Y = y-15;
             for(String str: TYPE_STR){
                 sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(str);
                 sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
-                sp.setPosition(SQUARE_X, SQUARE_Y);
+                sp.setPosition(SQUARE_X, y);
                 sp.draw(batch);
-                font.draw(batch, player.getAResultDetail().get(i)+"", SQUARE_X+SQUARE_WIDTH/2, y);
+                font.draw(batch, player.getAResultDetail().get(i)+"", SQUARE_X+SQUARE_WIDTH/2-5, y+SQUARE_HEIGHT/2-10);
                 SQUARE_X += SQUARE_WIDTH;
                 i += 1;
             }

@@ -1,8 +1,6 @@
 package com.apple.pawn;
 
 import android.support.annotation.NonNull;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 130;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
-    public static final String[] TYPE_STR_JP = {"通常マス", "イベントマス", "課題マス"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
 
     private final PlayerManager playerManager;

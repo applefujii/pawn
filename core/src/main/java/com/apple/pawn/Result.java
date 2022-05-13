@@ -13,8 +13,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 110;
-    public static final String[] TYPE_STR = {"start", "goal", "normal", "event", "task"};
-    public static final String[] TYPE_STR_JP = {"スタート", "ゴール", "通常マス", "イベントマス", "課題マス"};
+    public static final String[] TYPE_STR = {"normal", "event", "task"};
+    public static final String[] TYPE_STR_JP = {"通常マス", "イベントマス", "課題マス"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
 
     private final PlayerManager playerManager;
@@ -56,7 +56,6 @@ public class Result extends UIParts {
         font.draw(batch, "どのマスに何回止まったか", 440, 60);
 
 
-        float x = 440;
         float y = INDEX_HEIGHT;
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
@@ -65,15 +64,18 @@ public class Result extends UIParts {
             sprite.draw(batch);
             font.draw(batch, player.getName(), 200, y);
             font.draw(batch, player.getGoalTurn()+"ターン", 320, y);
-            for(int i=2; i<5; i++){
-                sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(TYPE_STR[i]);
+            int i=0;
+            int SQUARE_X = 440;
+            float SQUARE_Y = y-15;
+            for(String str: TYPE_STR){
+                sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(str);
                 sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
-                sp.setPosition(x, y-15);
+                sp.setPosition(SQUARE_X, SQUARE_Y);
                 sp.draw(batch);
-                x += SQUARE_WIDTH;
+                font.draw(batch, player.getAResultDetail().get(i)+"", SQUARE_X+SQUARE_WIDTH/2, y);
+                SQUARE_X += SQUARE_WIDTH;
+                i += 1;
             }
-            font.draw(batch, "aRD="+player.getAResultDetail(), 440+SQUARE_WIDTH/2, y);
-            x = 440;
             y += span;
         }
 

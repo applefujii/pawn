@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -71,7 +71,7 @@ public class UIPartsPopup extends UIParts{
     }
 
     @Override
-    public void draw(@NonNull Batch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
+    public void draw(@NonNull SpriteBatch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
 //        renderer.begin(ShapeRenderer.ShapeType.Filled);
 //        renderer.setColor(0.8f,0.8f,0.8f,alpha);
 //        renderer.box(x,y,0,width,height,0);

@@ -5,13 +5,12 @@ import static com.apple.pawn.PawnUtils.fontSplit;
 import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -47,7 +46,7 @@ public class UIPartsExplanation extends UIParts {
     }
 
     @Override
-    public void draw (@NonNull Batch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
+    public void draw (@NonNull SpriteBatch batch, ShapeRenderer renderer, @NonNull BitmapFont font) {
         batch.begin();
         sprite.draw(batch);
         for(int i = 0; i < stringRow.size; i++) {

@@ -5,9 +5,8 @@ import android.support.annotation.NonNull;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
@@ -58,7 +57,7 @@ public class UIPartsSelect extends UIParts {
         return -2;
     }
 
-    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, BitmapFont font) {
+    public void draw (@NonNull SpriteBatch batch, @NonNull ShapeRenderer renderer, BitmapFont font) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(0.8f,0.8f,0.8f,1);
         renderer.box(x,y,0,width,height*choices.size,0);

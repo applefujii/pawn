@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.sql.Connection;
@@ -101,7 +101,7 @@ public class UIPartsAchievementView extends UIParts{
         return 0;
     }
 
-    public void draw (@NonNull Batch batch, @NonNull ShapeRenderer renderer, BitmapFont font){
+    public void draw (@NonNull SpriteBatch batch, @NonNull ShapeRenderer renderer, BitmapFont font){
         //-- 描画範囲を変える
         GL20 gl = Gdx.graphics.getGL20();
         gl.glViewport(x, y, width, height);

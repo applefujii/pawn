@@ -1,7 +1,7 @@
 package com.apple.pawn;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -26,7 +26,7 @@ abstract public class UIParts {
 
     abstract public int update();
 
-    abstract public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font);
+    abstract public void draw (SpriteBatch batch, ShapeRenderer renderer, BitmapFont font);
 
     abstract public void dispose ();
 

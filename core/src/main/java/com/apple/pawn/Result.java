@@ -1,31 +1,45 @@
 package com.apple.pawn;
 
 import android.support.annotation.NonNull;
+
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 
 
 public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 130;
-    public static final String[] TYPE_STR = {"normal", "event", "task"};
-    public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
+    private static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
+    private static final Array<String> TYPE_STR;
+    private static final Array<String> TYPE_STR_JP;
 
     private final PlayerManager playerManager;
     private final float span;
     private final float spriteWidth;
-    AssetManager manager;
-    protected Sprite sp;
+    private final Array<Sprite> aSqSprite;
 
-    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager,AssetManager manager) {
+    static {
+        TYPE_STR = new Array<>();
+        TYPE_STR.addAll(Square.TYPE_STR, 2, Square.TYPE_STR.length - 2);
+        TYPE_STR_JP = new Array<>();
+        TYPE_STR_JP.addAll(Square.TYPE_STR_JP, 2, Square.TYPE_STR_JP.length - 2);
+    }
+
+    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
-        span = (float) (height - INDEX_HEIGHT) / 6;
+        span = (float) (height - INDEX_HEIGHT - py) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
-        this.manager = manager;
+        aSqSprite = new Array<>();
+        for(String st : TYPE_STR) {
+            Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
+            sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
+            aSqSprite.add(sp);
+        }
     }
 
     /**
@@ -40,41 +54,40 @@ public class Result extends UIParts {
      * @param batch 画像の表示等を受け持つ。batch.begin()で描画受付開始、batch.end()で描画受付終了
      * @param renderer 直線など簡単な図形の描画を受け持つ。renderer.begin()で描画受付開始、renderer.end()で描画受付終了
      */
-    public void draw(@NonNull Batch batch, @NonNull ShapeRenderer renderer, @NonNull BitmapFont font) {
+    public void draw(@NonNull SpriteBatch batch, @NonNull ShapeRenderer renderer, @NonNull BitmapFont font) {
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.setColor(1.0f,0.8f,0.8f,1);
-        renderer.box(x,y,0,width,height,0);
+        renderer.rect(x, y, width, height);
         renderer.end();
 
         batch.begin();
         font.getData().setScale(1);
-        font.draw(batch, "名前", 200, 60);
-        font.draw(batch, "ターン数", 320, 60);
-        font.draw(batch, "止まった回数", 520, 60);
-        font.draw(batch, "ノーマル", 440, 100);
-        font.draw(batch, "イベント", 540, 100);
-        font.draw(batch, "課題", 640, 100);
+        PawnUtils.fontDrawXCenter(font, batch, "名前", 260, 60);
+        PawnUtils.fontDrawXCenter(font, batch, "ターン数", 380, 60);
+        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", 680, 60);
+        int w = 520;
+        for(String st : TYPE_STR_JP) {
+            PawnUtils.fontDrawXCenter(font, batch, st, w, 100);
+            w += 160;
+        }
 
-        float y = INDEX_HEIGHT;
+        float h = INDEX_HEIGHT + (span / 2);
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
             sprite.setSize(spriteWidth, span);
-            sprite.setCenter(80 + (spriteWidth / 2), y + (span / 2));
+            sprite.setCenter(125, h);
             sprite.draw(batch);
-            font.draw(batch, player.getName(), 200, y);
-            font.draw(batch, player.getGoalTurn()+"ターン", 320, y);
-            int i=0;
-            int SQUARE_X = 440;
-            for(String str: TYPE_STR){
-                sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(str);
-                sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
-                sp.setPosition(SQUARE_X, y);
-                sp.draw(batch);
-                font.draw(batch, player.getAResultDetail().get(i)+"", SQUARE_X+SQUARE_WIDTH/2-5, y+SQUARE_HEIGHT/2-10);
-                SQUARE_X += 100;
-                i += 1;
+            PawnUtils.fontDrawYCenter(font, batch, player.getName(), 200, h);
+            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", 320, h);
+            w = 520;
+            for(int i = 0; i < TYPE_STR.size; i++) {
+                Sprite sqSprite = aSqSprite.get(i);
+                sqSprite.setCenter(w, h);
+                sqSprite.draw(batch);
+                PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
+                w += 160;
             }
-            y += span;
+            h += span;
         }
 
         batch.end();

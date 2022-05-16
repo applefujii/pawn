@@ -2,8 +2,8 @@ package com.apple.pawn;
 
 import android.support.annotation.NonNull;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
@@ -56,7 +56,7 @@ public class UI {
         return 0;
     }
 
-    public void draw (Batch batch, ShapeRenderer renderer, BitmapFont font, int group) {
+    public void draw (SpriteBatch batch, ShapeRenderer renderer, BitmapFont font, int group) {
         for(UIParts ui : uiParts) {
             if(ui.group != group) continue;
             ui.draw(batch,renderer,font);

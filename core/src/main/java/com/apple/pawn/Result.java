@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class Result extends UIParts {
-    private static final int INDEX_HEIGHT = 130;
+    private static final int INDEX_WIDTH = 100,INDEX_HEIGHT = 130;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR_JP;
@@ -70,11 +70,12 @@ public class Result extends UIParts {
             w += 200;
         }
 
+        float g = INDEX_WIDTH + (span / 2);
         float h = INDEX_HEIGHT + (span / 2);
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
             sprite.setSize(spriteWidth, span);
-            sprite.setCenter(125, h);
+            sprite.setCenter(g, h);
             sprite.draw(batch);
             PawnUtils.fontDrawYCenter(font, batch, player.getName(), 260, h);
             PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", 465, h);

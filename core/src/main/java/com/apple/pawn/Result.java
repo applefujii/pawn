@@ -1,7 +1,6 @@
 package com.apple.pawn;
 
 import android.support.annotation.NonNull;
-
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,8 +12,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Result extends UIParts {
     private static final int INDEX_HEIGHT = 130;
-    private static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
-    private static final Array<String> TYPE_STR;
+    public static final String[] TYPE_STR = {"normal", "event", "task"};
+    public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR_JP;
 
     private final PlayerManager playerManager;
@@ -23,8 +22,8 @@ public class Result extends UIParts {
     private final Array<Sprite> aSqSprite;
 
     static {
-        TYPE_STR = new Array<>();
-        TYPE_STR.addAll(Square.TYPE_STR, 2, Square.TYPE_STR.length - 2);
+        //TYPE_STR = new Array<>();
+        //TYPE_STR.addAll(Square.TYPE_STR, 2, Square.TYPE_STR.length - 2);
         TYPE_STR_JP = new Array<>();
         TYPE_STR_JP.addAll(Square.TYPE_STR_JP, 2, Square.TYPE_STR_JP.length - 2);
     }
@@ -62,13 +61,13 @@ public class Result extends UIParts {
 
         batch.begin();
         font.getData().setScale(1);
-        PawnUtils.fontDrawXCenter(font, batch, "名前", 260, 60);
-        PawnUtils.fontDrawXCenter(font, batch, "ターン数", 380, 60);
-        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", 680, 60);
-        int w = 520;
+        PawnUtils.fontDrawXCenter(font, batch, "名前", 280, 60);
+        PawnUtils.fontDrawXCenter(font, batch, "ターン数", 500, 60); //35
+        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", 900, 60);
+        int w = 700;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, 100);
-            w += 160;
+            w += 200;
         }
 
         float h = INDEX_HEIGHT + (span / 2);
@@ -77,15 +76,15 @@ public class Result extends UIParts {
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(125, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawYCenter(font, batch, player.getName(), 200, h);
-            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", 320, h);
-            w = 520;
-            for(int i = 0; i < TYPE_STR.size; i++) {
+            PawnUtils.fontDrawYCenter(font, batch, player.getName(), 260, h);
+            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", 465, h);
+            w = 700;
+            for(int i = 0; i < TYPE_STR.length; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                w += 160;
+                w += 200;
             }
             h += span;
         }

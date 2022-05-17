@@ -19,6 +19,7 @@ public class Result extends UIParts {
     private final PlayerManager playerManager;
     private final float spx;
     private final float span;
+    private final float prx;
     private final float spriteWidth;
     private final Array<Sprite> aSqSprite;
 
@@ -35,6 +36,7 @@ public class Result extends UIParts {
         this.playerManager = playerManager;
         spx = (float) (width - INDEX_WIDTH - px) / 6;
         span = (float) (height - INDEX_HEIGHT - py) / 6;
+        prx = width/6-width/118;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
         for(String st : TYPE_STR) {
@@ -64,32 +66,35 @@ public class Result extends UIParts {
 
         batch.begin();
         font.getData().setScale(1);
-        PawnUtils.fontDrawXCenter(font, batch, "名前", 280, 60);
-        PawnUtils.fontDrawXCenter(font, batch, "ターン数", 500, 60); //35
-        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", 900, 60);
-        int w = 700;
+
+        PawnUtils.fontDrawXCenter(font, batch, "名前", prx*2-width/15, height/10); //y=60
+
+        PawnUtils.fontDrawXCenter(font, batch, "ターン数", prx*3, height/10); //500
+        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", prx*5, height/10); //900
+        //int w = 700;
+        float w = prx*4;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, 100);
-            w += 200;
+            //w += 200;
+            w += prx;
         }
 
         float g = INDEX_WIDTH + (spx / 2);
         float h = INDEX_HEIGHT + (span / 2);
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
-            Gdx.app.debug("fps", "span="+span);
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawYCenter(font, batch, player.getName(), 260, h);
-            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", 465, h);
-            w = 700;
+            PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h); //260
+            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", prx*3-width/39, h);
+            w = prx*4; //700
             for(int i = 0; i < TYPE_STR.length; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                w += 200;
+                w += prx; //200
             }
             h += span;
         }

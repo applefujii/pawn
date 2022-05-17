@@ -32,7 +32,6 @@ public class Result extends UIParts {
 
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager) {
         super(name,x,y,width,height,group);
-        //Gdx.app.debug("fps", "height="+height);
         this.playerManager = playerManager;
         spx = (float) (width - INDEX_WIDTH - px) / 6;
         span = (float) (height - INDEX_HEIGHT - py) / 6;
@@ -66,16 +65,12 @@ public class Result extends UIParts {
 
         batch.begin();
         font.getData().setScale(1);
-
-        PawnUtils.fontDrawXCenter(font, batch, "名前", prx*2-width/15, height/10); //y=60
-
-        PawnUtils.fontDrawXCenter(font, batch, "ターン数", prx*3, height/10); //500
-        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", prx*5, height/10); //900
-        //int w = 700;
+        PawnUtils.fontDrawXCenter(font, batch, "名前", prx*2-width/15, height/10);
+        PawnUtils.fontDrawXCenter(font, batch, "ターン数", prx*3, height/10);
+        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", prx*5, height/10);
         float w = prx*4;
         for(String st : TYPE_STR_JP) {
-            PawnUtils.fontDrawXCenter(font, batch, st, w, 100);
-            //w += 200;
+            PawnUtils.fontDrawXCenter(font, batch, st, w, height/6);
             w += prx;
         }
 
@@ -86,15 +81,15 @@ public class Result extends UIParts {
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h); //260
+            PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h);
             PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", prx*3-width/39, h);
-            w = prx*4; //700
+            w = prx*4;
             for(int i = 0; i < TYPE_STR.length; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                w += prx; //200
+                w += prx;
             }
             h += span;
         }

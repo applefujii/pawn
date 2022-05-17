@@ -8,15 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-
+import com.badlogic.gdx.Gdx;
 
 public class Result extends UIParts {
-    private static final int INDEX_WIDTH = 100,INDEX_HEIGHT = 130;
+    private static final int INDEX_WIDTH = 70,INDEX_HEIGHT = 130;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR_JP;
 
     private final PlayerManager playerManager;
+    private final float spx;
     private final float span;
     private final float spriteWidth;
     private final Array<Sprite> aSqSprite;
@@ -30,7 +31,9 @@ public class Result extends UIParts {
 
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager) {
         super(name,x,y,width,height,group);
+        //Gdx.app.debug("fps", "height="+height);
         this.playerManager = playerManager;
+        spx = (float) (width - INDEX_WIDTH - px) / 6;
         span = (float) (height - INDEX_HEIGHT - py) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
@@ -70,10 +73,11 @@ public class Result extends UIParts {
             w += 200;
         }
 
-        float g = INDEX_WIDTH + (span / 2);
+        float g = INDEX_WIDTH + (spx / 2);
         float h = INDEX_HEIGHT + (span / 2);
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
+            Gdx.app.debug("fps", "span="+span);
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);

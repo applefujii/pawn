@@ -1,5 +1,4 @@
 package com.apple.pawn;
-
 import android.support.annotation.NonNull;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -8,16 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.Gdx;
 
 public class Result extends UIParts {
-    private static final int INDEX_WIDTH = 70,INDEX_HEIGHT = 130;
+    private static final int INDEX_WIDTH = 120,INDEX_HEIGHT = 140;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR_JP;
 
     private final PlayerManager playerManager;
-    private final float spx;
     private final float span;
     private final float prx;
     private final float spriteWidth;
@@ -33,8 +30,7 @@ public class Result extends UIParts {
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager) {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
-        spx = (float) (width - INDEX_WIDTH - px) / 6;
-        span = (float) (height - INDEX_HEIGHT - py) / 6;
+        span = (float) (height - INDEX_HEIGHT) / 6;
         prx = width/6-width/118;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
@@ -74,13 +70,14 @@ public class Result extends UIParts {
             w += prx;
         }
 
-        float g = INDEX_WIDTH + (spx / 2);
+        float g = INDEX_WIDTH + (spriteWidth / 2);
         float h = INDEX_HEIGHT + (span / 2);
         for(Player player : playerManager.getGoalPlayer()){
             Sprite sprite = player.getPiece().getSprite();
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
+            PawnUtils.fontDrawXCenter(font, batch, "test", g, 660);
             PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h);
             PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", prx*3-width/39, h);
             w = prx*4;

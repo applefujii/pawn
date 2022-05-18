@@ -77,7 +77,6 @@ public class Result extends UIParts {
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawXCenter(font, batch, "test", g, 660);
             PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h);
             PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", prx*3-width/39, h);
             w = prx*4;

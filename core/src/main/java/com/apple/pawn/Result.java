@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Result extends UIParts {
-    private static final int INDEX_WIDTH = 120,INDEX_HEIGHT = 140;
+    private static final int INDEX_WIDTH = 112,INDEX_HEIGHT = 140;
     public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR_JP;
 
     private final PlayerManager playerManager;
     private final float span;
-    private final float prx;
+    private final float spx;
     private final float spriteWidth;
     private final Array<Sprite> aSqSprite;
 
@@ -31,7 +31,7 @@ public class Result extends UIParts {
         super(name,x,y,width,height,group);
         this.playerManager = playerManager;
         span = (float) (height - INDEX_HEIGHT) / 6;
-        prx = width/6-width/118;
+        spx = (float) (width - INDEX_WIDTH) / 6;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
         for(String st : TYPE_STR) {
@@ -61,13 +61,14 @@ public class Result extends UIParts {
 
         batch.begin();
         font.getData().setScale(1);
-        PawnUtils.fontDrawXCenter(font, batch, "名前", prx*2-width/15, height/10);
-        PawnUtils.fontDrawXCenter(font, batch, "ターン数", prx*3, height/10);
-        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", prx*5, height/10);
-        float w = prx*4;
+
+        PawnUtils.fontDrawXCenter(font, batch, "名前", spx*2-width/15, height/10);
+        PawnUtils.fontDrawXCenter(font, batch, "ターン数", spx*3, height/10);
+        PawnUtils.fontDrawXCenter(font, batch, "止まった回数", spx*5, height/10);
+        float w = spx*4;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, height/6);
-            w += prx;
+            w += spx;
         }
 
         float g = INDEX_WIDTH + (spriteWidth / 2);
@@ -77,15 +78,15 @@ public class Result extends UIParts {
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawYCenter(font, batch, player.getName(), prx*2-width/13, h);
-            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", prx*3-width/39, h);
-            w = prx*4;
+            PawnUtils.fontDrawXCenter(font, batch, player.getName(), spx*2-width/13, h);
+            PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", spx*3-width/39, h);
+            w = spx*4;
             for(int i = 0; i < TYPE_STR.length; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                w += prx;
+                w += spx;
             }
             h += span;
         }

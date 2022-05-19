@@ -10,9 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class Result extends UIParts {
     private static final int INDEX_WIDTH = 112,INDEX_HEIGHT = 140;
-    public static final String[] TYPE_STR = {"normal", "event", "task"};
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
-    private static final Array<String> TYPE_STR_JP;
+    private static final Array<String>TYPE_STR, TYPE_STR_JP;
 
     private final PlayerManager playerManager;
     private final float span;
@@ -21,8 +20,8 @@ public class Result extends UIParts {
     private final Array<Sprite> aSqSprite;
 
     static {
-        //TYPE_STR = new Array<>();
-        //TYPE_STR.addAll(Square.TYPE_STR, 2, Square.TYPE_STR.length - 2);
+        TYPE_STR = new Array<>();
+        TYPE_STR.addAll(Square.TYPE_STR, 2, Square.TYPE_STR.length - 2);
         TYPE_STR_JP = new Array<>();
         TYPE_STR_JP.addAll(Square.TYPE_STR_JP, 2, Square.TYPE_STR_JP.length - 2);
     }
@@ -81,7 +80,7 @@ public class Result extends UIParts {
             PawnUtils.fontDrawXCenter(font, batch, player.getName(), spx*2-width/13, h);
             PawnUtils.fontDrawYCenter(font, batch, player.getGoalTurn()+"ターン", spx*3-width/39, h);
             w = spx*4;
-            for(int i = 0; i < TYPE_STR.length; i++) {
+            for(int i = 0; i < TYPE_STR.size; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);

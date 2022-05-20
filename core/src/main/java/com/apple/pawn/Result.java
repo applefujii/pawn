@@ -18,9 +18,8 @@ public class Result extends UIParts {
     private final float spx;
     private final float spy;
     private final float pax,pay;
-
     private final float spriteWidth;
-
+    private final UI ui;
     private final Array<Sprite> aSqSprite;
 
     static {
@@ -37,9 +36,10 @@ public class Result extends UIParts {
         pay = py;
         span = (float) (height - INDEX_HEIGHT - pay) / 6;
         spx = (float) (width - INDEX_WIDTH - pax) / 7;
-        spy = (float) height/16;
+        spy = (float) height/20; //16
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
+        ui = new UI();
         for (String st : TYPE_STR) {
             Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
@@ -68,10 +68,10 @@ public class Result extends UIParts {
         batch.begin();
         font.getData().setScale(1);
 
-        PawnUtils.fontDrawXCenter(font, batch, "test", 100, 54);
         PawnUtils.fontDrawXCenter(font, batch, "名前", spx*2, spy*2);
         PawnUtils.fontDrawXCenter(font, batch, "ターン数", spx*4, spy*2);
         PawnUtils.fontDrawXCenter(font, batch, "止まった回数", spx*6, spy*2);
+        ui.add(new UIPartsSelect("title_link", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "タイトルへ戻る"));
         float w = spx*5;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, spy*3);
@@ -84,17 +84,18 @@ public class Result extends UIParts {
             sprite.setSize(spriteWidth, span);
             sprite.setCenter(g, h);
             sprite.draw(batch);
-            PawnUtils.fontDrawXCenter(font, batch, player.getName(), spx*2, h);
-            PawnUtils.fontDrawXCenter(font, batch, player.getGoalTurn()+"ターン", spx*4, h);
+            PawnUtils.fontDrawCenter(font, batch, player.getName(), spx*2, h);
+            PawnUtils.fontDrawCenter(font, batch, player.getGoalTurn()+"ターン", spx*4, h);
             w = spx*5;
             for(int i = 0; i < TYPE_STR.size; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
+                //PawnUtils.fontDrawCenter(font, batch, "w="+w+",\nh="+h, w, h);
                 w += spx;
             }
-            h += spy*2;
+            h += spy*3;
         }
         batch.end();
     }

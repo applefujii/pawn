@@ -1,5 +1,7 @@
 package com.apple.pawn;
 import android.support.annotation.NonNull;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +23,7 @@ public class Result extends UIParts {
     private final float spriteWidth;
     private final UI ui;
     private final Array<Sprite> aSqSprite;
+    private final Pawn game;
 
     static {
         TYPE_STR = new Array<>();
@@ -29,16 +32,17 @@ public class Result extends UIParts {
         TYPE_STR_JP.addAll(Square.TYPE_STR_JP, 2, Square.TYPE_STR_JP.length - 2);
     }
 
-    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager) {
+    public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager,final Pawn game) {
         super(name, x, y, width, height, group);
         this.playerManager = playerManager;
         pax = px;
         pay = py;
         span = (float) (height - INDEX_HEIGHT - pay) / 6;
         spx = (float) (width - INDEX_WIDTH - pax) / 7;
-        spy = (float) height/20; //16
+        spy = (float) height / 20;
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
+        this.game = game;
         ui = new UI();
         for (String st : TYPE_STR) {
             Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
@@ -71,7 +75,6 @@ public class Result extends UIParts {
         PawnUtils.fontDrawXCenter(font, batch, "名前", spx*2, spy*2);
         PawnUtils.fontDrawXCenter(font, batch, "ターン数", spx*4, spy*2);
         PawnUtils.fontDrawXCenter(font, batch, "止まった回数", spx*6, spy*2);
-        ui.add(new UIPartsSelect("title_link", Pawn.LOGICAL_WIDTH/2-150, 600, 300, 20, 1, 0, true, "タイトルへ戻る"));
         float w = spx*5;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, spy*3);
@@ -92,12 +95,18 @@ public class Result extends UIParts {
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                //PawnUtils.fontDrawCenter(font, batch, "w="+w+",\nh="+h, w, h);
                 w += spx;
             }
             h += spy*3;
         }
         batch.end();
+        ui.add(new UIPartsSelect("title_link", 300, 300, 300, 20, 1, 0, true, "タイトルへ戻る"));
+        ui.draw(batch, renderer, font, 1);
+        int select = ui.getSelect();
+        ui.update();
+        if(select != -1 ) {
+            game.setScreen(new TitleScreen(game));
+        }
     }
 
     /**
@@ -105,6 +114,3 @@ public class Result extends UIParts {
      */
     public void dispose() { }
 }
-
-
-

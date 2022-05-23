@@ -22,6 +22,8 @@ public class Result extends UIParts {
     private final float pax,pay;
     private final float spriteWidth;
     private final int[] multx = {2,4,6};
+    private final float rlen;
+    private final float rx;
     private final String[] item = {"名前","ターン数","止まった回数"};
     private final UI ui;
     private final Array<Sprite> aSqSprite;
@@ -43,7 +45,9 @@ public class Result extends UIParts {
         pay = py;
         span = (float) (height - INDEX_HEIGHT - pay) / 6;
         spx = (float) (width - INDEX_WIDTH - pax) / 7;
-        spy = (float) height / 7; //20
+        spy = (int) height / 7 - height % 7;
+        rlen = (float) (width - spx * 4.5);
+        rx = (float) ((rlen - (rlen * 4.5 % 3)) / 3);
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
         this.game = game;
@@ -82,6 +86,7 @@ public class Result extends UIParts {
         }
 
         float w = spx*5;
+        Gdx.app.debug("fps", "4.5="+spx*4.5);
         float h = spy*2;
         for(String st : TYPE_STR_JP) {
             PawnUtils.fontDrawXCenter(font, batch, st, w, h-SQUARE_HEIGHT);
@@ -101,7 +106,6 @@ public class Result extends UIParts {
                 sqSprite.setCenter(w, h);
                 sqSprite.draw(batch);
                 PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                PawnUtils.fontDrawCenter(font, batch, "w="+w+",\nh="+h, w, h);
                 w += spx;
             }
             h += spy;

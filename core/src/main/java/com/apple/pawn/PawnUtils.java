@@ -63,6 +63,11 @@ public class PawnUtils {
         fontDrawCenter(font, batch, str, x, y, true, false);
     }
 
+    public static void fontDrawXCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float start, float end, float y) {
+        float x = (start + end) / 2;
+        fontDrawCenter(font, batch, str, x, y, true, false);
+    }
+
     /**
      * Y軸の中心の位置を指定して文字を描く
      *
@@ -72,12 +77,23 @@ public class PawnUtils {
         fontDrawCenter(font, batch, str, x, y, false, true);
     }
 
+    public static void fontDrawYCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float x, float start, float end) {
+        float y = (start + end) / 2;
+        fontDrawCenter(font, batch, str, x, y, false, true);
+    }
+
     /**
      * X軸、Y軸の中心の位置を指定して文字を描く
      *
      * @see #fontDrawCenter(BitmapFont, SpriteBatch, String, float, float, boolean, boolean)
      */
     public static void fontDrawCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float x, float y) {
+        fontDrawCenter(font, batch, str, x, y, true, true);
+    }
+
+    public static void fontDrawCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float xStart, float xEnd, float yStart, float yEnd) {
+        float x = (xStart + xEnd) / 2;
+        float y = (yStart + yEnd) / 2;
         fontDrawCenter(font, batch, str, x, y, true, true);
     }
 

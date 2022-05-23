@@ -44,6 +44,7 @@ public class Result extends UIParts {
         aSqSprite = new Array<>();
         this.game = game;
         ui = new UI();
+        FlagManagement.set(Flag.UI_INPUT_ENABLE);
         for (String st : TYPE_STR) {
             Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
@@ -103,7 +104,8 @@ public class Result extends UIParts {
         ui.add(new UIPartsSelect("title_link", 300, 300, 300, 20, 1, 0, true, "タイトルへ戻る"));
         ui.draw(batch, renderer, font, 1);
         int select = ui.getSelect();
-        ui.update();
+        if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
+        Gdx.app.debug("fps", "select="+select);
         if(select != -1 ) {
             game.setScreen(new TitleScreen(game));
         }

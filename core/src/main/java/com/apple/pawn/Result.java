@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class Result extends UIParts {
-    private static final int INDEX_WIDTH = 120, INDEX_HEIGHT = 150;
+    public static final int INDEX_WIDTH = 120;
     public static final int SQUARE_WIDTH = 50, SQUARE_HEIGHT = 50;
     private static final Array<String> TYPE_STR, TYPE_STR_JP;
 
@@ -19,11 +19,11 @@ public class Result extends UIParts {
     private final float span;
     private final float spx;
     private final float spy;
-    private final float pax,pay;
     private final float spriteWidth;
-    private final int[] multx = {2,4,6};
+    private final float[] multx = {2,4,(float)6.2};
     private final float rlen;
     private final float rx;
+    private final float inc;
     private final String[] item = {"名前","ターン数","止まった回数"};
     private final UI ui;
     private final Array<Sprite> aSqSprite;
@@ -39,15 +39,15 @@ public class Result extends UIParts {
     public Result(String name, int x, int y, int width, int height, int group, PlayerManager playerManager, AssetManager manager,final Pawn game) {
         super(name, x, y, width, height, group);
         this.playerManager = playerManager;
-        //px = x;
-        py = 14;
-        pax = px;
-        pay = py;
-        span = (float) (height - INDEX_HEIGHT - pay) / 6;
-        spx = (float) (width - INDEX_WIDTH - pax) / 7;
-        spy = (int) height / 7 - height % 7;
-        rlen = (float) (width - spx * 4.5);
-        rx = (float) ((rlen - (rlen * 4.5 % 3)) / 3);
+        px = 130;
+        py = 160;
+        span = (float) (height - py) / 6;
+        spx = (float) (width - px) / 7;
+        spy = height / 7 - height % 7;
+        rx = (float) (spx * 4.5);
+        rlen = width - rx;
+        inc = (rlen - (rlen % 3)) / 3;
+        Gdx.app.debug("fps", "inc="+inc);
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
         this.game = game;
@@ -85,12 +85,11 @@ public class Result extends UIParts {
             PawnUtils.fontDrawXCenter(font, batch, item[i], spx * multx[i], spy);
         }
 
-        float w = spx*5;
-        Gdx.app.debug("fps", "4.5="+spx*4.5);
+        float w = inc/2;
         float h = spy*2;
         for(String st : TYPE_STR_JP) {
-            PawnUtils.fontDrawXCenter(font, batch, st, w, h-SQUARE_HEIGHT);
-            w += spx;
+            PawnUtils.fontDrawXCenter(font, batch, st, rx+w, h-SQUARE_HEIGHT);
+            w += inc;
         }
         float g = INDEX_WIDTH + (spriteWidth / 2);
         for(Player player : playerManager.getGoalPlayer()){
@@ -100,13 +99,13 @@ public class Result extends UIParts {
             sprite.draw(batch);
             PawnUtils.fontDrawCenter(font, batch, player.getName(), spx * multx[0], h);
             PawnUtils.fontDrawCenter(font, batch, player.getGoalTurn()+"ターン", spx * multx[1], h);
-            w = spx*5;
+            w = inc/2;
             for(int i = 0; i < TYPE_STR.size; i++) {
                 Sprite sqSprite = aSqSprite.get(i);
-                sqSprite.setCenter(w, h);
+                sqSprite.setCenter(rx+w, h);
                 sqSprite.draw(batch);
-                PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), w, h);
-                w += spx;
+                PawnUtils.fontDrawCenter(font, batch, String.valueOf(player.getAResultDetail().get(i)), rx+w, h);
+                w += inc;
             }
             h += spy;
         }

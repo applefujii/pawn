@@ -2,6 +2,7 @@ package com.apple.pawn;
 import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -47,7 +48,6 @@ public class Result extends UIParts {
         rx = (float) (spx * 4.5);
         rlen = width - rx;
         inc = (rlen - (rlen % 3)) / 3;
-        Gdx.app.debug("fps", "inc="+inc);
         spriteWidth = span * ((float) Piece.WIDTH / Piece.HEIGHT);
         aSqSprite = new Array<>();
         this.game = game;
@@ -58,12 +58,21 @@ public class Result extends UIParts {
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
             aSqSprite.add(sp);
         }
+        if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //ESCAPE
+                Gdx.app.debug("fps", "test");
+                ui.add(new UIPartsSelect("title_link", (x + width) / 2 - 150, (y + height) / 2, 300, 20, 1, 0, true, "タイトルへ戻る"));
+        }
     }
 
     /**
      * update メインループの描画以外
      */
     public int update() {
+        int select = ui.getSelect();
+        if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
+        if(select != -1 ) {
+            game.setScreen(new TitleScreen(game));
+        }
         return 0;
     }
 
@@ -110,13 +119,8 @@ public class Result extends UIParts {
             h += spy;
         }
         batch.end();
-        ui.add(new UIPartsSelect("title_link", 300, 300, 300, 20, 1, 0, true, "タイトルへ戻る"));
+
         ui.draw(batch, renderer, font, 1);
-        int select = ui.getSelect();
-        //if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
-        if(select != -1 ) {
-            game.setScreen(new TitleScreen(game));
-        }
     }
 
     /**

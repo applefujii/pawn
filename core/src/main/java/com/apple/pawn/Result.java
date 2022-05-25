@@ -25,6 +25,7 @@ public class Result extends UIParts {
     private final float rlen;
     private final float rx;
     private final float inc;
+    private int space = 0;
     private final String[] item = {"名前","ターン数","止まった回数"};
     private final UI ui;
     private final Array<Sprite> aSqSprite;
@@ -59,9 +60,7 @@ public class Result extends UIParts {
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
             aSqSprite.add(sp);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            ui.add(new UIPartsSelect("title_link", (x + width) / 2 - 150, (y + height) / 2, 300, 20, 1, 0, true, "タイトルへ戻る"));
-        }
+        select();
     }
 
     /**
@@ -69,9 +68,15 @@ public class Result extends UIParts {
      */
     public int update() {
         int select = ui.getSelect();
-        if(FlagManagement.is(Flag.UI_INPUT_ENABLE)) ui.update();
+        if(FlagManagement.is(Flag.UI_INPUT_ENABLE) && space > 1) ui.update();
+
         if(select != -1 ) {
-            game.setScreen(new TitleScreen(game));
+            if (select == 0) {
+                game.setScreen(new TitleScreen(game));
+            }
+            if (select == 1) {
+                space = 1;
+            }
         }
         return 0;
     }
@@ -120,7 +125,15 @@ public class Result extends UIParts {
         }
         batch.end();
 
-        ui.draw(batch, renderer, font, 1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            space += 1;
+        }
+        if(space > 1){
+            ui.draw(batch, renderer, font, 1);
+            select();
+        }
+
+
 
     }
 
@@ -128,4 +141,10 @@ public class Result extends UIParts {
      * dispose 読み込んだ画像リソース等を不要になった際に破棄する。(特にリソースを管理しないなら消してもよい)
      */
     public void dispose() { }
+
+    public void select(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            ui.add(new UIPartsSelect("title_link", (x + width) / 2 - 150, (y + height) / 2, 300, 20, 1, 0, true, "タイトルへ戻る","キャンセル"));
+        }
+    }
 }

@@ -12,15 +12,15 @@ public class Lwjgl3Launcher {
 		config.setWindowIcon("assets/dice_icon.png");
 
 		//---- 開発用
-		config.setWindowedMode(1280, 720);
-		config.useVsync(true);
+		//config.setWindowedMode(1280, 720);
+		//config.useVsync(true);
 
 		//---- リリース用
-//		config.setWindowedMode(displayMode.width, displayMode.height);
-//		config.setWindowPosition(0,0);
-//		config.useVsync(true);
-//		config.setResizable(false);
-//		config.setDecorated(false);
+		config.setWindowedMode(displayMode.width, displayMode.height);
+		config.setWindowPosition(0,0);
+		config.useVsync(true);
+		config.setResizable(false);
+		config.setDecorated(false);
 
 		new ExtendedLwjgl3Application(new Pawn(), config);
 	}

@@ -53,14 +53,14 @@ public class Result extends UIParts {
         this.game = game;
         ui = new UI();
         FlagManagement.set(Flag.UI_INPUT_ENABLE);
+        FlagManagement.set(Flag.INPUT_ENABLE);
         for (String st : TYPE_STR) {
             Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
             aSqSprite.add(sp);
         }
-        if (FlagManagement.is(Flag.INPUT_ENABLE) && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) { //ESCAPE
-                Gdx.app.debug("fps", "test");
-                ui.add(new UIPartsSelect("title_link", (x + width) / 2 - 150, (y + height) / 2, 300, 20, 1, 0, true, "タイトルへ戻る"));
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            ui.add(new UIPartsSelect("title_link", (x + width) / 2 - 150, (y + height) / 2, 300, 20, 1, 0, true, "タイトルへ戻る"));
         }
     }
 
@@ -121,6 +121,7 @@ public class Result extends UIParts {
         batch.end();
 
         ui.draw(batch, renderer, font, 1);
+
     }
 
     /**

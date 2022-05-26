@@ -148,8 +148,8 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.UI_GROUP1_VISIBLE);
 		FlagManagement.set(Flag.UI_GROUP2_VISIBLE);
 		FlagManagement.set(Flag.PLAYER_NAME_VISIBLE);
-		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
-		FlagManagement.set(Flag.DEBUG_CONTROL);
+//		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+//		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);

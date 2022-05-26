@@ -136,9 +136,6 @@ public class FlagManagement {
             long lo = fi.next();
             ret += String.format("%016x", lo);
         }
-        Gdx.app.debug("info", "flag="+ret);
-
-        Gdx.app.debug("info", "flag="+bits.toArray(Long.class)[0]);
         return bits.toArray(Long.class);
     }
 

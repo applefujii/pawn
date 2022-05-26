@@ -148,11 +148,12 @@ public class GameScreen implements Screen {
 		FlagManagement.set(Flag.UI_GROUP1_VISIBLE);
 		FlagManagement.set(Flag.UI_GROUP2_VISIBLE);
 		FlagManagement.set(Flag.PLAYER_NAME_VISIBLE);
-		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
-		FlagManagement.set(Flag.DEBUG_CONTROL);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 		FlagManagement.set(Flag.LOOK_PIECE);
+		// デバッグ用のフラグ
+//		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+//		FlagManagement.set(Flag.DEBUG_CONTROL);
 
 		sequenceNo = Sequence.TURN_STANDBY.no;
 		// 動作させる関数を代入
@@ -231,7 +232,7 @@ public class GameScreen implements Screen {
 				FlagManagement.fold(Flag.PLAY);
 				String rollback = "前の選択肢に戻る";
 				if(visitSquare == null || lastDoPlayer == null) rollback = "/" + rollback;
-				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 20, 2, 0, true, "再開", rollback, "終了"));
+				ui.add(new UIPartsSelect("pause", Pawn.LOGICAL_WIDTH/2-150, Pawn.LOGICAL_HEIGHT/2-16, 300, 20, 2, 0, true, "再開", rollback, "タイトルに戻る", "終了"));
 			}
 			else {
 				FlagManagement.set(Flag.PLAY);
@@ -463,7 +464,6 @@ public class GameScreen implements Screen {
 		}
 		// マップ確認
 		if(sequenceNo == Sequence.ACTION_SELECT.no +2) {
-			Gdx.app.debug("info", ""+FlagManagement.is(Flag.INPUT_ENABLE));
 			if (FlagManagement.is(Flag.INPUT_ENABLE)) {
 				if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 					((UIPartsExplanation)ui.getUIParts(UI.SQUARE_EXPLANATION)).setExplanation(order+"\n"+turnCount+"ターン目");

@@ -77,12 +77,8 @@ public class Pawn extends Game {
 		fpsTimer = new Timer();
 		fpsTimer.scheduleAtFixedRate(fpsTask, 0, 1000);
 
-		GameSetting setting = new GameSetting();
-		setting.init(4);
-		setting.setStageNo(2);
-		GameScreen gameScreen = new GameScreen(this);
-		gameScreen.initialize(setting);
-		this.setScreen(gameScreen);
+		TitleScreen titleScreen = new TitleScreen(this);
+		this.setScreen(titleScreen);
 	}
 
 	/**

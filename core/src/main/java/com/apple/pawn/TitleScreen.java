@@ -58,7 +58,7 @@ public class TitleScreen implements Screen {
 
 	private final AssetManager manager;
 
-	private final String[] aStageName= {"1","2","3"};
+	private final String[] aStageName= {"1","2"};
 	private int playerNo;
 	private double rad;
 
@@ -131,8 +131,6 @@ public class TitleScreen implements Screen {
 			aStageName[0] = mapJson.get("name").asText();
 			mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[1]).file());
 			aStageName[1] = mapJson.get("name").asText();
-			mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[2]).file());
-			aStageName[2] = mapJson.get("name").asText();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

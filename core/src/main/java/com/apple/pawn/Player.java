@@ -116,11 +116,7 @@ public class Player {
         int type = visitSquare.getType() - 2;
         if(type >= 0) {
             int count = aResultDetail.get(type);
-            Gdx.app.debug("aResultDetail", aResultDetail.toString());
-            Gdx.app.debug("type", Square.TYPE_STR_JP[type + 2]);
-            Gdx.app.debug("count(before)", String.valueOf(count));
             count++;
-            Gdx.app.debug("count(after)", String.valueOf(count));
             aResultDetail.set(type, count);
         }
     }
@@ -174,6 +170,14 @@ public class Player {
 
     public Array<Integer> getAResultDetail() {
         return aResultDetail;
+    }
+
+    public Array<String> getAStringResultDetail() {
+        Array<String> aRD = new Array<>();
+        for (int val : aResultDetail) {
+            aRD.add(String.valueOf(val));
+        }
+        return aRD;
     }
 
     public Array<Integer> getADiceNo() {

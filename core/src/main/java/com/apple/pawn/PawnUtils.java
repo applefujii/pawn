@@ -91,7 +91,7 @@ public class PawnUtils {
         fontDrawCenter(font, batch, str, x, y, true, true);
     }
 
-    public static void fontDrawCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float xStart, float xEnd, float yStart, float yEnd) {
+    public static void fontDrawCenter(@NonNull BitmapFont font, SpriteBatch batch, String str, float xStart, float yStart, float xEnd, float yEnd) {
         float x = (xStart + xEnd) / 2;
         float y = (yStart + yEnd) / 2;
         fontDrawCenter(font, batch, str, x, y, true, true);

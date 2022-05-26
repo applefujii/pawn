@@ -1,5 +1,5 @@
 {
-"name" : "テスト用",
+"name" : "課題オンリー",
 "square" : [
 	{
 		"address":18,
@@ -7,6 +7,167 @@
 	},
 	{
 		"address":19,
+		"type":4,
+		"document":"みそ汁の具で一番好きなのは何ですか？",
+		"move":1,
+		"back":2
+	},
+	{
+		"address":20,
+		"type":4,
+		"document":"自己紹介を1分間してください。",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":21,
+		"type":4,
+		"document":"楽しかった出来事を1つ話してください。",
+		"move":3,
+		"back":2
+	},
+	{
+		"address":22,
+		"type":4,
+		"document":"100万円自由に使えるなら何に使いますか？",
+		"move":2,
+		"back":1
+	},
+	{
+		"address":23,
+		"type":4,
+		"document":"社長の大切にしている花瓶を割ってしまいました。あなたならどうしますか？",
+		"move":2,
+		"back":3
+	},
+	{
+		"address":24,
+		"type":4,
+		"document":"気になっているニュースはありますか？ あなたの意見も聞かせてください。",
+		"move":3,
+		"back":3
+	},
+	{
+		"address":25,
+		"type":4,
+		"document":"あなたの趣味について話してください。",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":26,
+		"type":4,
+		"document":"幽霊と少し先の未来、どちらかが見えるようになるならどっちを選ぶ？",
+		"move":2,
+		"back":1
+	},
+	{
+		"address":27,
+		"type":4,
+		"document":"腹が立った出来事を1つ話してください。",
+		"move":3,
+		"back":1
+	},
+	{
+		"address":28,
+		"type":4,
+		"document":"確実に100万円もらえるか、1/2の確率で10億円もらえるなら、あなたはどっちにする？",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":29,
+		"type":4,
+		"document":"昨日の夕食は何でしたか？",
+		"move":1,
+		"back":4
+	},
+	{
+		"address":45,
+		"type":4,
+		"document":"今日やりたいことは何ですか？",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":61,
+		"type":4,
+		"document":"今一番欲しいものは何ですか？",
+		"move":1,
+		"back":1
+	},
+	{
+		"address":60,
+		"type":4,
+		"document":"金曜日の仕事上がりに飲みに誘われましたが、あなたは行きたくないと思っています。どのように返答しますか？",
+		"move":3,
+		"back":3
+	},
+	{
+		"address":59,
+		"type":4,
+		"document":"偉い人から休日にゴルフに誘われました。しかしその日はデートの予定が入っています。あなたならどうしますか？",
+		"move":2,
+		"back":1
+	},
+	{
+		"address":58,
+		"type":4,
+		"document":"最近泣いた出来事はありますか？",
+		"move":2,
+		"back":1
+	},
+	{
+		"address":57,
+		"type":4,
+		"document":"学校の勉強でどの教科が好きですか？ また、嫌いな教科は何ですか？",
+		"move":3,
+		"back":2
+	},
+	{
+		"address":56,
+		"type":4,
+		"document":"世界滅亡まであと3時間！ あなたは何をしますか？",
+		"move":5,
+		"back":5
+	},
+	{
+		"address":55,
+		"type":4,
+		"document":"給料低いけど定時にあがれる仕事か、給料高いけど毎日12時間労働の仕事、どちらの仕事を選ぶ？",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":54,
+		"type":4,
+		"document":"おでんの具で一番好きなのは何ですか？",
+		"move":1,
+		"back":3
+	},
+	{
+		"address":53,
+		"type":4,
+		"document":"好きな季節とその理由を教えてください。",
+		"move":3,
+		"back":2
+	},
+	{
+		"address":52,
+		"type":4,
+		"document":"好きな食べ物を2つ教えてください。",
+		"move":2,
+		"back":2
+	},
+	{
+		"address":51,
+		"type":4,
+		"document":"「仕事と私(彼氏・彼女)どっちが大事なの？」どのように回答しますか？",
+		"move":0,
+		"back":6
+	},
+	{
+		"address":50,
 		"type":1
 	}
 ]

@@ -139,7 +139,7 @@ public class TitleScreen implements Screen {
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
-		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
+//		FlagManagement.set(Flag.PRINT_DEBUG_INFO);
 		FlagManagement.set(Flag.UI_INPUT_ENABLE);
 		FlagManagement.set(Flag.INPUT_ENABLE);
 
@@ -247,12 +247,14 @@ public class TitleScreen implements Screen {
 		}
 		ui.draw(batch, renderer, font, 1);
 		font.getData().setScale(1, 1);
-		batch.begin();
-		font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 20*0);
-		font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y+ " zoom:" + camera.zoom, 0, 20*1);
-		font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 20*2);
-		font.draw(batch, "FPS: " +Gdx.graphics.getFramesPerSecond() , 0, 20*3);
-		batch.end();
+		if(FlagManagement.is(Flag.PRINT_DEBUG_INFO)) {
+			batch.begin();
+			font.draw(batch, "ScreenOrigin: x:" + screenOrigin.x + " y:" + screenOrigin.y, 0, 20 * 0);
+			font.draw(batch, "CameraPosition: x:" + camera.position.x + " y:" + camera.position.y + " zoom:" + camera.zoom, 0, 20 * 1);
+			font.draw(batch, "Sequence_no: " + sequenceSubNo, 0, 20 * 2);
+			font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 20 * 3);
+			batch.end();
+		}
 	}
 
 	/**
@@ -453,7 +455,9 @@ public class TitleScreen implements Screen {
 	// 実績閲覧
 	private int achievementViewSequence() {
 		if (sequenceSubNo == 1) {
-			ui.add( new UIPartsAchievementView("achievement",50,30,1180,660, 1 ));
+			UIPartsAchievementView achievementUi = new UIPartsAchievementView("achievement",50,30,1180,660, 1 );
+			achievementUi.initialize(uiCamera);
+			ui.add( achievementUi );
 			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 2) {

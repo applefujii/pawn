@@ -20,7 +20,8 @@ public class BoardSurface {
     public static final Array<Vector2> MAP_COORDINATE;
     public static final String[] MAP_DATA_NAME = {
             "map.jsonc",
-            "map2.jsonc"
+            "map2.jsonc",
+            "map3.jsonc"
     };
 
     private Sprite backSprite;

@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -58,7 +59,7 @@ public class TitleScreen implements Screen {
 
 	private final AssetManager manager;
 
-	private final String[] aStageName= {"1","2"};
+	private final Array<String> aStageName;
 	private int playerNo;
 	private double rad;
 
@@ -98,6 +99,7 @@ public class TitleScreen implements Screen {
 		particle.startParticle(30);
 		particle.skipFrame(60*10);
 		gameSetting = new GameSetting();
+		aStageName = new Array<>();
 		playerNo = 6;
 		rad = 0;
 
@@ -127,13 +129,14 @@ public class TitleScreen implements Screen {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[0]).file());
-			aStageName[0] = mapJson.get("name").asText();
-			mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ BoardSurface.MAP_DATA_NAME[1]).file());
-			aStageName[1] = mapJson.get("name").asText();
+			for (String name : BoardSurface.MAP_DATA_NAME) {
+				JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/" + name).file());
+				aStageName.add(mapJson.get("name").asText());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 
 		FlagManagement.set(Flag.PLAY);
 		FlagManagement.set(Flag.UI_VISIBLE);
@@ -395,7 +398,7 @@ public class TitleScreen implements Screen {
 			}
 		}
 		if (sequenceSubNo == 2) {
-			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 20, 1, 0, true, "ステージ選択", aStageName));
+			ui.add(new UIPartsSelectIndex("stage_select", Pawn.LOGICAL_WIDTH / 2 - 150, 600, 300, 20, 1, 0, true, "ステージ選択", aStageName.toArray(String.class)));
 			sequenceSubNo++;
 		}
 		if (sequenceSubNo == 3) {

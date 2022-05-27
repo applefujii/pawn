@@ -90,10 +90,10 @@ public class UIPartsSelect extends UIParts {
         do {
             cursor--;
             if(cursor < 0) {
-                cursor = 0;
+                cursor = choices.size-1;
                 while(true) {
                     if(enable[cursor] == true) return cursor;
-                    cursor++;
+                    cursor--;
                 }
             }
         } while(enable[cursor] == false);
@@ -104,10 +104,10 @@ public class UIPartsSelect extends UIParts {
         do {
             cursor++;
             if(cursor > choices.size-1) {
-                cursor = choices.size-1;
+                cursor = 0;
                 while(true) {
                     if(enable[cursor] == true) return cursor;
-                    cursor--;
+                    cursor++;
                 }
             }
         } while(enable[cursor] == false);

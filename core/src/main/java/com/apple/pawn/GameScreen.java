@@ -293,6 +293,8 @@ public class GameScreen implements Screen {
 					sequenceNo = Sequence.TASK_DO.no;
 					sequence = this::taskDo;
 				} else if(select == 2) {
+					game.setScreen(new TitleScreen(game));
+				} else if(select == 3) {
 					Gdx.app.exit();
 				}
 			}

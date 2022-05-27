@@ -139,6 +139,14 @@ public class Player {
         aDiceNo.insert(0, diceNo);
     }
 
+    public Array<String> convertToAStringFromAResultDetail() {
+        Array<String> aRD = new Array<>();
+        for (int val : aResultDetail) {
+            aRD.add(String.valueOf(val));
+        }
+        return aRD;
+    }
+
 
     //----------------- getter ----------------------------------------------------------
 
@@ -170,14 +178,6 @@ public class Player {
 
     public Array<Integer> getAResultDetail() {
         return aResultDetail;
-    }
-
-    public Array<String> getAStringResultDetail() {
-        Array<String> aRD = new Array<>();
-        for (int val : aResultDetail) {
-            aRD.add(String.valueOf(val));
-        }
-        return aRD;
     }
 
     public Array<Integer> getADiceNo() {

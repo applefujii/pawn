@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Result extends UIParts {
@@ -66,7 +65,7 @@ public class Result extends UIParts {
                     new ResultBox(x1, yY + (spy * 2 * (i + 1)), 2, 2, spriteWidth, spy * 2, player.getPiece().getSprite()),
                     new ResultBox(x2, yY + (spy * 2 * (i + 1)), 4, 2, false, true, player.getName()),
                     new ResultBox(x3, yY + (spy * 2 * (i + 1)), 2, 2, true, true, String.valueOf(player.getGoalTurn())),
-                    new ResultBox(x4, yY + (spy * 2 * (i + 1)), 4, 2, SQUARE_WIDTH, SQUARE_HEIGHT, TYPE_STR.length, player.getAStringResultDetail(), aSqSprite)
+                    new ResultBox(x4, yY + (spy * 2 * (i + 1)), 4, 2, SQUARE_WIDTH, SQUARE_HEIGHT, TYPE_STR.length, player.convertToAStringFromAResultDetail(), aSqSprite)
             );
         }
         select();

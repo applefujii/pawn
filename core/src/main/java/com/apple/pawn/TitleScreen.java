@@ -134,8 +134,7 @@ public class TitleScreen implements Screen {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			for (String name : BoardSurface.MAP_DATA_NAME) {
-				Gdx.app.debug("path", Objects.requireNonNull(FileHandle.class.getResource("/" + name)).getPath());
-				JsonNode mapJson = objectMapper.readTree(new File(Objects.requireNonNull(FileHandle.class.getResource("/" + name)).getPath()));
+				JsonNode mapJson = objectMapper.readTree(Objects.requireNonNull(FileHandle.class.getResource("/" + name)));
 				aStageName.add(mapJson.get("name").asText());
 			}
 		} catch (IOException e) {

@@ -49,7 +49,7 @@ public class BoardSurface {
     public void initialize(AssetManager manager, int mapNo, BitmapFont font) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode mapJson = objectMapper.readTree(new File(Objects.requireNonNull(FileHandle.class.getResource("/" + MAP_DATA_NAME[mapNo])).getPath()));
+            JsonNode mapJson = objectMapper.readTree(Objects.requireNonNull(FileHandle.class.getResource("/" + MAP_DATA_NAME[mapNo])));
             int count = 0;
             for(JsonNode mJ : mapJson.get("square")) {
                 int add = mJ.path("address").asInt();

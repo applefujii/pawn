@@ -119,18 +119,18 @@ public class GameScreen implements Screen {
 		fileIO = new FileIO();
 		saveData = new SaveData();
 		//-- 初期化
-		manager.load("assets/map_atlas.txt", TextureAtlas.class);
-		manager.load("assets/ui_atlas.txt", TextureAtlas.class);
-		manager.load("assets/dice.png", Texture.class);
-		manager.load("assets/back.png", Texture.class);
-		manager.load("assets/cursor.png", Texture.class);
+		manager.load("map_atlas.txt", TextureAtlas.class);
+		manager.load("ui_atlas.txt", TextureAtlas.class);
+		manager.load("dice.png", Texture.class);
+		manager.load("back.png", Texture.class);
+		manager.load("cursor.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		dice.initialize(manager);
 		playerManager.initialize(this);
 		turnPlayerNo = -1;
 		ui.initialize(game);
-		cursor = new Sprite(manager.get("assets/cursor.png", Texture.class));
+		cursor = new Sprite(manager.get("cursor.png", Texture.class));
 		cursor.flip(false, true);
 		cursor.setCenter(Pawn.LOGICAL_WIDTH >> 1, Pawn.LOGICAL_HEIGHT >> 1);
 		//-- 参照セット
@@ -397,11 +397,11 @@ public class GameScreen implements Screen {
 		dice.dispose();
 		board.dispose();
 		particle.dispose();
-		manager.unload("assets/map_atlas.txt");
-		manager.unload("assets/ui_atlas.txt");
-		manager.unload("assets/dice.png");
-		manager.unload("assets/back.png");
-		manager.unload("assets/cursor.png");
+		manager.unload("map_atlas.txt");
+		manager.unload("ui_atlas.txt");
+		manager.unload("dice.png");
+		manager.unload("back.png");
+		manager.unload("cursor.png");
 	}
 
 

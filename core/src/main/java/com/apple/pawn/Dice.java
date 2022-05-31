@@ -32,7 +32,7 @@ public class Dice {
     }
 
     public void initialize(@NonNull AssetManager manager) {
-        img = manager.get("assets/dice.png", Texture.class);
+        img = manager.get("dice.png", Texture.class);
     }
 
     public void update() {

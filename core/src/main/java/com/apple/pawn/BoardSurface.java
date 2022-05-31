@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +14,9 @@ import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class BoardSurface {
     public static final int MAP_WIDTH = 4096, MAP_HEIGHT = 4096;
@@ -46,7 +49,7 @@ public class BoardSurface {
     public void initialize(AssetManager manager, int mapNo, BitmapFont font) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/"+ MAP_DATA_NAME[mapNo]).file());
+            JsonNode mapJson = objectMapper.readTree(new File(Objects.requireNonNull(FileHandle.class.getResource("/" + MAP_DATA_NAME[mapNo])).getPath()));
             int count = 0;
             for(JsonNode mJ : mapJson.get("square")) {
                 int add = mJ.path("address").asInt();
@@ -60,7 +63,7 @@ public class BoardSurface {
             e.printStackTrace();
         }
 
-        backSprite = new Sprite(manager.get("assets/back.png", Texture.class));
+        backSprite = new Sprite(manager.get("back.png", Texture.class));
         backSprite.flip(false, true);
         for(int i = 0; i < aSquare.size; i++) aSquare.get(i).initialize(manager, aSquare.size - 1, i, font);
     }

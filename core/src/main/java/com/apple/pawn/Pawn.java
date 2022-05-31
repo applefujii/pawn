@@ -49,7 +49,7 @@ public class Pawn extends Game {
 
 		batch = new SpriteBatch();
 		renderer = new ShapeRenderer();
-		fontGenerator = new PawnFontGenerator(Gdx.files.local("font/mplus-1m-medium.ttf"));
+		fontGenerator = new PawnFontGenerator(Gdx.files.internal("font/mplus-1m-medium.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		param.size = 16;
 		param.incremental = true;			// 自動的に文字を追加
@@ -60,7 +60,7 @@ public class Pawn extends Game {
 		font = fontGenerator.generateFont(param);
 		random = new RandomXS128(System.currentTimeMillis());
 		manager = new AssetManager();
-		manager.load("assets/piece_atlas.txt", TextureAtlas.class);
+		manager.load("piece_atlas.txt", TextureAtlas.class);
 
 		uiCamera = new OrthographicCamera();
 		uiCamera.setToOrtho(true, LOGICAL_WIDTH, LOGICAL_HEIGHT);

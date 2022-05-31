@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,7 +24,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
 import java.util.function.IntSupplier;
 
 /**
@@ -112,8 +116,8 @@ public class TitleScreen implements Screen {
 		param.flip = true;					// 上下反転
 		fontTitle = game.fontGenerator.generateFont(param);
 
-		TextureAtlas atlas = manager.get("assets/piece_atlas.txt", TextureAtlas.class);
-		manager.load("assets/title.png", Texture.class);
+		TextureAtlas atlas = manager.get("piece_atlas.txt", TextureAtlas.class);
+		manager.load("title.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		spPiece = new Sprite[6];
@@ -122,7 +126,7 @@ public class TitleScreen implements Screen {
 			spPiece[i].flip(false, true);
 			spPiece[i].setSize(80, 120);
 		}
-		mainImage = new Sprite(manager.get("assets/title.png", Texture.class),0,0,1024,591);
+		mainImage = new Sprite(manager.get("title.png", Texture.class),0,0,1024,591);
 		mainImage.flip(false,true);
 		mainImage.setSize(614,354);
 		mainImage.setPosition((Pawn.LOGICAL_WIDTH >> 1)-307,Pawn.LOGICAL_HEIGHT-354-130);
@@ -130,7 +134,7 @@ public class TitleScreen implements Screen {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			for (String name : BoardSurface.MAP_DATA_NAME) {
-				JsonNode mapJson = objectMapper.readTree(Gdx.files.local("assets/" + name).file());
+				JsonNode mapJson = objectMapper.readTree(Objects.requireNonNull(FileHandle.class.getResource("/" + name)));
 				aStageName.add(mapJson.get("name").asText());
 			}
 		} catch (IOException e) {
@@ -292,6 +296,7 @@ public class TitleScreen implements Screen {
 	@Override
 	public void dispose () {
 		particle.dispose();
+		manager.unload("title.png");
 	}
 
 

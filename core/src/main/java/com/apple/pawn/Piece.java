@@ -85,7 +85,7 @@ public class Piece {
         pos.x += WIDTH*((boardSurface.getSquare(squareNo).aPiece.indexOf(this,true))%LINE_MAX);
         pos.y += HEIGHT*Math.floor((float) boardSurface.getSquare(squareNo).aPiece.indexOf(this,true)/LINE_MAX);
         camPos = pos.cpy();
-        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
+        sprite = manager.get("piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 
@@ -97,7 +97,7 @@ public class Piece {
     public void load(@NonNull BoardSurface bs, @NonNull AssetManager manager) {
         this.boardSurface = bs;
         boardSurface.getSquare(squareNo).addPiece(this);
-        sprite = manager.get("assets/piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
+        sprite = manager.get("piece_atlas.txt", TextureAtlas.class).createSprite(COLOR[this.colorNo]);
         sprite.flip(false, true);
     }
 

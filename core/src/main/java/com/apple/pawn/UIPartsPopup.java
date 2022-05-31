@@ -34,7 +34,7 @@ public class UIPartsPopup extends UIParts{
         super(name, x, y, width, height, group);
         this.time_show = time_show;
         stringRow = fontSplit(text, width - (px * 2), font.getCache());
-        sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("popup");
+        sprite = manager.get("ui_atlas.txt", TextureAtlas.class).createSprite("popup");
         sprite.flip(false, true);
     }
 

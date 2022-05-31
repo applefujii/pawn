@@ -31,7 +31,7 @@ public class UIPartsExplanation extends UIParts {
         stringRow = new Array<>();
         explanation = "";
         fontCache = font.getCache();
-        sprite = manager.get("assets/ui_atlas.txt", TextureAtlas.class).createSprite("explanation");
+        sprite = manager.get("ui_atlas.txt", TextureAtlas.class).createSprite("explanation");
         sprite.flip(false, true);
         sprite.setSize(width, height);
         sprite.setPosition(x, y);

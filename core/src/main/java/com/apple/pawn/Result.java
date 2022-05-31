@@ -41,7 +41,7 @@ public class Result extends UIParts {
         FlagManagement.set(Flag.UI_INPUT_ENABLE);
         FlagManagement.set(Flag.INPUT_ENABLE);
         for (String st : TYPE_STR) {
-            Sprite sp = manager.get("assets/map_atlas.txt", TextureAtlas.class).createSprite(st);
+            Sprite sp = manager.get("map_atlas.txt", TextureAtlas.class).createSprite(st);
             sp.setSize(SQUARE_WIDTH, SQUARE_HEIGHT);
             aSqSprite.add(sp);
         }

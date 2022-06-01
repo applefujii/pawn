@@ -1,0 +1,18 @@
+{
+    "platform": "windows64",
+    "jdk": "C:/Program Files/Java/jdk-8",
+    "executable": "pawn",
+    "classpath": [
+        "build/classes/artifacts/pawn_jar/pawn.jar"
+    ],
+    "removelibs": [
+        "build/classes/artifacts/pawn_jar/pawn.jar"
+    ],
+    "mainclass": "com.apple.pawn.Lwjgl3Launcher",
+    "resources": [
+        "assets",
+        "font",
+        "save"
+    ],
+    "output": "out-windows"
+}

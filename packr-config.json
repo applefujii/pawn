@@ -10,8 +10,6 @@
     ],
     "mainclass": "com.apple.pawn.Lwjgl3Launcher",
     "resources": [
-        "assets",
-        "font",
         "save"
     ],
     "output": "out-windows"

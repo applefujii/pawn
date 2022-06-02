@@ -4,6 +4,8 @@ A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://git
 
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
+pull後"save/achievement.sqlite3.default"を同ファイル下に"achievement.sqlite3"と名前を変更してコピーすること。
+
 ## Gradle
 
 This project uses [Gradle](http://gradle.org/) to manage dependencies.
